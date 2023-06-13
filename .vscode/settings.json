@@ -1,0 +1,21 @@
+{
+  "stylelint.validate": [
+    "css",
+    "scss",
+    ".module.scss"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[css]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
+  "editor.tabSize": 2,
+  "cSpell.words": [
+    "playerslikeyoulove"
+  ],
+}
