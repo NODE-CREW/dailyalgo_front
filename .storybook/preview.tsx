@@ -7,6 +7,8 @@ import { MediaQueryProvider } from "../src/hooks/useMediaQuery";
 
 import "../src/styles/base/_reset.scss";
 import "../src/styles/base/_font.scss";
+import React from "react";
+import { Preview } from "@storybook/react";
 
 const customViewports = {
   DesktopXXLarge: {
@@ -87,3 +89,15 @@ export const parameters = {
     expanded: true,
   },
 };
+
+const preview: Preview = {
+  decorators: [
+    (Story) => (
+      <div style={{ margin: "3em" }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export default preview;
