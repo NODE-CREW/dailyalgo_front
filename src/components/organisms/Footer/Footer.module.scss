@@ -1,0 +1,26 @@
+.footer-wrap {
+  width: 100vw;
+  height: 360px;
+  // position: absolute;
+  bottom: 0;
+  left: 0;
+  // 임시 border
+  border-top: 1px solid #999;
+  .contents-wrap {
+    margin-top: 57px;
+    margin-left: 247px;
+    height: 300px;
+    background-color: white;
+  }
+  .copyright {
+    height: 60px;
+    background-color: #EEEEEE;
+    text-align: center;
+    span {
+      position: relative; 
+      bottom: 0;
+      top: 50%; 
+      transform: translateY(-50%); 
+    }
+  }
+}
