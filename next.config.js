@@ -3,6 +3,9 @@ const path = require("node:path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    appDir: true,
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
     prependData: `@import "src/styles/abstracts/_variables.scss";
