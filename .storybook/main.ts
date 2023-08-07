@@ -15,11 +15,7 @@ const config = {
       url: false,
     },
   },
-  // staticDirs: [
-  //   { from: "../public", to: "/public" },
-  //   { from: "../static", to: "/static" },
-  //   { from: "../public/assets", to: "/assets" },
-  // ],
+  staticDirs: ["../public"],
   docs: {
     autodocs: true,
   },
@@ -65,7 +61,6 @@ const config = {
         ...config.resolve,
         // next.config.js에 정의한 scss import alias
         alias: {
-          "next-i18next": "react-i18next",
           "@assets": path.resolve(__dirname, "../public/assets"),
           "@components": path.resolve(__dirname, "../src/components"),
         },
