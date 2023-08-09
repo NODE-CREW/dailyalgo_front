@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import "../../styles/common.scss";
 // import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
-import { LoginForm } from "src/components/signIn/LoginForm";
+import { LoginForm } from "src/components/SignIn/LoginForm";
 import classNames from "classnames/bind";
 import style from "./SignIn.module.scss";
 
