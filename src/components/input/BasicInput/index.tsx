@@ -1,3 +1,3 @@
-import { BasicInput } from "./BasicInput";
+import { BasicInput, Props } from "./BasicInput";
 
-export { BasicInput };
+export { BasicInput, type Props };
