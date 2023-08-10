@@ -16,6 +16,7 @@ const SYSTEM = [
   "send",
   "alert",
   "profile",
+  "checkbox",
 ] as const;
 const GRAPHIC = [] as const;
 const ICON_NAMES = [...LOGO, ...ARROW, ...PLATFORMS, ...SYSTEM, ...GRAPHIC] as const;
