@@ -1,9 +1,8 @@
 .btn {
   @include body-1;
+  @include transition-default(background-color);
 
   padding: 8px 26px;
-  background-color: $primary-1;
-  color: $white;
 
   &:disabled {
     background-color: $disabled;
@@ -25,6 +24,15 @@
 .btn-sm {
   height: 40px;
   border-radius: 50px;
+}
+
+.btn-type-primary {
+  background-color: $primary-1;
+  color: $white;
+
+  &:hover {
+    background-color: $primary-1-hover;
+  }
 }
 
 .btn-type-secondary {
