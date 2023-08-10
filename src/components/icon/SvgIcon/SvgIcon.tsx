@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 import { memo } from "react";
 import ReactSvg from "react-inlinesvg";
 import classNames from "classnames/bind";
