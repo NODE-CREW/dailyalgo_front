@@ -16,6 +16,7 @@ type Props = {
   linkTarget?: HTMLAttributeAnchorTarget;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   actionType?: Pick<React.ButtonHTMLAttributes<HTMLButtonElement>, "type">["type"];
+  className?: string;
   customColor?: {
     color: string;
     hover: string;
@@ -33,6 +34,7 @@ const IconButton = ({
   actionType,
   title,
   customColor,
+  className,
 }: Props) => {
   const setStyle = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +49,9 @@ const IconButton = ({
   return href ? (
     <Link
       href={href}
-      className={cx("btn-icon", `btn-${type}`, { disabled }, customColor && "custom-icon")}
+      className={
+        (cx("btn-icon", `btn-${type}`, { disabled }, customColor && "custom-icon"), className)
+      }
       target={linkTarget && linkTarget}
       rel={linkTarget && "noopener noreferrer"}
       onClick={onClick}
@@ -61,7 +65,7 @@ const IconButton = ({
       // TODO: 임시방편 Lint 에러 해결
       // eslint-disable-next-line react/button-has-type
       type={actionType || "button"}
-      className={cx("btn-icon", `btn-${type}`, customColor && "custom-icon")}
+      className={(cx("btn-icon", `btn-${type}`, customColor && "custom-icon"), className)}
       disabled={disabled}
       onClick={onClick}
       style={setStyle()}
