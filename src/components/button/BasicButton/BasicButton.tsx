@@ -8,16 +8,24 @@ type Props = {
   children: React.ReactNode;
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
-  styleType?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg";
   buttonType?: "primary" | "secondary" | "tertiary" | "danger" | "link";
 } & React.ButtonHTMLAttributes<HTMLButtonElement> &
   React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const BasicButton = ({ href, children, type, onClick, styleType = "md", ...props }: Props) => {
+const BasicButton = ({
+  href,
+  children,
+  type = "button",
+  onClick,
+  size = "md",
+  buttonType = "primary",
+  ...props
+}: Props) => {
   const element = href ? "a" : "button";
   const Root = element;
   const rootProps = {
-    className: cx("btn", `btn-${styleType}`, `btn-type-${props.buttonType}`),
+    className: cx("btn", `btn-${size}`, `btn-type-${buttonType}`),
     type,
     href,
     onClick,
