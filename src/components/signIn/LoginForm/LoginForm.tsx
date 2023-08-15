@@ -48,10 +48,6 @@ const LoginForm = () => {
           }
           {...register("loginId", {
             required: "아이디를 입력해주세요.",
-            // pattern: {
-            //   value: /^[a-zA-z0-9]{4,12}$/,
-            //   message: "아이디는 영문 대소문자와 숫자 4~12자리로 입력해야합니다",
-            // },
           })}
         />
         <button
@@ -73,12 +69,6 @@ const LoginForm = () => {
           type="password"
           {...register("password", {
             required: "비밀번호를 입력해주세요.",
-            // validate: {
-            //   hasRequiredChar: (value) =>
-            //     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&-]).{8,12}$/.test(value) ||
-            //     "비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다.",
-            //   haveSpace: (value) => !/\s/g.test(value) || "공백있네?",
-            // },
           })}
           className={cx("")}
           style={
