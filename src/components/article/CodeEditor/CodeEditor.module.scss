@@ -1,0 +1,9 @@
+.code-editor-wrap {
+  display: flex;
+  min-height: 330px;
+  flex-direction: column;
+
+  > section {
+    flex: 1;
+  }
+}
