@@ -1,6 +1,7 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
 import style from "./ChangePwForm.module.scss";
 
@@ -19,12 +20,37 @@ const ChangePwForm = () => {
     formState: { errors },
     getValues,
     trigger,
+    // setError
   } = useForm<FormValues>({ mode: "onChange" });
+
+  const [isChangeComplete, setIsChangeComplete] = useState(false);
+
+  const onValid: SubmitHandler<FormValues> = async (data) => {
+    console.log("data", data);
+    // 비밀번호 변경 API 요청(작업 시 주석 외 내용 삭제)
+    // const response = await checkPassword(data);
+    // if (response) {
+    //   setIsChangeComplete(true);
+    //   setTimeout(() => {
+    //   setIsChangeComplete(false);
+    // }, 1500);
+    // } else {
+    //   setError("newPassword", {
+    //     type: "wrongPassword",
+    //     message: "비밀번호가 올바르지않습니다."
+    //   })
+    // }
+    setIsChangeComplete(true);
+    setTimeout(() => {
+      setIsChangeComplete(false);
+    }, 1500);
+  };
+
   return (
     <div className={cx("form-wrap")}>
       <h1>비밀번호 변경</h1>
       <span className={cx("hint")}>8 ~ 16자 영문, 숫자, 특수문자($`~!@$!%*#^?&\\(\\)\-_=+)</span>
-      <form className={cx("change-pw-form")} onSubmit={handleSubmit((data) => console.log(data))}>
+      <form className={cx("change-pw-form")} onSubmit={handleSubmit(onValid)}>
         {/* original password */}
         <div className={cx("input-without-button-wrap")}>
           <label htmlFor="originPassword">
@@ -106,6 +132,15 @@ const ChangePwForm = () => {
           변경
         </button>
       </form>
+      {isChangeComplete && (
+        <button
+          type="button"
+          className={cx("background")}
+          onClick={() => setIsChangeComplete(false)}
+        >
+          <div className={cx("success-alarm")}>비밀번호가 성공적으로 변경되었습니다.</div>
+        </button>
+      )}
     </div>
   );
 };
