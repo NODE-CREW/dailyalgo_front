@@ -3,7 +3,15 @@
   display: inline-flex;
 
   &.size-sm {
-    width: 50px;
+    width: 150px;
+
+    .selected-option {
+      height: 32px;
+
+      .option-list {
+        top: 36px;
+      }
+    }
   }
 
   &.size-md {
@@ -16,11 +24,6 @@
 
   &.size-full {
     width: 100%;
-
-    .selected-option-text {
-      flex: 1;
-      text-align: start;
-    }
   }
 
   .selected-option {
@@ -47,6 +50,11 @@
       svg path {
         fill: $primary-1;
       }
+    }
+
+    .selected-option-text {
+      flex: 1;
+      text-align: start;
     }
   }
 
