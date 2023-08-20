@@ -14,7 +14,7 @@ type Props = {
   type?: InputType;
   size?: InputSize;
   className?: string;
-  onEnter?: (value: string) => void;
+  onEnter?: (event: KeyboardEvent<HTMLInputElement>) => void;
 } & Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "size">;
 
 const BasicInput = forwardRef<HTMLInputElement, Props>(
