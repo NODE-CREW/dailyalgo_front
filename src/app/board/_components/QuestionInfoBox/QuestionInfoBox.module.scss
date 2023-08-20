@@ -1,0 +1,42 @@
+.question-info-box-wrap {
+  padding: 28px 24px;
+  border: 1px solid $gray20;
+  border-radius: 16px;
+
+  .box-title {
+    @include head-4;
+
+    & + .input-block-wrap {
+      margin-top: 30px;
+    }
+  }
+
+  .tag-list {
+    display: flex;
+    margin-top: 12px;
+    gap: 8px;
+  }
+}
+
+.input-block-wrap {
+  & + .input-block-wrap {
+    margin-top: 16px;
+  }
+
+  .input-label {
+    @include body-1;
+
+    & + * {
+      margin-top: 4px;
+    }
+  }
+
+  .input-sub-label {
+    @include body-2;
+
+    display: block;
+    margin-top: 0;
+    margin-bottom: 4px;
+    color: $gray60;
+  }
+}

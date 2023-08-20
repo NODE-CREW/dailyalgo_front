@@ -24,9 +24,11 @@ const CommonDropdown = ({ options, placeholder, className, initialValue, size }:
   return (
     <div className={cx("dropdown", `size-${size}`, className)}>
       <button type="button" className={cx("selected-option")} onClick={toggleShowOptions}>
-        {selectedOption
-          ? options.filter((option) => option.id === selectedOption)[0].label
-          : placeholder}
+        <span className={cx("selected-option-text")}>
+          {selectedOption
+            ? options.filter((option) => option.id === selectedOption)[0].label
+            : placeholder}
+        </span>
         <SvgIcon iconName="arrow-triangle" size={10} />
       </button>
 
