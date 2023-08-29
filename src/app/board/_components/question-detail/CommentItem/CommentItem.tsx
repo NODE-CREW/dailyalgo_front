@@ -9,7 +9,7 @@ const cx = classNames.bind(style);
 
 const CommentItem = () => (
   <div className={cx("comment-item-wrap")}>
-    <div className={cx("comment-item-L")}>
+    <div className={cx("comment-item")}>
       <SvgIcon iconName="comment-list-item" size={14} />
     </div>
     <div className={cx("comment-contents")}>
