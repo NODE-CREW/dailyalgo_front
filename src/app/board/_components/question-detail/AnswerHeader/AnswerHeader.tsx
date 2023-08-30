@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 
 import { ProfileBadge } from "@components/user/ProfileBadge";
@@ -9,9 +9,9 @@ import style from "./AnswerHeader.module.scss";
 
 const cx = classNames.bind(style);
 
-interface Props {}
+// interface Props {}
 
-const AnswerHeader = ({}: Props) => {
+const AnswerHeader = () => {
   const userName = "답변왕";
   const isLiked = false;
   const likeIconName = isLiked ? "like-on" : "like-off";

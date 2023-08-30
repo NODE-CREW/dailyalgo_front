@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 
 import { CommentInput } from "../CommentInput";
@@ -8,9 +8,9 @@ import style from "./CommentBlock.module.scss";
 
 const cx = classNames.bind(style);
 
-interface Props {}
+// interface Props {}
 
-const CommentBlock = ({}: Props) => {
+const CommentBlock = () => {
   const commentCount = 2;
   const commentList = [
     {
@@ -35,7 +35,7 @@ const CommentBlock = ({}: Props) => {
       </strong>
       <CommentInput />
       <ul className={cx("comment-list-wrap")}>
-        {commentList.map((comment, index) => (
+        {commentList.map((comment) => (
           <li key={comment.text}>
             <CommentItem />
           </li>
