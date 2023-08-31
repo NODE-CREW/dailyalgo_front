@@ -7,3 +7,5 @@ type ProblemType =
   | "왜맞틀"
   | "왜틀맞"
   | "기타";
+
+type PlatformType = "BOJ" | "SWEA" | "Programmers";

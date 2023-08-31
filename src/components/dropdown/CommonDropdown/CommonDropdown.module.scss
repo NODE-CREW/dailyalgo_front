@@ -3,7 +3,15 @@
   display: inline-flex;
 
   &.size-sm {
-    width: 50px;
+    width: 150px;
+
+    .selected-option {
+      height: 32px;
+
+      .option-list {
+        top: 36px;
+      }
+    }
   }
 
   &.size-md {
@@ -23,7 +31,7 @@
 
     display: flex;
     width: 100%;
-    height: 36px;
+    height: 40px;
     align-items: center;
     padding: 8px 20px;
     border: 1px solid #898989;
@@ -43,15 +51,22 @@
         fill: $primary-1;
       }
     }
+
+    .selected-option-text {
+      flex: 1;
+      text-align: start;
+    }
   }
 
   .option-list {
     position: absolute;
-    top: 40px;
+    z-index: 20;
+    top: 44px;
     width: 100%;
     padding: 4px 0;
     border: 1px solid #898989;
     border-radius: 8px;
+    background-color: $white;
 
     .option {
       @include transition-default(background-color, color);

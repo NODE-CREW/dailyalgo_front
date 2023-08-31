@@ -18,6 +18,8 @@ const SYSTEM = [
   "profile",
   "checkbox",
   "arrow-triangle",
+  "star",
+  "comment-list-item",
 ] as const;
 const GRAPHIC = [] as const;
 const ICON_NAMES = [...LOGO, ...ARROW, ...PLATFORMS, ...SYSTEM, ...GRAPHIC] as const;
