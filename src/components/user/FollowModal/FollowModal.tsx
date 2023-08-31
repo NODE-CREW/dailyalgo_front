@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useLayoutEffect } from "react";
 import classNames from "classnames/bind";
 import { IconButton } from "@components/button/IconButton";
 import { SvgIcon } from "@components/icon/SvgIcon";
+import { FollowItem } from "./FollowItem";
 import style from "./FollowModal.module.scss";
 
 const cx = classNames.bind(style);
@@ -35,6 +36,34 @@ const FollowModal = ({ setIsOpen }: Props) => {
             onClick={() => setIsOpen(false)}
             title="닫기"
           />
+        </div>
+        <div className={cx("follow-list-wrap")}>
+          <ul className={cx("follow-list")}>
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+            <FollowItem />
+          </ul>
         </div>
       </div>
     </div>

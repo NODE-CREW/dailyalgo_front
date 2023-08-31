@@ -213,3 +213,18 @@ $breakpoint-md: 1024px;
   height: 100%;
   appearance: none;
 }
+
+@mixin scroll-style($width: 4px, $gap: 4px, $color: $gray20) {
+  &::-webkit-scrollbar {
+    width: calc(#{$width + ($gap * 2)});
+    height: calc(#{$width + ($gap * 2)});
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: $gap solid transparent;
+    border-radius: 100px;
+    background-clip: content-box;
+    background-color: $color;
+  }
+}
