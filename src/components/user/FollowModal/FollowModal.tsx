@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useLayoutEffect } from "react";
 import classNames from "classnames/bind";
 import { IconButton } from "@components/button/IconButton";
 import { SvgIcon } from "@components/icon/SvgIcon";
@@ -13,6 +13,17 @@ interface Props {
 const FollowModal = ({ setIsOpen }: Props) => {
   const a = 1;
   console.log(a);
+  useLayoutEffect(() => {
+    // Get original body overflow
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    // Prevent scrolling on mount
+    document.body.style.overflow = "hidden";
+
+    // Re-enable scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
   return (
     <div className={cx("follow-modal-wrap")}>
       <div className={cx("dim")} onClick={() => setIsOpen(false)} />
