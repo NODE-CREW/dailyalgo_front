@@ -1,3 +1,16 @@
+// variables
+// colors
+$color-blue: #1B5CED;
+$color-sky-blue: #00C3FF;
+$color-light-gray: #D5DCEF;
+$color-gary: #d2d2d2;
+$color-neon-red: #FF4568;
+$color-red: #FF0000;
+$color-white: #f6f6f6;
+
+// breakpoint
+$breakpoint-sm: 768px;
+$breakpoint-md: 1280px;
 /* iOS 브라우저 높이 대응 */
 $vh: var(--vh, 1vh);
 
