@@ -12,8 +12,8 @@ interface TimerProps {
 }
 
 const Timer = ({ setAuthResultMsg, isAuthorized, setIsTimeOut }: TimerProps) => {
-  const [time, setTime] = useState<any>(10);
-  const deadline = dayjs().add(10, "second");
+  const [time, setTime] = useState<any>(181);
+  const deadline = dayjs().add(181, "second");
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
 

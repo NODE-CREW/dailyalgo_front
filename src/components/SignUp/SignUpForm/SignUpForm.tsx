@@ -316,7 +316,7 @@ const SignUpForm = () => {
       </div>
       {shouldAuthorizeEmail && (
         <div className={cx("input-with-button-wrap")}>
-          <label htmlFor="emailAuthorization">
+          <label htmlFor="emailAuthorization" className={cx("email-authorization")}>
             {!isAuthorized && (
               <Timer
                 setAuthResultMsg={setAuthResultMsg}
