@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import classNames from "classnames/bind";
 import { SvgIcon } from "src/components/icon/SvgIcon";
+import useClickOutside from "src/hooks/useClickOutside";
 import { useDropDown } from "./handler";
 import style from "./CommonDropdown.module.scss";
 
@@ -14,15 +16,27 @@ interface Props {
   readonly className?: string;
   readonly initialValue?: string;
   readonly size?: "sm" | "md" | "lg" | "full";
+  changeHandler?: any;
 }
 
-const CommonDropdown = ({ options, placeholder, className, initialValue, size }: Props) => {
-  const { selectedOption, showOptions, handleLabelClick, toggleShowOptions } = useDropDown(
-    initialValue || ""
-  );
+const CommonDropdown = ({
+  options,
+  placeholder,
+  className,
+  initialValue,
+  size,
+  changeHandler,
+}: Props) => {
+  const { selectedOption, showOptions, handleLabelClick, toggleShowOptions, setShowOptions } =
+    useDropDown(initialValue || "");
+  const ref = useRef(null);
+
+  useClickOutside(ref, () => {
+    setShowOptions(false);
+  });
 
   return (
-    <div className={cx("dropdown", `size-${size}`, className)}>
+    <div className={cx("dropdown", `size-${size}`, className)} ref={ref}>
       <button type="button" className={cx("selected-option")} onClick={toggleShowOptions}>
         <span className={cx("selected-option-text")}>
           {selectedOption
@@ -40,6 +54,9 @@ const CommonDropdown = ({ options, placeholder, className, initialValue, size }:
                 type="button"
                 onClick={() => {
                   handleLabelClick(option.id);
+                  if (changeHandler) {
+                    changeHandler(option.id);
+                  }
                 }}
               >
                 {option.label}

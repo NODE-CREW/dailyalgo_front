@@ -1,21 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from "react";
+import { useEffect, useCallback, RefObject } from "react";
 
-const useClickOutside = (ref: any, handler: any) => {
+type HookType = (ref: RefObject<HTMLElement>, handler: (...args: any[]) => void) => void;
+
+const useClickOutside: HookType = (ref, handler) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleOutsideClick = useCallback(handler, [ref]);
+
   useEffect(() => {
     const listener = (event: any) => {
       if (!ref.current || ref.current.contains(event.target)) {
         return;
       }
-      handler(event);
+      handleOutsideClick(event);
     };
+
     document.addEventListener("mousedown", listener);
     document.addEventListener("touchstart", listener);
     return () => {
       document.removeEventListener("mousedown", listener);
       document.removeEventListener("touchstart", listener);
     };
-  }, [ref, handler]);
+  }, [ref, handleOutsideClick]);
 };
 
 export default useClickOutside;
