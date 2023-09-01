@@ -9,9 +9,10 @@ interface Props {
   defaultValue?: string;
   language: string;
   customOption?: { [key: string]: any };
+  handleChange: (value: string) => void;
 }
 
-const CodeEditor = ({ defaultValue, language, customOption }: Props) => {
+const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Props) => {
   const [editorContent, setEditorContent] = useState(defaultValue); // Example: Repeat content to create overflow
 
   loader.init().then((monaco) => {
@@ -27,7 +28,8 @@ const CodeEditor = ({ defaultValue, language, customOption }: Props) => {
 
   const handleEditorChange = (value: any) => {
     setEditorContent(value);
-
+    // register("codeEditor", { onChange: value });
+    handleChange(value);
     // TODO: 해당 로직 수정 필요, 부적절하게 늘어남
     const lineHeight = 19; // 디폴트 테마 line-height
     const totalLines = value.split("\n").length;

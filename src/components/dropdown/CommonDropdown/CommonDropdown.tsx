@@ -14,9 +14,17 @@ interface Props {
   readonly className?: string;
   readonly initialValue?: string;
   readonly size?: "sm" | "md" | "lg" | "full";
+  changeHandler?: any;
 }
 
-const CommonDropdown = ({ options, placeholder, className, initialValue, size }: Props) => {
+const CommonDropdown = ({
+  options,
+  placeholder,
+  className,
+  initialValue,
+  size,
+  changeHandler,
+}: Props) => {
   const { selectedOption, showOptions, handleLabelClick, toggleShowOptions } = useDropDown(
     initialValue || ""
   );
@@ -40,6 +48,9 @@ const CommonDropdown = ({ options, placeholder, className, initialValue, size }:
                 type="button"
                 onClick={() => {
                   handleLabelClick(option.id);
+                  if (changeHandler) {
+                    changeHandler(option.id);
+                  }
                 }}
               >
                 {option.label}
