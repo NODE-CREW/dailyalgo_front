@@ -141,8 +141,8 @@ const QuestionInfoBox = ({
         <div className={cx("tag-list")}>
           {tagList.map((tag) => (
             // TODO: 태그 삭제 기능 추가
-            <div className={cx("tag-wrap")}>
-              <Tag label={tag} key={tag} />
+            <div className={cx("tag-wrap")} key={tag}>
+              <Tag label={tag} />
               <button
                 type="button"
                 className={cx("tag-delete-btn")}

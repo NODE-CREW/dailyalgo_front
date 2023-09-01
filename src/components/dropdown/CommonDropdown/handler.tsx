@@ -18,6 +18,7 @@ const useDropDown = (initialValue: string) => {
     showOptions,
     handleLabelClick,
     toggleShowOptions,
+    setShowOptions,
   };
 };
 
