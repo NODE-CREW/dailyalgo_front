@@ -39,3 +39,13 @@
   background-color: $gray20;
   color: $black;
 }
+
+.btn-type-third {
+  padding: 8px 20px;
+  border: 1px solid $primary-1;
+  border-radius: 4px;
+  background-color: $white;
+  color: $primary-1;
+  font-size: 14px;
+  font-weight: 400;
+}

@@ -33,7 +33,7 @@ const IconButton = ({
   href,
   linkTarget,
   onClick,
-  actionType,
+  actionType = "button",
   title,
   customColor,
   className,
@@ -76,10 +76,6 @@ const IconButton = ({
       <span className={cx("a11y")}>{title}</span>
     </button>
   );
-};
-
-IconButton.defaultProps = {
-  actionType: "button",
 };
 
 export { IconButton };
