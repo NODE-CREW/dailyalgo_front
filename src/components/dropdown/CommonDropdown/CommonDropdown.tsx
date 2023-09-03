@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef } from "react";
 import classNames from "classnames/bind";
 import { SvgIcon } from "src/components/icon/SvgIcon";

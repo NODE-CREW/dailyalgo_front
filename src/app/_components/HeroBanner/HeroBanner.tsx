@@ -10,6 +10,7 @@ import style from "./HeroBanner.module.scss";
 const cx = classNames.bind(style);
 
 // TODO: 배너 닫기 기능 추가
+// TODO: 로그인 시 배너 안나오게
 // interface Props {}
 
 const HeroBanner = () => {

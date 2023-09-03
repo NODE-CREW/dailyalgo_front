@@ -1,3 +1,5 @@
-const Pages = () => <div style={{ marginTop: 60 }}>DAILY ALGO</div>;
+import { HomeLayout } from "./_components/HomeLayout";
+
+const Pages = () => <HomeLayout />;
 
 export default Pages;
