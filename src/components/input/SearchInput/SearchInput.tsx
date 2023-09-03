@@ -8,7 +8,7 @@ const cx = classNames.bind(style);
 // interface Props {}
 // TODO: 검색 로직 추가
 const SearchInput = () => {
-  console.log("test");
+  // console.log("test");
   return (
     <div className={cx("search-input-wrap")}>
       <SvgIcon iconName="search" size={24} />
