@@ -9,7 +9,9 @@ const cx = classNames.bind(style);
 interface Props {}
 
 const FollowItem = ({}: Props) => {
-  const handleClick = () => {};
+  const handleClick = () => {
+    // click follow button request to server
+  };
   return (
     <li className={cx("follow-item-wrap")}>
       <div className={cx("left")}>
