@@ -1,0 +1,33 @@
+.follow-item-wrap {
+  display: flex;
+  justify-content: space-between;
+
+  .left {
+    display: flex;
+    gap: 12px;
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .name {
+        color: $black;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 22px;
+      }
+
+      .introduce {
+        @include ellipsis;
+
+        display: block;
+        max-width: 300px;
+        color: rgb(0 0 0 / 60%);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+      }
+    }
+  }
+}
