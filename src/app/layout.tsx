@@ -14,6 +14,7 @@ const RootLayout = ({ children }: Props) => (
     <body>
       <Header />
       {children}
+      <div id="modal-root" />
     </body>
   </html>
 );
