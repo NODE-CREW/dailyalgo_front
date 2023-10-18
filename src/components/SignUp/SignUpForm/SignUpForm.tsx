@@ -5,13 +5,9 @@ import { FieldErrors, SubmitHandler, set, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
-import { BasicModal } from "@components/modal/BasicModal";
+import { AgreementModal } from "../Modal/AgreementModal";
 
 const cx = classNames.bind(style);
-
-// interface Props {
-
-// }
 
 type FormValues = {
   registerId: string;
@@ -41,13 +37,8 @@ const SignUpForm = () => {
   const [authResultMsg, setAuthResultMsg] = useState<string>("");
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [isTimeOut, setIsTimeOut] = useState<boolean>(false);
-  const [isUseModalOpen, setIsUseModalOpen] = useState<boolean>(false);
-  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState<boolean>(false);
-
-  const useModalOpen = (e: MouseEvent) => {
-    e.preventDefault();
-    setIsUseModalOpen(true);
-  };
+  const [isAlModalOpen, setIsAlModalOpen] = useState<boolean>(false);
+  const [isIdModalOpen, setIsIdModalOpen] = useState<boolean>(false);
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
     if (!registerIdDuplicationCheck) {
@@ -147,6 +138,28 @@ const SignUpForm = () => {
     const isValid = await trigger("email");
     if (!isValid) return;
     setShouldAuthorizeEmail(() => true);
+  };
+
+  const alModalOpen = (e: MouseEvent) => {
+    e.preventDefault();
+    setIsAlModalOpen(true);
+  };
+
+  const idModalOpen = (e: MouseEvent) => {
+    e.preventDefault();
+    setIsIdModalOpen(true);
+  };
+
+  const agreementBtnClickHandler = (type: "al" | "id") => {
+    if (type === "al") {
+      const alCheckbox = document.getElementById("agreement-al") as HTMLInputElement;
+      alCheckbox.checked = true;
+      setIsAlModalOpen(false);
+    } else {
+      const idCheckbox = document.getElementById("agreement-id") as HTMLInputElement;
+      idCheckbox.checked = true;
+      setIsIdModalOpen(false);
+    }
   };
 
   return (
@@ -397,7 +410,7 @@ const SignUpForm = () => {
             <label htmlFor="agreement-al">
               <span>
                 본 서비스를 위한{" "}
-                <a href="/" onClick={useModalOpen}>
+                <a href="/" onClick={alModalOpen}>
                   이용약관
                 </a>
                 에 동의합니다.(필수)
@@ -415,7 +428,11 @@ const SignUpForm = () => {
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="agreement-id">
               <span>
-                본 서비스를 위한 <a href="/">개인정보약관</a>에 동의합니다.(필수)
+                본 서비스를 위한{" "}
+                <a href="/" onClick={idModalOpen}>
+                  개인정보약관
+                </a>
+                에 동의합니다.(필수)
               </span>
             </label>
           </div>
@@ -424,9 +441,18 @@ const SignUpForm = () => {
           회원가입
         </button>
       </form>
-      <BasicModal isOpen={isUseModalOpen} closeModal={() => setIsUseModalOpen(false)}>
-        <div>이용약관</div>
-      </BasicModal>
+      <AgreementModal
+        type="al"
+        isOpen={isAlModalOpen}
+        closeModal={() => setIsAlModalOpen(false)}
+        agreementClick={agreementBtnClickHandler}
+      />
+      <AgreementModal
+        type="id"
+        isOpen={isIdModalOpen}
+        closeModal={() => setIsIdModalOpen(false)}
+        agreementClick={agreementBtnClickHandler}
+      />
     </>
   );
 };
