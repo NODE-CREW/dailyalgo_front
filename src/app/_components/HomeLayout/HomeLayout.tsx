@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
+import { SvgIcon } from "@components/icon/SvgIcon";
+import { FilterModal } from "../FilterModal";
 import { HeroBanner } from "../HeroBanner";
 import { QuestionListItem } from "../QuestionListItem";
 import style from "./HomeLayout.module.scss";
@@ -88,10 +90,21 @@ const HomeLayout = ({ data }: Props) => {
     { id: "all", label: "전체" },
     { id: "short", label: "단순" },
   ];
+  const questionStatusOptions = [
+    { id: "all", label: "전체" },
+    { id: "solved", label: "답변완료" },
+    { id: "unsolved", label: "미완료" },
+  ];
 
   const [sort, setSort] = useState(sortOptions[0].id);
   const [source, setSource] = useState(sourceOptions[0].id);
   const [questionType, setQuestionType] = useState(questionTypeOptions[0].id);
+  const [questionStatus, setQuestionStatus] = useState(questionStatusOptions[0].id);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filterKeyword, setFilterKeyword] = useState<{ id: string; label: string }>({
+    id: "",
+    label: "",
+  });
 
   return (
     <div className={cx("home-layout-wrap")}>
@@ -117,6 +130,21 @@ const HomeLayout = ({ data }: Props) => {
                 placeholder="질문 타입"
                 changeHandler={setQuestionType}
               />
+              <CommonDropdown
+                options={questionStatusOptions}
+                placeholder="질문 상태"
+                changeHandler={setQuestionStatus}
+              />
+              <div className={cx("filter-btn")} onClick={() => setIsFilterModalOpen(true)}>
+                {filterKeyword.id === "" ? (
+                  <div className={cx("filter-btn-inner")}>
+                    <SvgIcon size={18} iconName="filter" />
+                    필터
+                  </div>
+                ) : (
+                  <span>{filterKeyword.label}</span>
+                )}
+              </div>
             </div>
           </div>
           <ul className={cx("question-list")}>
@@ -129,6 +157,12 @@ const HomeLayout = ({ data }: Props) => {
           <div className={cx("temp-ad")}>광고 영역</div>
         </div>
       </div>
+      <FilterModal
+        isOpen={isFilterModalOpen}
+        closeModal={() => setIsFilterModalOpen(false)}
+        filterKeyword={filterKeyword.id}
+        setFilterKeyword={setFilterKeyword}
+      />
     </div>
   );
 };

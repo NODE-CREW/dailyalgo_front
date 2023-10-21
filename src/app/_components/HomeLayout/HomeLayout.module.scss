@@ -33,7 +33,41 @@
     .filter-wrap {
       display: flex;
       gap: 4px;
-    }
+
+      .filter-btn {
+        @include body-1;
+        
+        cursor: pointer;
+        padding: 8px 26px;
+        height: 40px;
+        border-radius: 4px;
+
+        background-color: $white;
+        color: #898989;
+        border: 1px solid #898989;
+      
+        .filter-btn-inner {
+          display: flex;
+          gap: 4px;
+          
+          svg {
+            position: relative;
+            top: 3px;
+            fill: #898989;
+          }
+        }
+
+        &:hover {
+          color: $primary-1;
+          border: 1px solid $primary-1;
+
+          svg {
+            fill: $primary-1;
+          }
+        }
+
+      }
+  }
 
     .question-list {
       > li {
