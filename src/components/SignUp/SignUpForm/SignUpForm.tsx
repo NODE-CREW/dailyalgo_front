@@ -3,6 +3,7 @@
 import { useState, MouseEvent } from "react";
 import { FieldErrors, SubmitHandler, set, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
+import { fetchCheckId, fetchCheckNickname } from "src/api/User";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../Modal/AgreementModal";
@@ -40,6 +41,8 @@ const SignUpForm = () => {
   const [isAlModalOpen, setIsAlModalOpen] = useState<boolean>(false);
   const [isIdModalOpen, setIsIdModalOpen] = useState<boolean>(false);
 
+  // const [verifiedId, setVerifiedId] = useState<string>("");
+
   const onValid: SubmitHandler<FormValues> = async (data) => {
     if (!registerIdDuplicationCheck) {
       setError("registerId", {
@@ -65,26 +68,15 @@ const SignUpForm = () => {
     if (!isValid) return;
 
     const id = getValues("registerId");
-    // 2. 중복확인요청
-    // response true: 아이디 사용가능, false: 중복 아이디 존재
-    // const response = await duplicateCheck(id);
-    // 아이디 중복
-    // if (response) {
-    //   setRegisterIdMsg(() => "사용가능한 아이디입니다.");
-    // } else {
-    //   setError("registerId", {
-    //     type: "duplication",
-    //     message: "이미 사용중인 아이디입니다.",
-    //   });
-    // }
-    if (id === "qwer1234") {
+    const res = await fetchCheckId(id);
+    if (res) {
+      setRegisterIdDuplicationCheck(true);
+    } else {
       setRegisterIdDuplicationCheck(false);
       setError("registerId", {
         type: "duplication",
         message: "이미 사용중인 아이디입니다.",
       });
-    } else {
-      setRegisterIdDuplicationCheck(true);
     }
   };
 
@@ -105,14 +97,16 @@ const SignUpForm = () => {
     if (!isValid) return;
 
     const nickname = getValues("nickname");
-    if (nickname === "qwer") {
+    const res = await fetchCheckNickname(nickname);
+
+    if (res) {
+      setNicknameDuplicationCheck(true);
+    } else {
       setNicknameDuplicationCheck(false);
       setError("nickname", {
         type: "duplicate",
         message: "이미 사용중인 닉네임입니다.",
       });
-    } else {
-      setNicknameDuplicationCheck(true);
     }
   };
 
