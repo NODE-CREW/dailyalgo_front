@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { debounce } from "lodash";
 import { BasicModal } from "@components/modal/BasicModal";
 import { BasicInput } from "@components/input/BasicInput";
 import classNames from "classnames/bind";
@@ -74,7 +75,7 @@ const FilterItem = ({
 const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Props) => {
   const [visibleFilterItem, setVisibleFilterItem] = useState<FilterItemType[]>(filerItemList);
 
-  const searchKeywordHanlder = (event: KeyboardEvent<HTMLInputElement>) => {
+  const searchKeywordHanlder = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = event.target.value;
     if (!keyword) {
       setVisibleFilterItem(filerItemList);
@@ -82,7 +83,7 @@ const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Pr
     }
     const filteredItem = filerItemList.filter((item) => item.label.includes(keyword));
     setVisibleFilterItem(filteredItem);
-  };
+  }, 300);
 
   return (
     <BasicModal isOpen={isOpen} closeModal={closeModal}>
@@ -91,18 +92,25 @@ const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Pr
           <BasicInput
             id="search-keyword"
             placeholder="알고리즘 이름을 입력해 주세요."
-            onEnter={searchKeywordHanlder}
+            onChange={searchKeywordHanlder}
           />
         </div>
         <div className={cx("filter-item-wrap")}>
-          {visibleFilterItem.map((item) => (
-            <FilterItem
-              key={item.id}
-              item={item}
-              isSelected={filterKeyword === item.id}
-              onClick={setFilterKeyword}
-            />
-          ))}
+          {visibleFilterItem.length === 0 ? (
+            <span className={cx("result-none-text")}>검색된 결과가 없습니다.</span>
+          ) : (
+            <>
+              {" "}
+              {visibleFilterItem.map((item) => (
+                <FilterItem
+                  key={item.id}
+                  item={item}
+                  isSelected={filterKeyword === item.id}
+                  onClick={setFilterKeyword}
+                />
+              ))}
+            </>
+          )}
         </div>
       </div>
     </BasicModal>
