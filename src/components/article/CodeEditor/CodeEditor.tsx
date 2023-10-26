@@ -26,6 +26,8 @@ const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Prop
     });
   });
 
+  const editorRef = useRef(null);
+
   const handleEditorChange = (value: any) => {
     setEditorContent(value);
     // register("codeEditor", { onChange: value });
@@ -37,11 +39,11 @@ const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Prop
 
     // Set the calculated height for the editor container
     const container = document.getElementById("editor-container");
-    if (container) {
+
+    if (container && requiredHeight > 300 && requiredHeight < 600) {
       container.style.height = `${requiredHeight}px`;
     }
   };
-  const editorRef = useRef(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function handleEditorDidMount(editor: any, _: Monaco) {
@@ -61,6 +63,8 @@ const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Prop
     hideCursorInOverviewRuler: true,
     automaticLayout: true,
     theme: "custom-theme",
+    handleMouseWheel: false,
+
     ...customOption,
   };
 
@@ -68,7 +72,7 @@ const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Prop
     <div id="editor-container" className={cx("code-editor-wrap")}>
       <Editor
         height="100%"
-        defaultLanguage={language || "javascript"}
+        language={language || "javascript"}
         defaultValue={defaultValue}
         // eslint-disable-next-line react/jsx-no-bind
         onMount={handleEditorDidMount}
