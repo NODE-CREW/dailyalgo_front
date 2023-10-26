@@ -18,13 +18,17 @@ const Header = () => {
     <header className={cx("header-wrap")}>
       <div className={cx("header-inner")}>
         <div className={cx("logo")}>
-          <Link href="/">LOGO</Link>
+          <Link href="/">
+            <img src="/assets/image/dailyalgo-logo.png" alt="logo" />
+          </Link>
         </div>
         <div className={cx("search-input-wrap")}>
           <SearchInput />
         </div>
         <div className={cx("account-wrap")}>
-          <BasicButton size="md">작성하기</BasicButton>
+          <Link href="/board/write">
+            <BasicButton size="md">작성하기</BasicButton>
+          </Link>
           {isLogin ? (
             <>
               {/* TODO: 알림 및 프로필 버튼 */}

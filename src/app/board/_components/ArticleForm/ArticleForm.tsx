@@ -20,10 +20,6 @@ const cx = classNames.bind(style);
 const ArticleForm = () => {
   const [language, setLanguage] = useState("python");
 
-  // TODO: 삭제 요망
-  useEffect(() => {
-    setLanguage("python");
-  }, []);
   type FormValues = {
     title: string;
     code: string;
@@ -52,6 +48,10 @@ const ArticleForm = () => {
     console.log(err);
   };
 
+  const changeLanguage = (value: string) => {
+    setLanguage(value);
+  };
+
   return (
     <div className={cx("article-form-wrap")}>
       <div className={cx("left")}>
@@ -72,7 +72,12 @@ const ArticleForm = () => {
         <div className={cx("input-wrap")}>
           <div className={cx("title-wrap")}>
             <h3 className={cx("sub-title")}>코드</h3>
-            <CommonDropdown options={languageList} initialValue={language} size="sm" />
+            <CommonDropdown
+              options={languageList}
+              initialValue={language}
+              changeHandler={changeLanguage}
+              size="sm"
+            />
           </div>
           <div className={cx("code-editor-wrap")}>
             <Controller
