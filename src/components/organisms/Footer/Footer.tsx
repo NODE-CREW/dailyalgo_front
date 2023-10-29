@@ -26,9 +26,9 @@ const Footer = () => {
         </div>
         <img className={cx("logo-img")} src="/images/brandLogo.png" alt="default" />
       </div>
-      <div className={cx("copyright")}>
+      {/* <div className={cx("copyright")}>
         <span>Copyright NODECREW. All rights reserved.</span>
-      </div>
+      </div> */}
     </div>
   );
 };
