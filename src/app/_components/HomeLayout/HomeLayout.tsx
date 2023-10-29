@@ -6,6 +6,7 @@ import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { SvgIcon } from "@components/icon/SvgIcon";
 import { FilterModal } from "../FilterModal";
 import { HeroBanner } from "../HeroBanner";
+import { Footer } from "@components/organisms/Footer";
 import { QuestionListItem } from "../QuestionListItem";
 import style from "./HomeLayout.module.scss";
 
@@ -163,6 +164,7 @@ const HomeLayout = ({ data }: Props) => {
         filterKeyword={filterKeyword.id}
         setFilterKeyword={setFilterKeyword}
       />
+      <Footer />
     </div>
   );
 };
