@@ -32,10 +32,14 @@ const Header = () => {
           {isLogin ? (
             <>
               {/* TODO: 알림 및 프로필 버튼 */}
-              <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="" />
+              <Link href="/mypage">
+                <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="" />
+              </Link>
             </>
           ) : (
-            <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="login" />
+            <Link href="/sign-in">
+              <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="login" />
+            </Link>
           )}
         </div>
       </div>

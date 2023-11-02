@@ -1,0 +1,14 @@
+.notification-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  
+  .notification-header {
+    border-bottom: solid 4px $gray20;
+    padding: 20px 0;
+
+    &-text {
+      @include head-4;
+    }
+  }
+}
