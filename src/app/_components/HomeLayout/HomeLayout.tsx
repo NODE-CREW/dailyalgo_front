@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { SvgIcon } from "@components/icon/SvgIcon";
+import { Footer } from "@components/organisms/Footer";
 import { FilterModal } from "../FilterModal";
 import { HeroBanner } from "../HeroBanner";
-import { Footer } from "@components/organisms/Footer";
 import { QuestionListItem } from "../QuestionListItem";
 import style from "./HomeLayout.module.scss";
 
