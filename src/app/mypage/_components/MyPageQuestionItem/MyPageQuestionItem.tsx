@@ -6,7 +6,6 @@ import { TimeAgo } from "@components/user/TimeAgo";
 import Link from "next/link";
 import style from "./MyPageQuestionItem.module.scss";
 import type { QuestionItem } from "../MyPageQuestionList/MyPageQuestionList";
-import { requestSendMail } from "src/api/User";
 
 const cx = classNames.bind(style);
 
