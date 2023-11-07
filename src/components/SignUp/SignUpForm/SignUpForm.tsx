@@ -3,7 +3,7 @@
 import { useState, MouseEvent } from "react";
 import { FieldErrors, SubmitHandler, set, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
-import { fetchCheckId, fetchCheckNickname } from "src/api/User";
+import { fetchCheckId, fetchCheckNickname, requestSendMail } from "src/api/User";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../Modal/AgreementModal";
@@ -128,8 +128,10 @@ const SignUpForm = () => {
     }
     return null;
   };
+
   const handleEmail = async () => {
     const isValid = await trigger("email");
+    await requestSendMail(getValues("registerId"), getValues("email"));
     if (!isValid) return;
     setShouldAuthorizeEmail(() => true);
   };
@@ -311,7 +313,6 @@ const SignUpForm = () => {
             <button
               type="button"
               onClick={() => {
-                console.log("인증하기");
                 handleEmail();
               }}
             >

@@ -14,13 +14,25 @@ type Props = {
   type?: InputType;
   size?: InputSize;
   className?: string;
+  disabled?: boolean;
   onEnter?: (event: KeyboardEvent<HTMLInputElement>) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 } & Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "size">;
 
 const BasicInput = forwardRef<HTMLInputElement, Props>(
   (
-    { id, name, title, type = "text", size = "md", className = "", placeholder, onEnter, ...props },
+    {
+      id,
+      name,
+      title,
+      type = "text",
+      size = "md",
+      className = "",
+      placeholder,
+      onEnter,
+      disabled = false,
+      ...props
+    },
     ref
   ) => {
     const handleEnter = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -40,6 +52,7 @@ const BasicInput = forwardRef<HTMLInputElement, Props>(
         className={cx("common-input", type, className, size && `size-${size}`)}
         aria-required={props.required ? "true" : "false"}
         onKeyDown={handleEnter}
+        disabled={disabled}
         {...props}
       />
     );

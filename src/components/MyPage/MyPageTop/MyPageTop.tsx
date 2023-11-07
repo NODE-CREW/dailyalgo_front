@@ -19,6 +19,8 @@ interface Props {
   // follower_cnt: number;
   // following_cnt: number;
   // organizations: string[];
+  clickEdit: () => void;
+  isEdited: boolean;
 }
 // "id": "TESTER",
 // "name": "테스터",
@@ -31,7 +33,10 @@ interface Props {
 // "follower_cnt": 1,
 // "following_cnt": 1,
 // "organizations": -1
-const MyPageTop = ({}: // id,
+const MyPageTop = ({
+  clickEdit,
+  isEdited,
+}: // id,
 // name,
 // nickname,
 // intro
@@ -88,7 +93,9 @@ Props) => {
           </div>
         </div>
         <div className={cx("edit-button")}>
-          <BasicButton buttonType="third">프로필 수정</BasicButton>
+          <BasicButton buttonType="third" onClick={clickEdit}>
+            {isEdited ? "수정 완료" : "프로필 수정"}
+          </BasicButton>
         </div>
       </div>
     </div>
