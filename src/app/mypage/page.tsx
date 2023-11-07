@@ -1,10 +1,13 @@
 "use client";
 
-import { MyPageTop } from "./_components/MyPageTop";
-import { SideTab } from "./_components/SideTab";
-import { MyPageQuestionList } from "./_components/MyPageQuestionList";
-import { NotificationList } from "./_components/NotificationList";
-import type { QuestionItem } from "./_components/MyPageQuestionList/MyPageQuestionList";
+import { useState } from "react";
+import { MyPageTop } from "../../components/mypage/MyPageTop";
+import { SideTab } from "../../components/mypage/SideTab";
+import { MyPageQuestionList } from "../../components/mypage/MyPageQuestionList";
+import { NotificationList } from "../../components/mypage/NotificationList";
+import { ChangePwForm } from "../../components/mypage/ChangePwForm";
+import { ChangeProfileForm } from "../../components/mypage/ChangeProfileForm";
+import type { QuestionItem } from "../../components/mypage/MyPageQuestionList/MyPageQuestionList";
 
 const Dummy: QuestionItem[] = [
   {
@@ -66,19 +69,31 @@ const Dummy: QuestionItem[] = [
 ];
 
 const Page = () => {
-  const tabList = ["답변", "질문", "다시보기", "알람"];
+  const mypageTabList = ["답변", "질문", "다시보기", "알람"];
+  const mypageEditTabList = ["프로필 수정", "비밀번호 변경"];
+  const [isEdited, setIsEdited] = useState(false);
 
-  const tabContents = [
+  const clickEdit = () => {
+    setIsEdited(!isEdited);
+  };
+
+  const mypageTabContents = [
     <MyPageQuestionList tab="답변" questionsData={Dummy} />,
     <MyPageQuestionList tab="질문" questionsData={Dummy} />,
     <MyPageQuestionList tab="다시보기" questionsData={Dummy} />,
     <NotificationList />,
   ];
 
+  const mypageEditTabContents = [<ChangeProfileForm />, <ChangePwForm />];
+
   return (
     <>
-      <MyPageTop />
-      <SideTab tabList={tabList} tabContents={tabContents} />
+      <MyPageTop isEdited={isEdited} clickEdit={clickEdit} />
+      {isEdited ? (
+        <SideTab tabList={mypageEditTabList} tabContents={mypageEditTabContents} />
+      ) : (
+        <SideTab tabList={mypageTabList} tabContents={mypageTabContents} />
+      )}
     </>
   );
 };
