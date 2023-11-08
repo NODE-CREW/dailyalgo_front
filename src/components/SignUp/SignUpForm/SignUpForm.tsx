@@ -6,7 +6,7 @@ import classNames from "classnames/bind";
 import { fetchCheckId, fetchCheckNickname, requestSendMail } from "src/api/User";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
-import { AgreementModal } from "../Modal/AgreementModal";
+import { AgreementModal } from "../AgreementModal/AgreementModal";
 
 const cx = classNames.bind(style);
 
