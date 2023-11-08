@@ -6,7 +6,7 @@ import classNames from "classnames/bind";
 import { fetchCheckId, fetchCheckNickname, requestSendMail } from "src/api/User";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
-import { AgreementModal } from "../Modal/AgreementModal";
+import { AgreementModal } from "../AgreementModal/AgreementModal";
 
 const cx = classNames.bind(style);
 
@@ -131,8 +131,9 @@ const SignUpForm = () => {
 
   const handleEmail = async () => {
     const isValid = await trigger("email");
-    await requestSendMail(getValues("registerId"), getValues("email"));
+    const email = getValues("email");
     if (!isValid) return;
+    await requestSendMail(email);
     setShouldAuthorizeEmail(() => true);
   };
 
@@ -323,8 +324,7 @@ const SignUpForm = () => {
               type="button"
               disabled={isAuthorized}
               onClick={() => {
-                console.log("재전송");
-                // handleEmail();
+                handleEmail();
               }}
             >
               재전송
