@@ -22,6 +22,9 @@ const FollowItem = ({}: Props) => {
         </div>
       </div>
       <BasicButton size="sm">팔로우</BasicButton>
+      {/* <BasicButton size="sm" buttonType="secondary">
+        취소
+      </BasicButton> */}
     </li>
   );
 };

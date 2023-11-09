@@ -67,7 +67,8 @@
             }
           }
 
-          dt, dd {
+          dt,
+          dd {
             color: #898989;
             font-size: 14px;
             font-weight: 400;
@@ -84,6 +85,7 @@
         .social-item {
           display: flex;
           gap: 8px;
+          cursor: pointer;
 
           &-title {
             color: $black;
@@ -105,7 +107,7 @@
     .edit-button {
       position: absolute;
       top: 50%;
-      right :0;
+      right: 0;
       transform: translateY(-50%);
     }
   }
