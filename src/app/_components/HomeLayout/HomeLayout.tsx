@@ -8,6 +8,7 @@ import { Footer } from "@components/organisms/Footer";
 import { FilterModal } from "../FilterModal";
 import { HeroBanner } from "../HeroBanner";
 import { QuestionListItem } from "../QuestionListItem";
+import { Pagination } from "@components/common/Pagination/Pagination";
 import style from "./HomeLayout.module.scss";
 
 const cx = classNames.bind(style);
@@ -102,6 +103,7 @@ const HomeLayout = ({ data }: Props) => {
   const [questionType, setQuestionType] = useState(questionTypeOptions[0].id);
   const [questionStatus, setQuestionStatus] = useState(questionStatusOptions[0].id);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
   const [filterKeyword, setFilterKeyword] = useState<{ id: string; label: string }>({
     id: "",
     label: "",
@@ -153,6 +155,7 @@ const HomeLayout = ({ data }: Props) => {
               <QuestionListItem key={item.id} {...item} />
             ))}
           </ul>
+          <Pagination totalPage={30} page={1} setPage={setPage} />
         </div>
         <div className={cx("advertise-wrap")}>
           <div className={cx("temp-ad")}>광고 영역</div>
