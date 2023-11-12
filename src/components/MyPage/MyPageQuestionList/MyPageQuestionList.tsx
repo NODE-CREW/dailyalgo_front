@@ -1,4 +1,6 @@
 import classNames from "classnames/bind";
+import { useState, useEffect } from "react";
+import { Pagination } from "@components/common/Pagination/Pagination";
 import { MyPageQuestionItem } from "../MyPageQuestionItem";
 import style from "./MyPageQuestionList.module.scss";
 
@@ -31,6 +33,13 @@ const MyPageQuestionList = ({ tab, questionsData }: Props) => {
     return undefined;
   };
 
+  const totalPage = 30;
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [tab]);
+
   return (
     <div className={cx("mypage-questions-wrap")}>
       <div className={cx("mypage-questions-header")}>
@@ -43,6 +52,7 @@ const MyPageQuestionList = ({ tab, questionsData }: Props) => {
           <MyPageQuestionItem {...questionData} key={`${tab}-${questionData.id}`} />
         ))}
       </div>
+      <Pagination totalPage={totalPage} page={page} setPage={setPage} />
     </div>
   );
 };
