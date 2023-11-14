@@ -55,7 +55,7 @@ const MyPageTop = ({
 // organizations,
 Props) => {
   const organizations = ["테스트", "테스트2"];
-  
+
   const [isFollowerModalOpen, setIsFollowerModalOpen] = useState(false);
   const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
 
@@ -72,7 +72,8 @@ Props) => {
       setIsFollowerModalOpen(false);
     } else {
       setIsFollowingModalOpen(false);
-
+    }
+  };
 
   const btnContent = () => {
     switch (pageType) {
@@ -140,8 +141,8 @@ Props) => {
               </div>
             </div>
           </div>
+          <div className={cx("edit-button")}>{btnContent()}</div>
         </div>
-        <div className={cx("edit-button")}>{btnContent()}</div>
       </div>
       <FollowModal
         isOpen={isFollowerModalOpen}
