@@ -27,7 +27,7 @@ const BasicModal = ({ isOpen, closeModal, children }: Props) => {
       <div className={cx("modal-container")}>
         <div className={cx("modal-top")}>
           <div onClick={closeModal} className={cx("modal-close-btn")}>
-            <SvgIcon iconName="close" size={18} />
+            <SvgIcon iconName="close" size={32} />
           </div>
         </div>
         <div className={cx("modal-content")}>{children}</div>
