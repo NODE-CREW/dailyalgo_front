@@ -1,13 +1,10 @@
 "use client";
 
+import { SideTab } from "@components/mypage/SideTab";
+import { MyPageQuestionList } from "@components/mypage/MyPageQuestionList";
+import { MyPageTop } from "@components/mypage/MyPageTop";
 import { useState } from "react";
-import { MyPageTop } from "../../components/mypage/MyPageTop";
-import { SideTab } from "../../components/mypage/SideTab";
-import { MyPageQuestionList } from "../../components/mypage/MyPageQuestionList";
-import { NotificationList } from "../../components/mypage/NotificationList";
-import { ChangePwForm } from "../../components/mypage/ChangePwForm";
-import { ChangeProfileForm } from "../../components/mypage/ChangeProfileForm";
-import type { QuestionItem } from "../../components/mypage/MyPageQuestionList/MyPageQuestionList";
+import type { QuestionItem } from "@components/mypage/MyPageQuestionList/MyPageQuestionList";
 
 const Dummy: QuestionItem[] = [
   {
@@ -68,34 +65,25 @@ const Dummy: QuestionItem[] = [
   },
 ];
 
-const Page = () => {
-  const mypageTabList = ["답변", "질문", "다시보기", "알람"];
-  const mypageEditTabList = ["프로필 수정", "비밀번호 변경"];
-  const [isEdited, setIsEdited] = useState(false);
-
-  const clickEdit = () => {
-    setIsEdited(!isEdited);
-  };
-
-  const mypageTabContents = [
+const UserPage = () => {
+  const userPageTabList = ["답변", "질문"];
+  const userPageTabContent = [
     <MyPageQuestionList tab="답변" questionsData={Dummy} />,
     <MyPageQuestionList tab="질문" questionsData={Dummy} />,
-    <MyPageQuestionList tab="다시보기" questionsData={Dummy} />,
-    <NotificationList />,
   ];
 
-  const mypageEditTabContents = [<ChangeProfileForm />, <ChangePwForm />];
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const clickFollowBtn = () => {
+    setIsFollowing(!isFollowing);
+  };
 
   return (
     <>
-      <MyPageTop isEdited={isEdited} clickBtnHandler={clickEdit} pageType="mypage" />
-      {isEdited ? (
-        <SideTab tabList={mypageEditTabList} tabContents={mypageEditTabContents} />
-      ) : (
-        <SideTab tabList={mypageTabList} tabContents={mypageTabContents} />
-      )}
+      <MyPageTop clickBtnHandler={clickFollowBtn} isFollowing={isFollowing} pageType="user" />
+      <SideTab tabList={userPageTabList} tabContents={userPageTabContent} />
     </>
   );
 };
 
-export default Page;
+export default UserPage;
