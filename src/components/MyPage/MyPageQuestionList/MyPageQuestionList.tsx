@@ -1,4 +1,6 @@
 import classNames from "classnames/bind";
+import { useState, useEffect } from "react";
+import { Pagination } from "@components/common/Pagination/Pagination";
 import { MyPageQuestionItem } from "../MyPageQuestionItem";
 import style from "./MyPageQuestionList.module.scss";
 
@@ -25,11 +27,18 @@ interface Props {
 
 const MyPageQuestionList = ({ tab, questionsData }: Props) => {
   const headerText = (tabType: string) => {
-    if (tabType === "답변") return "작성한 질문";
+    if (tabType === "답변") return "작성한 답변";
     if (tabType === "질문") return "작성한 질문";
     if (tabType === "다시보기") return "다시보기";
     return undefined;
   };
+
+  const totalPage = 30;
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [tab]);
 
   return (
     <div className={cx("mypage-questions-wrap")}>
@@ -43,6 +52,7 @@ const MyPageQuestionList = ({ tab, questionsData }: Props) => {
           <MyPageQuestionItem {...questionData} key={`${tab}-${questionData.id}`} />
         ))}
       </div>
+      <Pagination totalPage={totalPage} page={page} setPage={setPage} />
     </div>
   );
 };

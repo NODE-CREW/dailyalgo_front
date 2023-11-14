@@ -20,8 +20,10 @@ interface Props {
   // follower_cnt: number;
   // following_cnt: number;
   // organizations: string[];
-  clickEdit: () => void;
-  isEdited: boolean;
+  clickBtnHandler: () => void;
+  isEdited?: boolean;
+  isFollowing?: boolean;
+  pageType: "user" | "mypage";
 }
 // "id": "TESTER",
 // "name": "테스터",
@@ -35,8 +37,10 @@ interface Props {
 // "following_cnt": 1,
 // "organizations": -1
 const MyPageTop = ({
-  clickEdit,
+  clickBtnHandler,
   isEdited,
+  isFollowing,
+  pageType,
 }: // id,
 // name,
 // nickname,
@@ -51,6 +55,7 @@ const MyPageTop = ({
 // organizations,
 Props) => {
   const organizations = ["테스트", "테스트2"];
+  
   const [isFollowerModalOpen, setIsFollowerModalOpen] = useState(false);
   const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
 
@@ -67,6 +72,28 @@ Props) => {
       setIsFollowerModalOpen(false);
     } else {
       setIsFollowingModalOpen(false);
+
+
+  const btnContent = () => {
+    switch (pageType) {
+      case "user":
+        return isFollowing ? (
+          <BasicButton size="sm" buttonType="primary" onClick={clickBtnHandler}>
+            팔로잉
+          </BasicButton>
+        ) : (
+          <BasicButton size="sm" buttonType="secondary" onClick={clickBtnHandler}>
+            팔로우
+          </BasicButton>
+        );
+      case "mypage":
+        return (
+          <BasicButton buttonType="third" onClick={clickBtnHandler}>
+            {isEdited ? "수정 완료" : "프로필 수정"}
+          </BasicButton>
+        );
+      default:
+        return null;
     }
   };
 
@@ -113,12 +140,8 @@ Props) => {
               </div>
             </div>
           </div>
-          <div className={cx("edit-button")}>
-            <BasicButton buttonType="third" onClick={clickEdit}>
-              {isEdited ? "수정 완료" : "프로필 수정"}
-            </BasicButton>
-          </div>
         </div>
+        <div className={cx("edit-button")}>{btnContent()}</div>
       </div>
       <FollowModal
         isOpen={isFollowerModalOpen}
