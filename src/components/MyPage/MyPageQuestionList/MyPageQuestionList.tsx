@@ -27,7 +27,7 @@ interface Props {
 
 const MyPageQuestionList = ({ tab, questionsData }: Props) => {
   const headerText = (tabType: string) => {
-    if (tabType === "답변") return "작성한 질문";
+    if (tabType === "답변") return "작성한 답변";
     if (tabType === "질문") return "작성한 질문";
     if (tabType === "다시보기") return "다시보기";
     return undefined;
