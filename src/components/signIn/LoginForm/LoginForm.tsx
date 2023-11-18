@@ -3,7 +3,12 @@
 import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
 import style from "./LoginForm.module.scss";
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "src/redux/store";
+import { logIn } from "src/redux/slices/auth-slice";
+import { requestSignIn } from "src/api/User";
 
+import { apiRequestSignIn } from "src/api/User/api";
 const cx = classNames.bind(style);
 
 // interface Props {
@@ -16,6 +21,9 @@ type FormValues = {
 };
 
 const LoginForm = () => {
+  const { isLoggedIn } = useAppSelector((state) => state.authReducer.value);
+  console.log(isLoggedIn);
+
   const {
     register,
     handleSubmit,
@@ -24,7 +32,11 @@ const LoginForm = () => {
   } = useForm<FormValues>();
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
-    console.log("valid", data);
+    // const res = await requestSignIn(data.loginId, data.password);
+    // console.log(res);
+    apiRequestSignIn(data.loginId, data.password, (resData) => {
+      console.log(resData);
+    });
   };
   const onInvalid = (error: FieldErrors) => {
     console.log("invalid", error);

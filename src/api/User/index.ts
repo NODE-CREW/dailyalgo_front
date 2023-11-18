@@ -5,6 +5,7 @@ import {
   API_CHECK_NICKNAME,
   API_SEND_EMAIL,
   API_CEHCK_CERTIFICATION_NUM,
+  API_SIGN_IN,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -25,4 +26,8 @@ export const requestSendMail = (email: string): Promise<any> => {
 
 export const requestCheckCertificationNum = (email: string, num: string): Promise<any> => {
   return instance.post(API_CEHCK_CERTIFICATION_NUM, { email, num });
+};
+
+export const requestSignIn = (id: string, password: string): Promise<any> => {
+  return instance.post(API_SIGN_IN, { id, password });
 };
