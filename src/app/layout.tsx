@@ -3,6 +3,7 @@ import "./global.scss";
 import { Header } from "@components/layout/Header";
 import "../styles/base/_reset.scss";
 import "../styles/base/_font.scss";
+import ReduxProvider from "src/redux/provider";
 
 interface Props {
   children: ReactNode;
@@ -13,8 +14,10 @@ const RootLayout = ({ children }: Props) => (
     <head />
     <body>
       <Header />
-      {children}
-      <div id="modal-root" />
+      <ReduxProvider>
+        {children}
+        <div id="modal-root" />
+      </ReduxProvider>
     </body>
   </html>
 );

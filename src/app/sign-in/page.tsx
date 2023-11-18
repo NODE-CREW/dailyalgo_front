@@ -1,3 +1,5 @@
+"use client";
+
 import Head from "next/head";
 import Link from "next/link";
 import { LoginForm } from "src/components/signIn/LoginForm";
