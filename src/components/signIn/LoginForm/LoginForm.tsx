@@ -2,18 +2,13 @@
 
 import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
-import style from "./LoginForm.module.scss";
+import { apiRequestSignIn } from "src/api/User";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "src/redux/store";
 import { logIn } from "src/redux/slices/auth-slice";
-import { requestSignIn } from "src/api/User";
+import style from "./LoginForm.module.scss";
 
-import { apiRequestSignIn } from "src/api/User/api";
 const cx = classNames.bind(style);
-
-// interface Props {
-
-// }
 
 type FormValues = {
   loginId: string;
@@ -21,22 +16,21 @@ type FormValues = {
 };
 
 const LoginForm = () => {
-  const { isLoggedIn } = useAppSelector((state) => state.authReducer.value);
-  console.log(isLoggedIn);
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { isSubmitting, errors },
   } = useForm<FormValues>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
-    // const res = await requestSignIn(data.loginId, data.password);
-    // console.log(res);
-    apiRequestSignIn(data.loginId, data.password, (resData) => {
-      console.log(resData);
-    });
+    const loginSuccessHandler = (res) => {
+      dispatch(logIn(res.token));
+      window.localStorage.setItem("token", res.token);
+    };
+
+    apiRequestSignIn(data.loginId, data.password, loginSuccessHandler);
   };
   const onInvalid = (error: FieldErrors) => {
     console.log("invalid", error);

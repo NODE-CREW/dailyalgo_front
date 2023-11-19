@@ -3,7 +3,7 @@
 import { useState, MouseEvent } from "react";
 import { FieldErrors, SubmitHandler, set, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
-import { fetchCheckId, fetchCheckNickname, requestSendMail } from "src/api/User";
+import { fetchCheckId, fetchCheckNickname, requestSendMail } from "src/api/User/api";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../AgreementModal/AgreementModal";
