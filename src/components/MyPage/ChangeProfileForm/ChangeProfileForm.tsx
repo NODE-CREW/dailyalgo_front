@@ -3,7 +3,7 @@ import { BasicButton } from "@components/button/BasicButton";
 import { DeleteUserModal } from "../DeleteUserModal";
 import { useState } from "react";
 import { useForm, FieldErrors, SubmitHandler } from "react-hook-form";
-import { fetchCheckNickname } from "src/api/User/api";
+import { fetchCheckNickname } from "src/api/User";
 import style from "./ChangeProfileForm.module.scss";
 
 const cx = classNames.bind(style);

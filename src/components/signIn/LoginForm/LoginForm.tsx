@@ -2,10 +2,12 @@
 
 import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
-import { apiRequestSignIn } from "src/api/User";
 import { useDispatch } from "react-redux";
-import { AppDispatch, useAppSelector } from "src/redux/store";
-import { logIn } from "src/redux/slices/auth-slice";
+import { AppDispatch } from "src/redux/store";
+import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
+import type { UserInfo, LoginRes } from "src/types/user";
+import { requestSignIn, fetchUserInfo } from "src/api/User";
+import { useRouter } from "next/navigation";
 import style from "./LoginForm.module.scss";
 
 const cx = classNames.bind(style);
@@ -16,28 +18,43 @@ type FormValues = {
 };
 
 const LoginForm = () => {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { isSubmitting, errors },
+    setError,
   } = useForm<FormValues>();
-  const dispatch = useDispatch<AppDispatch>();
+
+  const getUserInfo = async () => {
+    try {
+      const res: UserInfo = await fetchUserInfo();
+      dispatch(setUserInfo(res));
+      router.push("/");
+    } catch (e) {
+      throw new Error("Failed to fetch data");
+    }
+  };
+
+  const onInvalid = () => {
+    setError("root", {
+      type: "required",
+      message: `아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.`,
+    });
+  };
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
-    const loginSuccessHandler = (res) => {
+    try {
+      const res: LoginRes = await requestSignIn(data.loginId, data.password);
       dispatch(logIn(res.token));
       window.localStorage.setItem("token", res.token);
-    };
-
-    apiRequestSignIn(data.loginId, data.password, loginSuccessHandler);
-  };
-  const onInvalid = (error: FieldErrors) => {
-    console.log("invalid", error);
-    // setError("root", {
-    //   type: "required",
-    //   message: `아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.`,
-    // });
+      await getUserInfo();
+    } catch (e) {
+      onInvalid();
+    }
   };
 
   return (
