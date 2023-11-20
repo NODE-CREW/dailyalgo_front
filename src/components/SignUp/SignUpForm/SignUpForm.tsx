@@ -11,6 +11,7 @@ import { AgreementModal } from "../AgreementModal/AgreementModal";
 const cx = classNames.bind(style);
 
 type FormValues = {
+  name: string;
   registerId: string;
   nickname: string;
   password: string;
@@ -67,16 +68,20 @@ const SignUpForm = () => {
     const isValid = await trigger("registerId");
     if (!isValid) return;
 
+    // 2. 아이디 중복 확인
     const id = getValues("registerId");
-    const res = await fetchCheckId(id);
-    if (res) {
-      setRegisterIdDuplicationCheck(true);
-    } else {
-      setRegisterIdDuplicationCheck(false);
-      setError("registerId", {
-        type: "duplication",
-        message: "이미 사용중인 아이디입니다.",
-      });
+    try {
+      const res = await fetchCheckId(id);
+      if (res) setRegisterIdDuplicationCheck(true);
+      else {
+        setRegisterIdDuplicationCheck(false);
+        setError("registerId", {
+          type: "duplication",
+          message: "이미 사용중인 아이디입니다.",
+        });
+      }
+    } catch (e) {
+      throw new Error("아이디 중복 확인에 실패했습니다.");
     }
   };
 
@@ -93,20 +98,25 @@ const SignUpForm = () => {
   };
 
   const handleCheckNickname = async () => {
+    // 1. 닉네임 유효성 검사 통과확인
     const isValid = await trigger("nickname");
     if (!isValid) return;
 
+    // 2. 닉네임 중복 확인
     const nickname = getValues("nickname");
-    const res = await fetchCheckNickname(nickname);
-
-    if (res) {
-      setNicknameDuplicationCheck(true);
-    } else {
-      setNicknameDuplicationCheck(false);
-      setError("nickname", {
-        type: "duplicate",
-        message: "이미 사용중인 닉네임입니다.",
-      });
+    try {
+      const res = await fetchCheckNickname(nickname);
+      if (res) {
+        setNicknameDuplicationCheck(true);
+      } else {
+        setNicknameDuplicationCheck(false);
+        setError("nickname", {
+          type: "duplicate",
+          message: "이미 사용중인 닉네임입니다.",
+        });
+      }
+    } catch (e) {
+      throw new Error("닉네임 중복 확인에 실패했습니다.");
     }
   };
 
@@ -129,11 +139,14 @@ const SignUpForm = () => {
     return null;
   };
 
-  const handleEmail = async () => {
+  const handleSendEmail = async () => {
+    // 1. 이메일 유효성 검사 통과확인
     const isValid = await trigger("email");
-    const email = getValues("email");
     if (!isValid) return;
-    await requestSendMail(email);
+
+    // 2. 인증 메일 전송
+    const email = getValues("email");
+    // await requestSendMail(email);
     setShouldAuthorizeEmail(() => true);
   };
 
@@ -162,6 +175,12 @@ const SignUpForm = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onValid, onInvalid)} className={cx("register-form")}>
+        {/* name */}
+        <div className={cx("input-without-button-wrap")}>
+          <label htmlFor="name">
+            <input id="name" placeholder="이름을 입력해주세요." {...register("name", {})} />
+          </label>
+        </div>
         {/* register-id */}
         <div className={cx("input-with-button-wrap")}>
           <label htmlFor="registerId">
@@ -314,7 +333,7 @@ const SignUpForm = () => {
             <button
               type="button"
               onClick={() => {
-                handleEmail();
+                handleSendEmail();
               }}
             >
               인증하기
@@ -324,7 +343,7 @@ const SignUpForm = () => {
               type="button"
               disabled={isAuthorized}
               onClick={() => {
-                handleEmail();
+                handleReSendEmail();
               }}
             >
               재전송
