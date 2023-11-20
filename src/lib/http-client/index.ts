@@ -5,10 +5,10 @@ import { AxiosClientBuilder } from "./AxiosClientBuilder";
 const requestInterceptor: RequestInterceptor = {
   async onFulfilled(config) {
     // 토큰 설정
-    // const accessToken = localStorage.getItem("accessToken");
-    // if (!accessToken) return config
+    const token = localStorage.getItem("token");
+    if (!token) return config;
 
-    // config.headers.Authorization = `Bearer ${accessToken}`;
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   onRejected(error) {
