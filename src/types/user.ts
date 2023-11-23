@@ -1,4 +1,4 @@
-interface LoginRes {
+interface UserLoginRes {
   message: string;
   token: string;
 }
@@ -18,4 +18,13 @@ interface UserInfo {
   following_cnt: number;
 }
 
-export type { LoginRes, UserInfo };
+interface UserSignUpReq {
+  id: string;
+  name: string;
+  nickname: string;
+  password: string;
+  email: string;
+  organization_code?: string;
+}
+
+export type { UserLoginRes, UserInfo, UserSignUpReq };

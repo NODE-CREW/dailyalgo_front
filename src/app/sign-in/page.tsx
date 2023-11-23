@@ -21,11 +21,11 @@ const SignIn = () => (
       <h1>로그인</h1>
       <LoginForm />
       <div className={cx("sign-in-actions")}>
-        <Link href="/" className={cx("link")}>
+        <Link href="/finduser" className={cx("link")}>
           <span>아이디/비밀번호를 잊어버리셨나요?</span>
           <img src="./images/arrow-tr.svg" alt="" />
         </Link>
-        <Link href="/" className={cx("link")}>
+        <Link href="/sign-up" className={cx("link")}>
           <span>아직 아이디가 없으신가요?</span>
           <img src="./images/arrow-tr.svg" alt="" />
         </Link>

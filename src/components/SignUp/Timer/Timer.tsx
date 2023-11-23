@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import classNames from "classnames/bind";
 import style from "./Timer.module.scss";
 
@@ -11,9 +11,9 @@ interface TimerProps {
   setIsTimeOut: (isTimeOut: boolean) => void;
 }
 
-const Timer = ({ setAuthResultMsg, isAuthorized, setIsTimeOut }: TimerProps) => {
+const Timer = forwardRef(({ setAuthResultMsg, isAuthorized, setIsTimeOut }: TimerProps, ref) => {
   const [time, setTime] = useState<any>(181);
-  const deadline = dayjs().add(181, "second");
+  const [deadline, setDeadLine] = useState(dayjs().add(181, "second"));
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
 
@@ -25,6 +25,15 @@ const Timer = ({ setAuthResultMsg, isAuthorized, setIsTimeOut }: TimerProps) => 
       setSeconds(() => Math.floor((timeDiff / 1000) % 60));
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    resetTimer: () => {
+      setTime(181);
+      setDeadLine(dayjs().add(181, "second"));
+      setMinutes(3);
+      setSeconds(0);
+    },
+  }));
 
   useEffect(() => {
     if (!isAuthorized && time === 0) {
@@ -41,13 +50,13 @@ const Timer = ({ setAuthResultMsg, isAuthorized, setIsTimeOut }: TimerProps) => 
     }
     return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [deadline]);
 
   return (
     <span className={cx("timer")}>
       {`0${minutes}`} : {seconds < 10 ? `0${seconds}` : seconds}
     </span>
   );
-};
+});
 
 export { Timer };

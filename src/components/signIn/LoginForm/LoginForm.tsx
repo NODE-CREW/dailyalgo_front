@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/redux/store";
 import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
-import type { UserInfo, LoginRes } from "src/types/user";
+import type { UserInfo, UserLoginRes } from "src/types/user";
 import { requestSignIn, fetchUserInfo } from "src/api/User";
 import { useRouter } from "next/navigation";
 import style from "./LoginForm.module.scss";
@@ -48,7 +48,7 @@ const LoginForm = () => {
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
     try {
-      const res: LoginRes = await requestSignIn(data.loginId, data.password);
+      const res: UserLoginRes = await requestSignIn(data.loginId, data.password);
       dispatch(logIn(res.token));
       window.localStorage.setItem("token", res.token);
       await getUserInfo();

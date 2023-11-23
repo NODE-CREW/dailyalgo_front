@@ -1,9 +1,21 @@
 "use client";
 
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useRef } from "react";
 import { FieldErrors, SubmitHandler, set, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
-import { fetchCheckId, fetchCheckNickname, requestSendMail } from "src/api/User";
+import {
+  fetchCheckId,
+  fetchCheckNickname,
+  requestSendMail,
+  requestCheckCertificationNum,
+  requestSignUp,
+  fetchUserInfo,
+} from "src/api/User";
+import type { UserSignUpReq, UserLoginRes, UserInfo } from "src/types/user";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "src/redux/store";
+import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../AgreementModal/AgreementModal";
@@ -11,11 +23,13 @@ import { AgreementModal } from "../AgreementModal/AgreementModal";
 const cx = classNames.bind(style);
 
 type FormValues = {
+  name: string;
   registerId: string;
   nickname: string;
   password: string;
   passwordCheck: string;
   email: string;
+  emailAuthorization: string;
   organization?: string;
   organizationCode?: string;
   agreementAl: boolean;
@@ -23,6 +37,9 @@ type FormValues = {
 };
 
 const SignUpForm = () => {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
   const {
     handleSubmit,
     register,
@@ -30,6 +47,7 @@ const SignUpForm = () => {
     getValues,
     trigger,
     setError,
+    reset,
   } = useForm<FormValues>({ mode: "onChange" });
 
   const [registerIdDuplicationCheck, setRegisterIdDuplicationCheck] = useState(false);
@@ -40,8 +58,17 @@ const SignUpForm = () => {
   const [isTimeOut, setIsTimeOut] = useState<boolean>(false);
   const [isAlModalOpen, setIsAlModalOpen] = useState<boolean>(false);
   const [isIdModalOpen, setIsIdModalOpen] = useState<boolean>(false);
+  const timerRef = useRef();
 
-  // const [verifiedId, setVerifiedId] = useState<string>("");
+  const getUserInfo = async () => {
+    try {
+      const res: UserInfo = await fetchUserInfo();
+      dispatch(setUserInfo(res));
+      router.push("/");
+    } catch (e) {
+      throw new Error("Failed to fetch data");
+    }
+  };
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
     if (!registerIdDuplicationCheck) {
@@ -54,29 +81,57 @@ const SignUpForm = () => {
         type: "duplicate",
         message: "중복 확인이 필요합니다.",
       });
+    } else if (!isAuthorized) {
+      setError("email", {
+        type: "duplicate",
+        message: "이메일 인증이 필요합니다.",
+      });
     } else {
-      console.log("valid", data);
+      const requestBody: UserSignUpReq = {
+        id: data.registerId,
+        name: data.name,
+        nickname: data.nickname,
+        password: data.password,
+        email: data.email,
+        organization_code: data.organizationCode,
+      };
+
+      try {
+        const res: UserLoginRes = await requestSignUp(requestBody);
+        const { token } = res;
+        dispatch(logIn(token));
+        window.localStorage.setItem("token", token);
+        await getUserInfo();
+      } catch (e) {
+        throw new Error("회원가입에 실패했습니다.");
+      }
     }
   };
+
   const onInvalid = (error: FieldErrors) => {
     console.log("invalid", error);
   };
 
+  /** resisterId */
   const handleCheckRegisterId = async () => {
     // 1. 아이디 유효성 검사 통과확인
     const isValid = await trigger("registerId");
     if (!isValid) return;
 
+    // 2. 아이디 중복 확인
     const id = getValues("registerId");
-    const res = await fetchCheckId(id);
-    if (res) {
-      setRegisterIdDuplicationCheck(true);
-    } else {
-      setRegisterIdDuplicationCheck(false);
-      setError("registerId", {
-        type: "duplication",
-        message: "이미 사용중인 아이디입니다.",
-      });
+    try {
+      const res = await fetchCheckId(id);
+      if (res) setRegisterIdDuplicationCheck(true);
+      else {
+        setRegisterIdDuplicationCheck(false);
+        setError("registerId", {
+          type: "duplication",
+          message: "이미 사용중인 아이디입니다.",
+        });
+      }
+    } catch (e) {
+      throw new Error("아이디 중복 확인에 실패했습니다.");
     }
   };
 
@@ -89,24 +144,30 @@ const SignUpForm = () => {
         return <span className={cx("success")}>사용가능한 아이디입니다.</span>;
       return <span className={cx("need-duplication-check")}>중복 확인이 필요합니다.</span>;
     }
-    return undefined;
+    return null;
   };
 
+  /** nickname */
   const handleCheckNickname = async () => {
+    // 1. 닉네임 유효성 검사 통과확인
     const isValid = await trigger("nickname");
     if (!isValid) return;
 
+    // 2. 닉네임 중복 확인
     const nickname = getValues("nickname");
-    const res = await fetchCheckNickname(nickname);
-
-    if (res) {
-      setNicknameDuplicationCheck(true);
-    } else {
-      setNicknameDuplicationCheck(false);
-      setError("nickname", {
-        type: "duplicate",
-        message: "이미 사용중인 닉네임입니다.",
-      });
+    try {
+      const res = await fetchCheckNickname(nickname);
+      if (res) {
+        setNicknameDuplicationCheck(true);
+      } else {
+        setNicknameDuplicationCheck(false);
+        setError("nickname", {
+          type: "duplicate",
+          message: "이미 사용중인 닉네임입니다.",
+        });
+      }
+    } catch (e) {
+      throw new Error("닉네임 중복 확인에 실패했습니다.");
     }
   };
 
@@ -114,7 +175,6 @@ const SignUpForm = () => {
     const nickname = getValues("nickname");
     if (errors.nickname && nickname === "") return <span>{errors.nickname?.message}</span>;
     if (nickname !== undefined && nickname !== "") {
-      if (nickname === "") return <span>{errors.nickname?.message}</span>;
       if (errors.nickname) return <span>{errors?.nickname.message}</span>;
       if (nicknameDuplicationCheck)
         return <span className={cx("success")}>사용가능한 닉네임입니다.</span>;
@@ -129,12 +189,90 @@ const SignUpForm = () => {
     return null;
   };
 
-  const handleEmail = async () => {
+  /** email */
+  const handleSendEmail = async () => {
+    // 1. 이메일 유효성 검사 통과확인
     const isValid = await trigger("email");
-    const email = getValues("email");
     if (!isValid) return;
-    await requestSendMail(email);
-    setShouldAuthorizeEmail(() => true);
+
+    // 2. 인증 메일 전송
+    const email = getValues("email");
+    try {
+      await requestSendMail(email);
+      setShouldAuthorizeEmail(() => true);
+      setAuthResultMsg("");
+    } catch (e) {
+      /** 이메일 중복 확인 로직 */
+      setError("email", {
+        type: "duplicate",
+        message: "이미 가입한 계정이 있습니다.",
+      });
+      throw new Error("이메일 전송에 실패했습니다.");
+    }
+  };
+
+  const initializeEmailAuthorization = () => {
+    const initialValues = {
+      emailAuthorization: "",
+    };
+
+    reset(initialValues);
+  };
+
+  const handleReSendEmail = async () => {
+    const email = getValues("email");
+    try {
+      await requestSendMail(email);
+      setShouldAuthorizeEmail(() => true);
+      setAuthResultMsg("");
+      setIsTimeOut(false);
+      timerRef.current.resetTimer();
+      initializeEmailAuthorization();
+    } catch (e) {
+      /** 이메일 중복 확인 로직 */
+      setError("email", {
+        type: "duplicate",
+        message: "이미 가입한 계정이 있습니다.",
+      });
+      throw new Error("이메일 전송에 실패했습니다.");
+    }
+  };
+
+  const emailMsg = () => {
+    const email = getValues("email");
+    if (errors.email && email === "") return <span>{errors.email?.message}</span>;
+    if (email !== undefined && email !== "") {
+      if (errors.email?.message) return <span>{errors.email?.message}</span>;
+      if (!shouldAuthorizeEmail)
+        return (
+          <span role="alert" className={cx("need-duplication-check")}>
+            이메일 인증이 필요합니다.
+          </span>
+        );
+      return null;
+    }
+  };
+
+  /** emailAuthorization */
+  const handleCheckCertificationNum = async () => {
+    const email = getValues("email");
+    const emailAuthorization = getValues("emailAuthorization");
+
+    try {
+      const res = await requestCheckCertificationNum(email, emailAuthorization);
+
+      if (res) {
+        setIsAuthorized(true);
+        setAuthResultMsg("인증이 완료 되었습니다.");
+      } else {
+        setError("emailAuthorization", {
+          type: "duplicate",
+          message: "인증번호가 일치하지 않습니다.",
+        });
+      }
+    } catch (e) {
+      throw new Error("인증번호 확인에 실패했습니다.");
+    }
   };
 
   const alModalOpen = (e: MouseEvent) => {
@@ -162,6 +300,24 @@ const SignUpForm = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onValid, onInvalid)} className={cx("register-form")}>
+        {/* name */}
+        <div className={cx("input-without-button-wrap")}>
+          <label htmlFor="name">
+            <input
+              id="name"
+              placeholder="이름을 입력해주세요."
+              {...register("name", {
+                required: "이름을 입력해주세요.",
+              })}
+              style={
+                errors.name
+                  ? { borderColor: "#FF0000", paddingRight: "50px" }
+                  : { paddingRight: "50px" }
+              }
+            />
+            {errors.name?.message && <span>{errors.name.message}</span>}
+          </label>
+        </div>
         {/* register-id */}
         <div className={cx("input-with-button-wrap")}>
           <label htmlFor="registerId">
@@ -268,18 +424,7 @@ const SignUpForm = () => {
               {...register("passwordCheck", {
                 required: "비밀번호를 한번 더 입력해주세요.",
                 validate: {
-                  // isDuplicate: (value) => {
-                  //   const password = getValues("password");
-                  //   if (password === "") return undefined;
-                  //   if (password !== "" && value !== password) {
-                  //     trigger("password");
-                  //     return "비밀번호가 일치하지 않습니다.";
-                  //   }
-                  //   trigger("password");
-                  //   return undefined;
-                  // },
                   check: (value) => {
-                    console.log("중복확인", "password : ", getValues("password"));
                     if (getValues("password") !== value) {
                       return "비밀번호가 일치하지 않습니다.";
                     }
@@ -302,19 +447,26 @@ const SignUpForm = () => {
                 required: "이메일을 입력해주세요.",
                 pattern: {
                   value:
-                    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+                    /^[0-9a-zA-Z]([-_.]|[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
                   message: "이메일형식이 올바르지 않습니다.",
+                },
+                onChange: () => {
+                  if (shouldAuthorizeEmail) {
+                    setShouldAuthorizeEmail(false);
+                    setIsAuthorized(false);
+                    initializeEmailAuthorization();
+                  }
                 },
               })}
               style={errors.email ? { borderColor: "#FF0000" } : {}}
             />
-            {errors.email?.message && <span>{errors.email.message}</span>}
+            {emailMsg()}
           </label>
           {!shouldAuthorizeEmail ? (
             <button
               type="button"
               onClick={() => {
-                handleEmail();
+                handleSendEmail();
               }}
             >
               인증하기
@@ -324,7 +476,7 @@ const SignUpForm = () => {
               type="button"
               disabled={isAuthorized}
               onClick={() => {
-                handleEmail();
+                handleReSendEmail();
               }}
             >
               재전송
@@ -336,6 +488,7 @@ const SignUpForm = () => {
             <label htmlFor="emailAuthorization" className={cx("email-authorization")}>
               {!isAuthorized && (
                 <Timer
+                  ref={timerRef}
                   setAuthResultMsg={setAuthResultMsg}
                   isAuthorized={isAuthorized}
                   setIsTimeOut={setIsTimeOut}
@@ -347,14 +500,17 @@ const SignUpForm = () => {
                 placeholder="인증번호를 입력해 주세요"
                 disabled={isAuthorized}
                 style={
-                  errors.email
+                  errors.emailAuthorization
                     ? { borderColor: "#FF0000", paddingRight: "50px" }
                     : { paddingRight: "50px" }
                 }
+                {...register("emailAuthorization", {
+                  required: "인증번호를 입력해주세요.",
+                })}
               />
-              {/* {errors.email?.message && <span>{errors.email.message}</span>} */}
-              {/* <span>{authResultMsg}</span> */}
-              {isTimeOut && <span>{authResultMsg}</span>}
+              {errors.emailAuthorization?.message && !isTimeOut && (
+                <span>{errors.emailAuthorization.message}</span>
+              )}
               {isAuthorized && <span className={cx("success")}>{authResultMsg}</span>}
             </label>
 
@@ -362,15 +518,11 @@ const SignUpForm = () => {
               type="button"
               disabled={isAuthorized || isTimeOut}
               onClick={() => {
-                setIsAuthorized(true);
-                setAuthResultMsg("인증이완료되었습니다.");
+                handleCheckCertificationNum();
               }}
             >
               확인
             </button>
-            {/* <div className={cn("certification-result-msg")}>
-            <span>{authResultMsg}</span>
-          </div> */}
           </div>
         )}
         <div style={{ marginTop: 24 }}>
@@ -398,10 +550,9 @@ const SignUpForm = () => {
               type="checkbox"
               id="agreement-al"
               {...register("agreementAl", {
-                required: false || "이용약관에 동의해주세요.",
+                required: "이용약관에 동의해주세요.",
               })}
             />
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="agreement-al">
               <span>
                 본 서비스를 위한{" "}
@@ -417,10 +568,9 @@ const SignUpForm = () => {
               type="checkbox"
               id="agreement-id"
               {...register("agreementId", {
-                required: false || "개인정보약관에 동의해주세요.",
+                required: "개인정보약관에 동의해주세요.",
               })}
             />
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="agreement-id">
               <span>
                 본 서비스를 위한{" "}

@@ -1,5 +1,5 @@
 import { createHttpCilent } from "src/lib/http-client";
-import type { UserInfo, LoginRes } from "src/types/user";
+import type { UserInfo, UserLoginRes, UserSignUpReq } from "src/types/user";
 import {
   API_CHECK_ID,
   API_CHECK_NICKNAME,
@@ -7,6 +7,7 @@ import {
   API_CEHCK_CERTIFICATION_NUM,
   API_SIGN_IN,
   API_USER_INFO,
+  API_SIGN_UP,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -29,7 +30,11 @@ export const requestCheckCertificationNum = (email: string, num: string): Promis
   return instance.post(API_CEHCK_CERTIFICATION_NUM, { email, num });
 };
 
-export const requestSignIn = (id: string, password: string): Promise<LoginRes> => {
+export const requestSignUp = (requestBody: UserSignUpReq): Promise<UserLoginRes> => {
+  return instance.post(API_SIGN_UP, requestBody);
+};
+
+export const requestSignIn = (id: string, password: string): Promise<UserLoginRes> => {
   return instance.post(API_SIGN_IN, { id, password });
 };
 
