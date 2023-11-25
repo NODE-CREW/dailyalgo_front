@@ -20,7 +20,6 @@ import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../AgreementModal/AgreementModal";
-import { set } from "lodash";
 
 const cx = classNames.bind(style);
 
@@ -573,7 +572,6 @@ const SignUpForm = () => {
                     if (isOrganizationNameSearched) {
                       setOrganizationName("");
                       setIsOrganizationNameSearched(false);
-                      changeOrganizationCodeReqired();
                     }
                   },
                 })}

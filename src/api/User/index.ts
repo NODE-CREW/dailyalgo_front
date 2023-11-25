@@ -8,6 +8,7 @@ import {
   API_SIGN_IN,
   API_USER_INFO,
   API_SIGN_UP,
+  API_FIND_ID_BY_EMAIL,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -40,4 +41,8 @@ export const requestSignIn = (id: string, password: string): Promise<UserLoginRe
 
 export const fetchUserInfo = (id?: string): Promise<UserInfo> => {
   return instance.get(API_USER_INFO(id));
+};
+
+export const fetchFindIdByEmail = (email: string): Promise<any> => {
+  return instance.get(API_FIND_ID_BY_EMAIL(email));
 };
