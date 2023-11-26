@@ -3,8 +3,8 @@ import type { UserInfo, UserLoginRes, UserSignUpReq } from "src/types/user";
 import {
   API_CHECK_ID,
   API_CHECK_NICKNAME,
-  API_SEND_EMAIL,
-  API_CEHCK_CERTIFICATION_NUM,
+  API_SEND_SIGN_UP_EMAIL,
+  API_CEHCK_SIGN_UP_CERTIFICATION_NUM,
   API_SIGN_IN,
   API_USER_INFO,
   API_SIGN_UP,
@@ -22,12 +22,12 @@ export const fetchCheckNickname = (nickname: string): Promise<boolean> => {
   return instance.get(API_CHECK_NICKNAME, { params: { nickname } });
 };
 
-export const requestSendMail = (email: string): Promise<any> => {
-  return instance.post(API_SEND_EMAIL, { email });
+export const requestSendSignUpMail = (email: string): Promise<any> => {
+  return instance.post(API_SEND_SIGN_UP_EMAIL, { email });
 };
 
-export const requestCheckCertificationNum = (email: string, num: string): Promise<any> => {
-  return instance.post(API_CEHCK_CERTIFICATION_NUM, { email, num });
+export const requestCheckSignUpCertificationNum = (email: string, num: string): Promise<any> => {
+  return instance.post(API_CEHCK_SIGN_UP_CERTIFICATION_NUM, { email, num });
 };
 
 export const requestSignUp = (requestBody: UserSignUpReq): Promise<UserLoginRes> => {

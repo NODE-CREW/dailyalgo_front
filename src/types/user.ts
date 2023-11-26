@@ -24,6 +24,7 @@ interface UserSignUpReq {
   nickname: string;
   password: string;
   email: string;
+  num: string;
   organization_code?: string;
 }
 
