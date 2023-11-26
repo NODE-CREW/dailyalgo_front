@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, MouseEvent, useRef } from "react";
-import { FieldErrors, SubmitHandler, set, useForm } from "react-hook-form";
+import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
 import {
   fetchCheckId,
   fetchCheckNickname,
-  requestSendMail,
-  requestCheckCertificationNum,
+  requestSendSignUpMail,
+  requestCheckSignUpCertificationNum,
   requestSignUp,
   fetchUserInfo,
 } from "src/api/User";
+import { fetchOrganizationSearch } from "src/api/Organization";
 import type { UserSignUpReq, UserLoginRes, UserInfo } from "src/types/user";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -19,6 +20,7 @@ import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../AgreementModal/AgreementModal";
+import { set } from "lodash";
 
 const cx = classNames.bind(style);
 
@@ -30,7 +32,6 @@ type FormValues = {
   passwordCheck: string;
   email: string;
   emailAuthorization: string;
-  organization?: string;
   organizationCode?: string;
   agreementAl: boolean;
   agreementId: boolean;
@@ -58,7 +59,9 @@ const SignUpForm = () => {
   const [isTimeOut, setIsTimeOut] = useState<boolean>(false);
   const [isAlModalOpen, setIsAlModalOpen] = useState<boolean>(false);
   const [isIdModalOpen, setIsIdModalOpen] = useState<boolean>(false);
-  const timerRef = useRef();
+  const [isOrganizationNameSearched, setIsOrganizationNameSearched] = useState<boolean>(false);
+  const [organizationName, setOrganizationName] = useState<string>("");
+  const timerRef = useRef<any>();
 
   const getUserInfo = async () => {
     try {
@@ -86,6 +89,11 @@ const SignUpForm = () => {
         type: "duplicate",
         message: "이메일 인증이 필요합니다.",
       });
+    } else if (data.organizationCode && !isOrganizationNameSearched) {
+      setError("organizationCode", {
+        type: "duplicate",
+        message: "조회 버튼을 눌러주세요.",
+      });
     } else {
       const requestBody: UserSignUpReq = {
         id: data.registerId,
@@ -93,6 +101,7 @@ const SignUpForm = () => {
         nickname: data.nickname,
         password: data.password,
         email: data.email,
+        num: data.emailAuthorization,
         organization_code: data.organizationCode,
       };
 
@@ -198,7 +207,7 @@ const SignUpForm = () => {
     // 2. 인증 메일 전송
     const email = getValues("email");
     try {
-      await requestSendMail(email);
+      await requestSendSignUpMail(email);
       setShouldAuthorizeEmail(() => true);
       setAuthResultMsg("");
     } catch (e) {
@@ -222,7 +231,7 @@ const SignUpForm = () => {
   const handleReSendEmail = async () => {
     const email = getValues("email");
     try {
-      await requestSendMail(email);
+      await requestSendSignUpMail(email);
       setShouldAuthorizeEmail(() => true);
       setAuthResultMsg("");
       setIsTimeOut(false);
@@ -259,11 +268,11 @@ const SignUpForm = () => {
     const emailAuthorization = getValues("emailAuthorization");
 
     try {
-      const res = await requestCheckCertificationNum(email, emailAuthorization);
+      const res = await requestCheckSignUpCertificationNum(email, emailAuthorization);
 
       if (res) {
         setIsAuthorized(true);
-        setAuthResultMsg("인증이 완료 되었습니다.");
+        setAuthResultMsg("인증이 완료되었습니다.");
       } else {
         setError("emailAuthorization", {
           type: "duplicate",
@@ -272,6 +281,32 @@ const SignUpForm = () => {
       }
     } catch (e) {
       throw new Error("인증번호 확인에 실패했습니다.");
+    }
+  };
+
+  /** organizationName */
+  const organizationNameSearch = async () => {
+    const organizationCode = getValues("organizationCode");
+
+    if (!organizationCode) {
+      setError("organizationCode", {
+        type: "duplicate",
+        message: "소속코드를 입력해주세요.",
+      });
+      return;
+    }
+
+    try {
+      const res = await fetchOrganizationSearch(organizationCode);
+      if (res) {
+        setOrganizationName(res.name);
+        setIsOrganizationNameSearched(true);
+      }
+    } catch (e) {
+      setError("organizationCode", {
+        type: "duplicate",
+        message: "존재하지 않는 소속코드입니다.",
+      });
     }
   };
 
@@ -511,6 +546,7 @@ const SignUpForm = () => {
               {errors.emailAuthorization?.message && !isTimeOut && (
                 <span>{errors.emailAuthorization.message}</span>
               )}
+              {isTimeOut && <span className={cx("error")}>{authResultMsg}</span>}
               {isAuthorized && <span className={cx("success")}>{authResultMsg}</span>}
             </label>
 
@@ -527,23 +563,30 @@ const SignUpForm = () => {
         )}
         <div style={{ marginTop: 24 }}>
           <span style={{ color: "black", fontSize: 14 }}>선택</span>
-          <div className={cx("input-without-button-wrap")}>
-            <label htmlFor="organization">
-              <input
-                id="organization"
-                placeholder="소속을 입력해주세요."
-                {...register("organization", {})}
-              />
-            </label>
-          </div>
-          <div className={cx("input-without-button-wrap")}>
+          <div className={cx("input-with-button-wrap")}>
             <label htmlFor="organizationCode">
               <input
                 id="organizationCode"
                 placeholder="소속코드를 입력해주세요."
-                {...register("organizationCode", {})}
+                {...register("organizationCode", {
+                  onChange: () => {
+                    if (isOrganizationNameSearched) {
+                      setOrganizationName("");
+                      setIsOrganizationNameSearched(false);
+                      changeOrganizationCodeReqired();
+                    }
+                  },
+                })}
+                style={errors.organizationCode ? { borderColor: "#FF0000" } : {}}
               />
+              {organizationName && isOrganizationNameSearched && (
+                <span className={cx("organization-name-text")}>소속 이름: {organizationName}</span>
+              )}
+              {errors.organizationCode?.message && <span>{errors.organizationCode.message}</span>}
             </label>
+            <button type="button" onClick={organizationNameSearch}>
+              조회
+            </button>
           </div>
           <div className={cx(["agreement", "al"])}>
             <input
