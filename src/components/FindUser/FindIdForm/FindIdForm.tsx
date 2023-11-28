@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Timer } from "@components/SignUp/Timer";
 import classNames from "classnames/bind";
+import { requestSendFindMail, requestCheckFindCertificationNum } from "src/api/User";
 import style from "./FindIdForm.module.scss";
 
 const cx = classNames.bind(style);
 
 type FormValues = {
   email: string;
+  emailAuthorization: string;
 };
 
 const FindIdForm = () => {
@@ -20,6 +22,8 @@ const FindIdForm = () => {
     formState: { errors },
     trigger,
     getValues,
+    reset,
+    setError,
   } = useForm<FormValues>({ mode: "onChange" });
 
   const [authResultMsg, setAuthResultMsg] = useState<string>("");
@@ -27,24 +31,80 @@ const FindIdForm = () => {
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [isTimeOut, setIsTimeOut] = useState<boolean>(false);
   const [canSearchId, setCanSearchId] = useState<boolean>(false);
+  const [failSearchId, setFailSearchId] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
+  const timerRef = useRef<any>(null);
+
+  const onVaild: SubmitHandler<FormValues> = async (data) => {
+    if (!isAuthorized) {
+      setError("emailAuthorization", {
+        type: "required",
+        message: "이메일 인증이 필요합니다.",
+      });
+    }
+  };
 
   const handleEmail = async () => {
     const isValid = await trigger("email");
     if (!isValid) return;
-    // 유저가 입력한 email로 인증번호 전송
 
-    setShouldAuthorizeEmail(() => true);
+    const email = getValues("email");
+    try {
+      const res = await requestSendFindMail(getValues("email"));
+      if (res) {
+        await requestSendFindMail(email);
+        setShouldAuthorizeEmail(() => true);
+        setAuthResultMsg("");
+      }
+    } catch (e) {
+      setFailSearchId(() => true);
+    }
+  };
+
+  const initializeEmailAuthorization = () => {
+    const initialValues = {
+      emailAuthorization: "",
+    };
+
+    reset(initialValues);
+  };
+
+  const handleReSendEmail = async () => {
+    const email = getValues("email");
+    try {
+      await requestSendFindMail(email);
+      setShouldAuthorizeEmail(() => true);
+      setAuthResultMsg("");
+      setIsTimeOut(false);
+      timerRef.current.resetTimer();
+      initializeEmailAuthorization();
+    } catch (e) {
+      setFailSearchId(() => true);
+    }
+  };
+
+  const handleCheckCertificationNum = async () => {
+    const email = getValues("email");
+    const emailAuthorization = getValues("emailAuthorization");
+
+    try {
+      const res = await requestCheckFindCertificationNum(email, emailAuthorization);
+      setCanSearchId(() => true);
+      setUserId(() => res);
+      setIsAuthorized(() => true);
+      setAuthResultMsg(() => "인증에 성공했습니다.");
+      timerRef.current.resetTimer();
+    } catch (e) {
+      setError("emailAuthorization", {
+        type: "duplicate",
+        message: "인증번호가 일치하지 않습니다.",
+      });
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit((d) => {
-        console.log(d);
-      })}
-      className={cx("find-id-form")}
-    >
-      {!canSearchId && (
+    <form onSubmit={handleSubmit(onVaild)} className={cx("find-id-form")}>
+      {!canSearchId && !failSearchId && (
         <div className={cx("input-with-button-wrap")}>
           <label htmlFor="email">
             <input
@@ -55,8 +115,15 @@ const FindIdForm = () => {
                 required: "이메일을 입력해주세요.",
                 pattern: {
                   value:
-                    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+                    /^[0-9a-zA-Z]([-_.]|[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
                   message: "이메일형식이 올바르지 않습니다.",
+                },
+                onChange: () => {
+                  if (shouldAuthorizeEmail) {
+                    setShouldAuthorizeEmail(() => false);
+                    setIsAuthorized(() => false);
+                    initializeEmailAuthorization();
+                  }
                 },
               })}
               style={errors.email ? { borderColor: "#FF0000" } : {}}
@@ -67,7 +134,6 @@ const FindIdForm = () => {
             <button
               type="button"
               onClick={() => {
-                console.log("인증하기");
                 handleEmail();
               }}
             >
@@ -78,8 +144,7 @@ const FindIdForm = () => {
               type="button"
               disabled={isAuthorized}
               onClick={() => {
-                console.log("재전송");
-                // handleEmail();
+                handleReSendEmail();
               }}
             >
               재전송
@@ -88,56 +153,48 @@ const FindIdForm = () => {
         </div>
       )}
       {shouldAuthorizeEmail && !canSearchId && (
-        <>
-          <div className={cx("input-with-button-wrap")}>
-            <label htmlFor="emailAuthorization" className={cx("email-authorization")}>
-              {!isAuthorized && (
-                <Timer
-                  setAuthResultMsg={setAuthResultMsg}
-                  isAuthorized={isAuthorized}
-                  setIsTimeOut={setIsTimeOut}
-                />
-              )}
-
-              <input
-                id="emailAuthorization"
-                placeholder="인증번호를 입력해 주세요"
-                disabled={isAuthorized}
-                style={
-                  errors.email
-                    ? { borderColor: "#FF0000", paddingRight: "50px" }
-                    : { paddingRight: "50px" }
-                }
+        <div className={cx("input-with-button-wrap")}>
+          <label htmlFor="emailAuthorization" className={cx("email-authorization")}>
+            {!isAuthorized && (
+              <Timer
+                ref={timerRef}
+                setAuthResultMsg={setAuthResultMsg}
+                isAuthorized={isAuthorized}
+                setIsTimeOut={setIsTimeOut}
               />
-              {isTimeOut && <span>{authResultMsg}</span>}
-              {isAuthorized && <span className={cx("success")}>{authResultMsg}</span>}
-            </label>
+            )}
 
-            <button
-              type="button"
-              disabled={isAuthorized || isTimeOut}
-              onClick={() => {
-                setIsAuthorized(true);
-                setAuthResultMsg("인증이완료되었습니다.");
-              }}
-            >
-              확인
-            </button>
-            {/* <div className={cn("certification-result-msg")}>
-            <span>{authResultMsg}</span>
-          </div> */}
-          </div>
+            <input
+              id="emailAuthorization"
+              placeholder="인증번호를 입력해 주세요"
+              disabled={isAuthorized}
+              style={
+                errors.emailAuthorization
+                  ? { borderColor: "#FF0000", paddingRight: "50px" }
+                  : { paddingRight: "50px" }
+              }
+              {...register("emailAuthorization", {
+                required: "인증번호를 입력해주세요.",
+              })}
+            />
+            {errors.emailAuthorization?.message && !isTimeOut && (
+              <span>{errors.emailAuthorization.message}</span>
+            )}
+            {isTimeOut && <span className={cx("error")}>{authResultMsg}</span>}
+            {isAuthorized && <span className={cx("success")}>{authResultMsg}</span>}
+          </label>
+
           <button
             type="button"
-            className={cx("find-btn")}
-            onClick={() => {
-              setCanSearchId(true);
-              setUserId("afdadfs");
-            }}
+            disabled={isAuthorized || isTimeOut}
+            onClick={handleCheckCertificationNum}
           >
-            찾기
+            확인
           </button>
-        </>
+          {/* <div className={cn("certification-result-msg")}>
+            <span>{authResultMsg}</span>
+          </div> */}
+        </div>
       )}
       {canSearchId && (
         <div className={cx("find-id-success")}>
@@ -148,6 +205,14 @@ const FindIdForm = () => {
           <span className={cx("user-id")}>{userId}</span>
           <Link href="/sign-in" className={cx("login-btn")}>
             <button type="button">로그인하기</button>
+          </Link>
+        </div>
+      )}
+      {failSearchId && (
+        <div className={cx("find-id-fail")}>
+          <span>해당 이메일로 가입된 아이디가 없습니다.</span>
+          <Link href="/sign-up" className={cx("sign-up-btn")}>
+            <button type="button">회원가입하기</button>
           </Link>
         </div>
       )}

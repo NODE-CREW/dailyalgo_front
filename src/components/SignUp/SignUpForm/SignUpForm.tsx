@@ -20,7 +20,6 @@ import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../AgreementModal/AgreementModal";
-import { set } from "lodash";
 
 const cx = classNames.bind(style);
 
@@ -258,8 +257,8 @@ const SignUpForm = () => {
             이메일 인증이 필요합니다.
           </span>
         );
-      return null;
     }
+    return null;
   };
 
   /** emailAuthorization */
@@ -573,7 +572,6 @@ const SignUpForm = () => {
                     if (isOrganizationNameSearched) {
                       setOrganizationName("");
                       setIsOrganizationNameSearched(false);
-                      changeOrganizationCodeReqired();
                     }
                   },
                 })}
