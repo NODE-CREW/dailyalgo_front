@@ -68,9 +68,9 @@ export const requestCheckPasswordCertificationNum = (
 };
 
 export const requestResetPassword = (
-  id: string,
+  email: string,
   num: string,
   newPassword: string
 ): Promise<any> => {
-  return instance.put(API_RESET_PASSWORD, { id, num, newPassword });
+  return instance.put(API_RESET_PASSWORD, { email, num, newPassword });
 };

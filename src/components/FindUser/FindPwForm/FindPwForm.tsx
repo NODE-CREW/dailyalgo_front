@@ -44,7 +44,7 @@ const FindPwForm = () => {
   const timerRef = useRef<any>(null);
 
   const handleIdCheck = async () => {
-    const isValid = trigger("userId");
+    const isValid = await trigger("userId");
     if (!isValid) return;
 
     try {
@@ -131,7 +131,7 @@ const FindPwForm = () => {
       const res = await requestCheckPasswordCertificationNum(email, num);
       if (res) {
         setIsAuthorized(true);
-        setAuthResultMsg("인증이완료되었습니다.");
+        setAuthResultMsg("인증이 완료되었습니다.");
       } else {
         setError("emailAuthorization", {
           type: "duplicate",
@@ -147,12 +147,12 @@ const FindPwForm = () => {
     const isValid = await trigger("password");
     if (!isValid) return;
 
-    const id = getValues("userId");
+    const email = getValues("email");
     const num = getValues("emailAuthorization");
     const password = getValues("password");
 
     try {
-      await requestResetPassword(id, num, password);
+      await requestResetPassword(email, num, password);
       setPasswordSettingComplete(true);
     } catch (e) {
       throw new Error("비밀번호 재설정에 실패했습니다.");
@@ -168,6 +168,10 @@ const FindPwForm = () => {
               placeholder="아이디를 입력해주세요."
               {...register("userId", {
                 required: "아이디를 입력해주세요.",
+                pattern: {
+                  value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{4,12}$/,
+                  message: "아이디는 영문 대소문자와 숫자를 포함하여 4~12자리로 입력해야합니다",
+                },
               })}
               style={errors.userId ? { borderColor: "#FF0000" } : {}}
               maxLength={12}
@@ -253,6 +257,9 @@ const FindPwForm = () => {
                     : { paddingRight: "50px" }
                 }
               />
+              {errors.emailAuthorization?.message && (
+                <span>{errors.emailAuthorization.message}</span>
+              )}
               {isTimeOut && <span className={cx("error")}>{authResultMsg}</span>}
               {isAuthorized && <span className={cx("success")}>{authResultMsg}</span>}
             </label>
@@ -266,18 +273,16 @@ const FindPwForm = () => {
             >
               확인
             </button>
-            {/* <div className={cn("certification-result-msg")}>
-            <span>{authResultMsg}</span>
-          </div> */}
           </div>
           <button
             type="button"
             className={cx("find-btn")}
+            disabled={!isAuthorized}
             onClick={() => {
               setCanSearchId(true);
             }}
           >
-            찾기
+            비밀번호 재설정 하기
           </button>
         </>
       )}
@@ -326,18 +331,7 @@ const FindPwForm = () => {
                 {...register("passwordCheck", {
                   required: "비밀번호를 한번 더 입력해주세요.",
                   validate: {
-                    // isDuplicate: (value) => {
-                    //   const password = getValues("password");
-                    //   if (password === "") return undefined;
-                    //   if (password !== "" && value !== password) {
-                    //     trigger("password");
-                    //     return "비밀번호가 일치하지 않습니다.";
-                    //   }
-                    //   trigger("password");
-                    //   return undefined;
-                    // },
                     check: (value) => {
-                      console.log("중복확인", "password : ", getValues("password"));
                       if (getValues("password") !== value) {
                         return "비밀번호가 일치하지 않습니다.";
                       }
