@@ -9,6 +9,11 @@ import {
   API_USER_INFO,
   API_SIGN_UP,
   API_FIND_ID_BY_EMAIL,
+  API_SEND_FIND_EMAIL,
+  API_CHECK_FIND_CERTIFICATION_NUM,
+  API_SEND_PASSWORD_EMAIL,
+  API_CHECK_PASSWORD_CERTIFICATION_NUM,
+  API_RESET_PASSWORD,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -43,6 +48,29 @@ export const fetchUserInfo = (id?: string): Promise<UserInfo> => {
   return instance.get(API_USER_INFO(id));
 };
 
-export const fetchFindIdByEmail = (email: string): Promise<any> => {
-  return instance.get(API_FIND_ID_BY_EMAIL(email));
+export const requestSendFindMail = (email: string): Promise<any> => {
+  return instance.post(API_SEND_FIND_EMAIL, { email });
+};
+
+export const requestCheckFindCertificationNum = (email: string, num: string): Promise<string> => {
+  return instance.post(API_CHECK_FIND_CERTIFICATION_NUM, { email, num });
+};
+
+export const requestSendPasswordMail = (id: string, email: string): Promise<any> => {
+  return instance.post(API_SEND_PASSWORD_EMAIL, { id, email });
+};
+
+export const requestCheckPasswordCertificationNum = (
+  email: string,
+  num: string
+): Promise<boolean> => {
+  return instance.post(API_CHECK_PASSWORD_CERTIFICATION_NUM, { email, num });
+};
+
+export const requestResetPassword = (
+  id: string,
+  num: string,
+  newPassword: string
+): Promise<any> => {
+  return instance.put(API_RESET_PASSWORD, { id, num, newPassword });
 };

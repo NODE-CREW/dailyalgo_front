@@ -1,9 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Timer } from "@components/SignUp/Timer";
+import {
+  fetchCheckId,
+  requestSendPasswordMail,
+  requestCheckPasswordCertificationNum,
+  requestResetPassword,
+} from "src/api/User";
 import classNames from "classnames/bind";
 import style from "./FindPwForm.module.scss";
 
@@ -12,6 +18,7 @@ const cx = classNames.bind(style);
 type FormValues = {
   userId: string;
   email: string;
+  emailAuthorization: string;
   password: string;
   passwordCheck: string;
 };
@@ -23,6 +30,8 @@ const FindPwForm = () => {
     formState: { errors },
     trigger,
     getValues,
+    setError,
+    reset,
   } = useForm<FormValues>({ mode: "onChange" });
 
   const [idCheckComplete, setIdCheckComplete] = useState<boolean>(false);
@@ -32,25 +41,122 @@ const FindPwForm = () => {
   const [isTimeOut, setIsTimeOut] = useState<boolean>(false);
   const [canSearchId, setCanSearchId] = useState<boolean>(false);
   const [passwordSettingComplete, setPasswordSettingComplete] = useState<boolean>(false);
+  const timerRef = useRef<any>(null);
 
-  const handleIdCheck = () => {
-    // const isValid = trigger("userId");
-    // if (!isValid) return;
-    setIdCheckComplete(true);
+  const handleIdCheck = async () => {
+    const isValid = trigger("userId");
+    if (!isValid) return;
+
+    try {
+      const res: boolean = await fetchCheckId(getValues("userId"));
+      if (!res) {
+        setIdCheckComplete(true);
+      } else {
+        setError("userId", {
+          message: "존재하지 않는 아이디입니다.",
+        });
+      }
+    } catch (e) {
+      throw new Error("아이디 중복체크에 실패했습니다.");
+    }
   };
 
   const handleEmail = async () => {
     const isValid = await trigger("email");
     if (!isValid) return;
-    // 유저가 입력한 email로 인증번호 전송
+    const email = getValues("email");
+    const id = getValues("userId");
+    try {
+      await requestSendPasswordMail(id, email);
+      setShouldAuthorizeEmail(() => true);
+      setAuthResultMsg("");
+    } catch (e) {
+      /** 이메일 중복 확인 로직 */
+      setError("email", {
+        type: "duplicate",
+        message: "아이디와 이메일이 일치하지 않습니다.",
+      });
+      throw new Error("이메일 전송에 실패했습니다.");
+    }
+  };
 
-    setShouldAuthorizeEmail(() => true);
+  const initializeEmailAuthorization = () => {
+    const initialValues = {
+      emailAuthorization: "",
+    };
+
+    reset(initialValues);
+  };
+
+  const handleReSendEmail = async () => {
+    const email = getValues("email");
+    const id = getValues("userId");
+    try {
+      await requestSendPasswordMail(id, email);
+      setShouldAuthorizeEmail(() => true);
+      setAuthResultMsg("");
+      setIsTimeOut(false);
+      timerRef.current.resetTimer();
+      initializeEmailAuthorization();
+    } catch (e) {
+      /** 이메일 중복 확인 로직 */
+      setError("email", {
+        type: "duplicate",
+        message: "아이디와 이메일이 일치하지 않습니다.",
+      });
+      throw new Error("이메일 전송에 실패했습니다.");
+    }
+  };
+
+  const emailMsg = () => {
+    const email = getValues("email");
+    if (errors.email && email === "") return <span>{errors.email?.message}</span>;
+    if (email !== undefined && email !== "") {
+      if (errors.email?.message) return <span>{errors.email?.message}</span>;
+      if (!shouldAuthorizeEmail)
+        return (
+          <span role="alert" className={cx("need-duplication-check")}>
+            이메일 인증이 필요합니다.
+          </span>
+        );
+    }
+    return null;
+  };
+
+  const handleCheckCertification = async () => {
+    const email = getValues("email");
+    const num = getValues("emailAuthorization");
+
+    try {
+      const res = await requestCheckPasswordCertificationNum(email, num);
+      if (res) {
+        setIsAuthorized(true);
+        setAuthResultMsg("인증이완료되었습니다.");
+      } else {
+        setError("emailAuthorization", {
+          type: "duplicate",
+          message: "인증번호가 일치하지 않습니다.",
+        });
+      }
+    } catch (e) {
+      throw new Error("인증번호 확인에 실패했습니다.");
+    }
   };
 
   const handlePasswordSetting = async () => {
     const isValid = await trigger("password");
     if (!isValid) return;
-    setPasswordSettingComplete(true);
+
+    const id = getValues("userId");
+    const num = getValues("emailAuthorization");
+    const password = getValues("password");
+
+    try {
+      await requestResetPassword(id, num, password);
+      setPasswordSettingComplete(true);
+    } catch (e) {
+      throw new Error("비밀번호 재설정에 실패했습니다.");
+    }
   };
   return (
     <form className={cx("find-pw-form")} onSubmit={handleSubmit((d) => console.log(d))}>
@@ -60,7 +166,9 @@ const FindPwForm = () => {
             <input
               id="userId"
               placeholder="아이디를 입력해주세요."
-              {...register("userId")}
+              {...register("userId", {
+                required: "아이디를 입력해주세요.",
+              })}
               style={errors.userId ? { borderColor: "#FF0000" } : {}}
               maxLength={12}
             />
@@ -85,16 +193,22 @@ const FindPwForm = () => {
                     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
                   message: "이메일형식이 올바르지 않습니다.",
                 },
+                onChange: () => {
+                  if (shouldAuthorizeEmail) {
+                    setShouldAuthorizeEmail(false);
+                    setIsAuthorized(false);
+                    initializeEmailAuthorization();
+                  }
+                },
               })}
               style={errors.email ? { borderColor: "#FF0000" } : {}}
             />
-            {errors.email?.message && <span>{errors.email.message}</span>}
+            {emailMsg()}
           </label>
           {!shouldAuthorizeEmail ? (
             <button
               type="button"
               onClick={() => {
-                console.log("인증하기");
                 handleEmail();
               }}
             >
@@ -105,8 +219,7 @@ const FindPwForm = () => {
               type="button"
               disabled={isAuthorized}
               onClick={() => {
-                console.log("재전송");
-                // handleEmail();
+                handleReSendEmail();
               }}
             >
               재전송
@@ -120,6 +233,7 @@ const FindPwForm = () => {
             <label htmlFor="emailAuthorization" className={cx("email-authorization")}>
               {!isAuthorized && (
                 <Timer
+                  ref={timerRef}
                   setAuthResultMsg={setAuthResultMsg}
                   isAuthorized={isAuthorized}
                   setIsTimeOut={setIsTimeOut}
@@ -130,13 +244,16 @@ const FindPwForm = () => {
                 id="emailAuthorization"
                 placeholder="인증번호를 입력해 주세요"
                 disabled={isAuthorized}
+                {...register("emailAuthorization", {
+                  required: "인증번호를 입력해주세요.",
+                })}
                 style={
-                  errors.email
+                  errors.emailAuthorization
                     ? { borderColor: "#FF0000", paddingRight: "50px" }
                     : { paddingRight: "50px" }
                 }
               />
-              {isTimeOut && <span>{authResultMsg}</span>}
+              {isTimeOut && <span className={cx("error")}>{authResultMsg}</span>}
               {isAuthorized && <span className={cx("success")}>{authResultMsg}</span>}
             </label>
 
@@ -144,8 +261,7 @@ const FindPwForm = () => {
               type="button"
               disabled={isAuthorized || isTimeOut}
               onClick={() => {
-                setIsAuthorized(true);
-                setAuthResultMsg("인증이완료되었습니다.");
+                handleCheckCertification();
               }}
             >
               확인

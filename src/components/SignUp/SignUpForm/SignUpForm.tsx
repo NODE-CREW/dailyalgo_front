@@ -257,8 +257,8 @@ const SignUpForm = () => {
             이메일 인증이 필요합니다.
           </span>
         );
-      return null;
     }
+    return null;
   };
 
   /** emailAuthorization */
