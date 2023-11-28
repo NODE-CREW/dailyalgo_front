@@ -11,7 +11,7 @@
         padding: 16px 20px 16px 20px;
         box-sizing: border-box;
         font-size: 16px;
-        border: 1px solid #D2D2D2;
+        border: 1px solid #d2d2d2;
         border-radius: 4px;
         // margin-bottom: 8px;
       }
@@ -31,17 +31,17 @@
       padding: 16px 20px 16px 20px;
       margin-left: 12px;
       box-sizing: border-box;
-      border: 1px solid #1B5CED;
+      border: 1px solid #1b5ced;
       border-radius: 4px;
-      color: #1B5CED;
+      color: #1b5ced;
     }
     button:disabled {
-      border: 1px solid #D2D2D2;
+      border: 1px solid #d2d2d2;
       color: #898989;
       cursor: no-drop;
     }
   }
-  .input-with-button-wrap:nth-child(n+2) {
+  .input-with-button-wrap:nth-child(n + 2) {
     margin-top: 8px;
   }
   .input-without-button-wrap {
@@ -54,7 +54,7 @@
       padding: 16px 20px 16px 20px;
       box-sizing: border-box;
       font-size: 16px;
-      border: 1px solid #D2D2D2;
+      border: 1px solid #d2d2d2;
       border-radius: 4px;
     }
     input:focus {
@@ -86,7 +86,7 @@
   .id-check-btn:hover,
   .password-setting-btn:hover,
   .login-btn:hover {
-    background-color: #0241CF;
+    background-color: #0241cf;
   }
   .login-btn {
     display: flex;
@@ -97,6 +97,11 @@
       font-size: 16px;
       color: white;
     }
+  }
+  .find-btn:disabled {
+    background-color: #d2d2d2;
+    color: #898989;
+    cursor: no-drop;
   }
   span {
     width: 100%;
@@ -118,18 +123,18 @@
   }
   .password-setting,
   .password-setting-success {
-      div {
-        &.input-without-button-wrap {
-          margin-top: 32px;
-        }
-        &.check {
-          margin-top: 8px;
-        }
+    div {
+      &.input-without-button-wrap {
+        margin-top: 32px;
       }
-      .message {
-        text-align: center;
-        font-size: 14px;
-        color: $black;
+      &.check {
+        margin-top: 8px;
       }
+    }
+    .message {
+      text-align: center;
+      font-size: 14px;
+      color: $black;
+    }
   }
 }

@@ -361,7 +361,7 @@ const SignUpForm = () => {
               {...register("registerId", {
                 required: "아이디를 입력해주세요.",
                 pattern: {
-                  value: /^(?=.*?[a-zA-Z])(?=.*?[a-z])(?=.*?[0-9]).{4,12}$/,
+                  value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{4,12}$/,
                   message: "아이디는 영문 대소문자와 숫자를 포함하여 4~12자리로 입력해야합니다",
                 },
                 onChange: () => {
@@ -391,7 +391,7 @@ const SignUpForm = () => {
               {...register("nickname", {
                 required: "닉네임을 입력해주세요.",
                 pattern: {
-                  value: /^[a-zA-z0-9]{4,12}$/,
+                  value: /^[가-힣a-zA-Z0-9]{4,12}$/,
                   message: "닉네임은 영문 대소문자와 숫자 4~12자리로 입력해야합니다",
                 },
                 onChange: () => {
