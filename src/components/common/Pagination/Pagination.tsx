@@ -22,6 +22,7 @@ const Pagination = ({ totalPage, page, setPage }: Props) => {
         <div
           className={cx("number-btn", { "is-selected": page === startPage + i })}
           onClick={() => setPage(startPage + i)}
+          key={`page-${startPage + i}`}
         >
           {startPage + i}
         </div>

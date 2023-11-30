@@ -35,7 +35,7 @@ const MyPageQuestionItem = ({
 
         <div className={cx("question-tags")}>
           {algorithmTagArray.map((tag) => (
-            <Tag label={tag} />
+            <Tag label={tag} key={tag} />
           ))}
         </div>
       </div>

@@ -4,7 +4,7 @@ import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/redux/store";
-import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
+import { setLogIn, setUserInfo } from "src/redux/slices/auth-slice";
 import type { UserInfo, UserLoginRes } from "src/types/user";
 import { requestSignIn, fetchUserInfo } from "src/api/User";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ const LoginForm = () => {
   const onValid: SubmitHandler<FormValues> = async (data) => {
     try {
       const res: UserLoginRes = await requestSignIn(data.loginId, data.password);
-      dispatch(logIn(res.token));
+      dispatch(setLogIn(res.token));
       window.localStorage.setItem("token", res.token);
       await getUserInfo();
     } catch (e) {

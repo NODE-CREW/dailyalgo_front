@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import classNames from "classnames/bind";
 import { ProfileBadge } from "@components/user/ProfileBadge";
 import { BasicButton } from "@components/button/BasicButton";
@@ -108,7 +108,9 @@ Props) => {
             <span className={cx("introduce")}>{"intro"}</span>
             <ul className={cx("organization-list")}>
               {organizations.map((organization) => (
-                <li className={cx("organization-item")}>@{organization}</li>
+                <li className={cx("organization-item")} key={organization}>
+                  @{organization}
+                </li>
               ))}
             </ul>
             <dl className={cx("figure-info-wrap")}>

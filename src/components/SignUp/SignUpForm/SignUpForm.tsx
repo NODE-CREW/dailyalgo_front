@@ -16,7 +16,7 @@ import type { UserSignUpReq, UserLoginRes, UserInfo } from "src/types/user";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/redux/store";
-import { logIn, setUserInfo } from "src/redux/slices/auth-slice";
+import { setLogIn, setUserInfo } from "src/redux/slices/auth-slice";
 import style from "./SignUpForm.module.scss";
 import { Timer } from "../Timer";
 import { AgreementModal } from "../AgreementModal/AgreementModal";
@@ -107,7 +107,7 @@ const SignUpForm = () => {
       try {
         const res: UserLoginRes = await requestSignUp(requestBody);
         const { token } = res;
-        dispatch(logIn(token));
+        dispatch(setLogIn(token));
         window.localStorage.setItem("token", token);
         await getUserInfo();
       } catch (e) {
