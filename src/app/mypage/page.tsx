@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { reduxAppSelector } from "src/redux/store";
 import { MyPageTop } from "../../components/mypage/MyPageTop";
 import { SideTab } from "../../components/mypage/SideTab";
 import { MyPageQuestionList } from "../../components/mypage/MyPageQuestionList";
@@ -69,6 +70,9 @@ const Dummy: QuestionItem[] = [
 ];
 
 const Page = () => {
+  const { userInfo } = reduxAppSelector((state) => state.authReducer.value);
+  console.log(userInfo);
+
   const mypageTabList = ["답변", "질문", "다시보기", "알람"];
   const mypageEditTabList = ["프로필 수정", "비밀번호 변경"];
   const [isEdited, setIsEdited] = useState(false);

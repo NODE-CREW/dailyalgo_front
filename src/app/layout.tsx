@@ -13,8 +13,8 @@ const RootLayout = ({ children }: Props) => (
   <html lang="ko">
     <head />
     <body>
-      <Header />
       <ReduxProvider>
+        <Header />
         {children}
         <div id="modal-root" />
       </ReduxProvider>

@@ -23,10 +23,10 @@ export const auth = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logIn: (State, action: PayloadAction<string>) => {
+    setLogIn: (State, action: PayloadAction<string>) => {
       return {
         value: {
-          isLoggedIn: true,
+          isLogIn: true,
           token: action.payload,
           userInfo: State.value.userInfo,
         },
@@ -35,7 +35,7 @@ export const auth = createSlice({
     setUserInfo: (State, action: PayloadAction<UserInfo>) => {
       return {
         value: {
-          isLoggedIn: true,
+          isLogIn: true,
           token: State.value.token,
           userInfo: action.payload,
         },
@@ -44,5 +44,5 @@ export const auth = createSlice({
   },
 });
 
-export const { logIn, setUserInfo } = auth.actions;
+export const { setLogIn, setUserInfo } = auth.actions;
 export default auth.reducer;
