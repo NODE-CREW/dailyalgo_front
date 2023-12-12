@@ -32,27 +32,29 @@ const Header = () => {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      dispatch(setLogIn(token));
-      getUserInfo();
-    }
-  }, []);
-
   /** 로그인 상태에 따른 redirect 설정
    * 로그인유저 접근 불가: 로그인, 회원가입, 아이디/비밀번호 찾기
    * 비로그인유저 접근 불가: 마이페이지, 게시글 작성
    * */
   const redirectPathnameArrayToLoginUser = ["/sign-in", "/sign-up", "/find-user"];
   const redirectPathnameArrayToNotLoginUser = ["/mypage", "/board/write"];
+
   useEffect(() => {
-    if (isLogIn && redirectPathnameArrayToLoginUser.includes(pathname)) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      if (!isLogIn) {
+        /** 토큰이 있는데, login상태가 아니라면 변경 */
+        dispatch(setLogIn(token));
+        getUserInfo();
+      } else if (redirectPathnameArrayToLoginUser.includes(pathname)) {
+        /** 토큰이 있고, 이미 로그인 상태라면 pathname에 따른 변동 */
+        redirect("/");
+      }
+    } else if (redirectPathnameArrayToNotLoginUser.includes(pathname)) {
+      /** 토큰이 없고, pathname에 따른 변동 */
       redirect("/");
-    } else if (!isLogIn && redirectPathnameArrayToNotLoginUser.includes(pathname)) {
-      redirect("/sign-in");
     }
-  }, [pathname, isLogIn]);
+  });
 
   return (
     <header className={cx("header-wrap")}>
