@@ -1,6 +1,7 @@
 import { createHttpCilent } from "src/lib/http-client";
 import type { UserInfo, UserLoginRes, UserSignUpReq } from "src/types/user";
 import {
+  API_UPDATE_USER,
   API_CHECK_ID,
   API_CHECK_NICKNAME,
   API_SEND_SIGN_UP_EMAIL,
@@ -8,7 +9,6 @@ import {
   API_SIGN_IN,
   API_USER_INFO,
   API_SIGN_UP,
-  API_FIND_ID_BY_EMAIL,
   API_SEND_FIND_EMAIL,
   API_CHECK_FIND_CERTIFICATION_NUM,
   API_SEND_PASSWORD_EMAIL,
@@ -73,4 +73,11 @@ export const requestResetPassword = (
   newPassword: string
 ): Promise<any> => {
   return instance.put(API_RESET_PASSWORD, { email, num, newPassword });
+};
+
+export const requestUpdateUser = (requestBody: {
+  nickname: string;
+  intro?: string;
+}): Promise<any> => {
+  return instance.put(API_UPDATE_USER, requestBody);
 };
