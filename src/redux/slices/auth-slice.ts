@@ -6,14 +6,14 @@ type InitialState = {
 };
 
 type AuthState = {
-  isLoggedIn: boolean;
+  isLogIn: boolean;
   token: string | null;
   userInfo: UserInfo | null;
 };
 
 const initialState = {
   value: {
-    isLoggedIn: false,
+    isLogIn: false,
     token: null,
     userInfo: null,
   } as AuthState,
@@ -32,6 +32,15 @@ export const auth = createSlice({
         },
       };
     },
+    setLogOut: () => {
+      return {
+        value: {
+          isLogIn: false,
+          token: null,
+          userInfo: null,
+        },
+      };
+    },
     setUserInfo: (State, action: PayloadAction<UserInfo>) => {
       return {
         value: {
@@ -44,5 +53,5 @@ export const auth = createSlice({
   },
 });
 
-export const { setLogIn, setUserInfo } = auth.actions;
+export const { setLogIn, setUserInfo, setLogOut } = auth.actions;
 export default auth.reducer;
