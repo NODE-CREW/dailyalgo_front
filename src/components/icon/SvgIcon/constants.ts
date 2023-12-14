@@ -21,6 +21,8 @@ const SYSTEM = [
   "star",
   "comment-list-item",
   "filter",
+  "logout",
+  "login",
 ] as const;
 const GRAPHIC = [] as const;
 const ICON_NAMES = [...LOGO, ...ARROW, ...PLATFORMS, ...SYSTEM, ...GRAPHIC] as const;

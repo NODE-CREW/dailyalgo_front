@@ -9,7 +9,7 @@ import { SearchInput } from "@components/input/SearchInput";
 import { IconButton } from "@components/button/IconButton";
 import { SvgIcon } from "@components/icon/SvgIcon";
 import { reduxAppSelector, AppDispatch } from "src/redux/store";
-import { setLogIn, setUserInfo } from "src/redux/slices/auth-slice";
+import { setLogIn, setUserInfo, setLogOut } from "src/redux/slices/auth-slice";
 import { useDispatch } from "react-redux";
 import style from "./Header.module.scss";
 import { fetchUserInfo } from "../../../api/User";
@@ -30,6 +30,12 @@ const Header = () => {
     } catch (e) {
       throw new Error("유저 정보를 불러오는데 실패했습니다.");
     }
+  };
+
+  const logout = () => {
+    dispatch(setLogOut());
+    localStorage.removeItem("token");
+    redirect("/");
   };
 
   /** 로그인 상태에 따른 redirect 설정
@@ -74,13 +80,19 @@ const Header = () => {
           {isLogIn ? (
             <>
               {/* TODO: 알림 및 프로필 버튼 */}
+              <IconButton icon={<SvgIcon iconName="alert" size={36} />} title="alert" />
               <Link href="/mypage">
-                <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="" />
+                <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="mypage" />
               </Link>
+              <IconButton
+                icon={<SvgIcon iconName="logout" size={40} />}
+                title="logout"
+                onClick={logout}
+              />
             </>
           ) : (
             <Link href="/sign-in">
-              <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="login" />
+              <IconButton icon={<SvgIcon iconName="login" size={40} />} title="login" />
             </Link>
           )}
         </div>
