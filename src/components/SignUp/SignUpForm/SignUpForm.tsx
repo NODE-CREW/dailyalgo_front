@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, MouseEvent, useRef } from "react";
+import { useState, MouseEvent, useRef, use } from "react";
 import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
 import {
@@ -392,7 +392,8 @@ const SignUpForm = () => {
                 required: "닉네임을 입력해주세요.",
                 pattern: {
                   value: /^[가-힣a-zA-Z0-9]{4,12}$/,
-                  message: "닉네임은 영문 대소문자와 숫자 4~12자리로 입력해야합니다",
+                  message:
+                    "닉네임은 영문 대소문자, 숫자, 또는 한글로 구성되어야 하며, 길이는 2자에서 10자 사이여야 합니다.",
                 },
                 onChange: () => {
                   if (nicknameDuplicationCheck) {

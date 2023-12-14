@@ -46,7 +46,10 @@ export const auth = createSlice({
         value: {
           isLogIn: true,
           token: State.value.token,
-          userInfo: action.payload,
+          userInfo: {
+            ...State.value.userInfo,
+            ...action.payload,
+          },
         },
       };
     },

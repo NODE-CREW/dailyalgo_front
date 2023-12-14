@@ -1,4 +1,5 @@
 // === User ===
+export const API_UPDATE_USER = "/user/";
 export const API_CHECK_ID = "/user/check/id/";
 export const API_CHECK_NICKNAME = "/user/check/nickname/";
 export const API_SEND_SIGN_UP_EMAIL = "/user/sign_up/email/";
