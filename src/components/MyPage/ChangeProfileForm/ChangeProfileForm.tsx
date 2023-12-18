@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "src/redux/slices/auth-slice";
 import classNames from "classnames/bind";
 import { BasicButton } from "@components/button/BasicButton";
-import { use, useState } from "react";
+import { useState } from "react";
 import { useForm, FieldErrors, SubmitHandler } from "react-hook-form";
 import { fetchCheckNickname, requestUpdateUser } from "src/api/User";
 import { DeleteUserModal } from "../DeleteUserModal";

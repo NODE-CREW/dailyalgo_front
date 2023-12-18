@@ -48,6 +48,7 @@ const SignUpForm = () => {
     trigger,
     setError,
     reset,
+    clearErrors,
   } = useForm<FormValues>({ mode: "onChange" });
 
   const [registerIdDuplicationCheck, setRegisterIdDuplicationCheck] = useState(false);
@@ -463,6 +464,7 @@ const SignUpForm = () => {
                     if (getValues("password") !== value) {
                       return "비밀번호가 일치하지 않습니다.";
                     }
+                    clearErrors("password");
                     return undefined;
                   },
                 },
