@@ -50,7 +50,7 @@ const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType }: Props) 
       case "mypage":
         return (
           <BasicButton buttonType="third" onClick={clickBtnHandler}>
-            {isEdited ? "수정 완료" : "프로필 수정"}
+            {isEdited ? "돌아가기" : "프로필 수정"}
           </BasicButton>
         );
       default:

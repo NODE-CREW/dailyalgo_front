@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { WritableDraft } from "immer/dist/internal";
 import type { UserInfo } from "src/types/user";
 
 type InitialState = {
@@ -41,7 +42,7 @@ export const auth = createSlice({
         },
       };
     },
-    setUserInfo: (State, action: PayloadAction<UserInfo>) => {
+    setUserInfo: (State, action: PayloadAction<Partial<UserInfo>>) => {
       return {
         value: {
           isLogIn: true,
@@ -51,7 +52,7 @@ export const auth = createSlice({
             ...action.payload,
           },
         },
-      };
+      } as WritableDraft<InitialState>;
     },
   },
 });

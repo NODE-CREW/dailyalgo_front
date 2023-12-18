@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
+import { requestUpdatePassword } from "src/api/User";
 import style from "./ChangePwForm.module.scss";
 
 const cx = classNames.bind(style);
@@ -20,30 +21,41 @@ const ChangePwForm = () => {
     formState: { errors },
     getValues,
     trigger,
-    // setError
+    setError,
+    clearErrors,
+    resetField,
   } = useForm<FormValues>({ mode: "onChange" });
 
   const [isChangeComplete, setIsChangeComplete] = useState(false);
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
-    console.log("data", data);
-    // 비밀번호 변경 API 요청(작업 시 주석 외 내용 삭제)
-    // const response = await checkPassword(data);
-    // if (response) {
-    //   setIsChangeComplete(true);
-    //   setTimeout(() => {
-    //   setIsChangeComplete(false);
-    // }, 1500);
-    // } else {
-    //   setError("newPassword", {
-    //     type: "wrongPassword",
-    //     message: "비밀번호가 올바르지않습니다."
-    //   })
-    // }
     setIsChangeComplete(true);
     setTimeout(() => {
       setIsChangeComplete(false);
-    }, 1500);
+    }, 3000);
+    resetField("originalPassword");
+    resetField("newPassword");
+    resetField("newPasswordCheck");
+    // try {
+    //   const requestBody = {
+    //     password: data.originalPassword,
+    //     newPassword: data.newPassword,
+    //   };
+
+    //   await requestUpdatePassword(requestBody);
+    //   setIsChangeComplete(true);
+    //   setTimeout(() => {
+    //     setIsChangeComplete(false);
+    //   }, 1500);
+    //   resetField("originalPassword");
+    //   resetField("newPassword");
+    //   resetField("newPasswordCheck");
+    // } catch (e) {
+    //   setError("originalPassword", {
+    //     type: "wrongPassword",
+    //     message: "비밀번호가 올바르지않습니다.",
+    //   });
+    // }
   };
 
   return (
@@ -56,7 +68,7 @@ const ChangePwForm = () => {
           <label htmlFor="originPassword">
             <input
               id="originPassword"
-              type="text"
+              type="password"
               placeholder="현재 비밀번호를 입력해주세요."
               {...register("originalPassword", {
                 required: "현재 비밀번호를 입력해주세요.",
@@ -74,7 +86,7 @@ const ChangePwForm = () => {
           <label htmlFor="newPassword">
             <input
               id="newPassword"
-              type="text"
+              type="password"
               placeholder="새 비밀번호를 입력해주세요."
               {...register("newPassword", {
                 required: "비밀번호를 입력해주세요.",
@@ -107,16 +119,16 @@ const ChangePwForm = () => {
           <label htmlFor="newPasswordCheck">
             <input
               id="newPasswordCheck"
-              type="text"
+              type="password"
               placeholder="새 비밀번호를 한번 더 입력해주세요."
               {...register("newPasswordCheck", {
                 required: "비밀번호를 한번 더 입력해주세요.",
                 validate: {
                   check: (value) => {
-                    console.log("중복확인", "newPassword : ", getValues("newPassword"));
                     if (getValues("newPassword") !== value) {
                       return "비밀번호가 일치하지 않습니다.";
                     }
+                    clearErrors("newPassword");
                     return undefined;
                   },
                 },
