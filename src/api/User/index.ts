@@ -17,6 +17,7 @@ import {
   API_RESET_PASSWORD,
   API_USER_FOLLOWER,
   API_USER_FOLLOWING,
+  API_USER_FOLLOW,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -98,4 +99,8 @@ export const fetchUserFollower = (id: string): Promise<UserFollow[]> => {
 
 export const fetchUserFollowing = (id: string): Promise<UserFollow[]> => {
   return instance.get(API_USER_FOLLOWING(id));
+};
+
+export const requestUserFollow = (id: string): Promise<any> => {
+  return instance.put(API_USER_FOLLOW(id));
 };
