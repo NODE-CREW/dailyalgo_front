@@ -1,30 +1,60 @@
 import { useState, useEffect } from "react";
+import { reduxAppSelector } from "src/redux/store";
 import classNames from "classnames/bind";
 import { ProfileBadge } from "@components/user/ProfileBadge";
 import { BasicButton } from "@components/button/BasicButton";
+import { useRouter } from "next/navigation";
+import type { UserFollow } from "src/types/user";
+import { requestUserFollow } from "src/api/User";
 import style from "./FollowItem.module.scss";
 
 const cx = classNames.bind(style);
 
-interface Props {}
+interface Props {
+  followItem: UserFollow;
+}
 
-const FollowItem = ({}: Props) => {
-  const handleClick = () => {
-    // click follow button request to server
+const FollowItem = ({ followItem }: Props) => {
+  const [isFollowed, setIsFollowed] = useState(false);
+  const { isLogIn } = reduxAppSelector((state) => state.authReducer.value);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsFollowed(followItem.is_following);
+  }, []);
+
+  const handleClick = async () => {
+    if (!isLogIn) {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      await requestUserFollow(followItem.id);
+      setIsFollowed(!isFollowed);
+    } catch (e) {
+      console.log(e);
+    }
   };
+
   return (
     <li className={cx("follow-item-wrap")}>
       <div className={cx("left")}>
         <ProfileBadge size={48} />
         <div className={cx("user-info")}>
-          <span className={cx("name")}>nickname</span>
-          <span className={cx("introduce")}>ㅋㅋㅋㅋㅋ</span>
+          <span className={cx("name")}>{followItem.nickname}</span>
+          <span className={cx("introduce")}>{followItem.intro}</span>
         </div>
       </div>
-      <BasicButton size="sm">팔로우</BasicButton>
-      {/* <BasicButton size="sm" buttonType="secondary">
-        취소
-      </BasicButton> */}
+      {isFollowed ? (
+        <BasicButton size="sm" buttonType="secondary" onClick={handleClick}>
+          취소
+        </BasicButton>
+      ) : (
+        <BasicButton size="sm" onClick={handleClick}>
+          팔로우
+        </BasicButton>
+      )}
     </li>
   );
 };

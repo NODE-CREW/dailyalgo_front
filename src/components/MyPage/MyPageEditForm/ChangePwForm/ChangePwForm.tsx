@@ -29,33 +29,26 @@ const ChangePwForm = () => {
   const [isChangeComplete, setIsChangeComplete] = useState(false);
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
-    setIsChangeComplete(true);
-    setTimeout(() => {
-      setIsChangeComplete(false);
-    }, 3000);
-    resetField("originalPassword");
-    resetField("newPassword");
-    resetField("newPasswordCheck");
-    // try {
-    //   const requestBody = {
-    //     password: data.originalPassword,
-    //     newPassword: data.newPassword,
-    //   };
+    try {
+      const requestBody = {
+        password: data.originalPassword,
+        newPassword: data.newPassword,
+      };
 
-    //   await requestUpdatePassword(requestBody);
-    //   setIsChangeComplete(true);
-    //   setTimeout(() => {
-    //     setIsChangeComplete(false);
-    //   }, 1500);
-    //   resetField("originalPassword");
-    //   resetField("newPassword");
-    //   resetField("newPasswordCheck");
-    // } catch (e) {
-    //   setError("originalPassword", {
-    //     type: "wrongPassword",
-    //     message: "비밀번호가 올바르지않습니다.",
-    //   });
-    // }
+      await requestUpdatePassword(requestBody);
+      setIsChangeComplete(true);
+      setTimeout(() => {
+        setIsChangeComplete(false);
+      }, 1500);
+      resetField("originalPassword");
+      resetField("newPassword");
+      resetField("newPasswordCheck");
+    } catch (e) {
+      setError("originalPassword", {
+        type: "wrongPassword",
+        message: "비밀번호가 올바르지않습니다.",
+      });
+    }
   };
 
   return (

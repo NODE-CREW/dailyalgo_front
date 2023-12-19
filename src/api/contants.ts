@@ -23,5 +23,17 @@ export const API_USER_INFO = (id?: string) => {
   return id ? `/user/${id}/` : "/user/";
 };
 
+export const API_USER_FOLLOWER = (id: string) => {
+  return `/user/${id}/follower/`;
+};
+
+export const API_USER_FOLLOWING = (id: string) => {
+  return `/user/${id}/following/`;
+};
+
+export const API_USER_FOLLOW = (id: string) => {
+  return `/user/${id}/follow/`;
+};
+
 // === Organization ===
 export const API_SEARCH_ORGANIZATION = "/organization/code";

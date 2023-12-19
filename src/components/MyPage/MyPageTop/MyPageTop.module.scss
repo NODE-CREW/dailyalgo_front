@@ -107,6 +107,10 @@
               line-height: 20px;
             }
           }
+
+          .disabled {
+            cursor: not-allowed;
+          }
         }
       }
     }
