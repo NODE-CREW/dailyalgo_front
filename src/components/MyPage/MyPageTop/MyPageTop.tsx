@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import { ProfileBadge } from "@components/user/ProfileBadge";
 import { BasicButton } from "@components/button/BasicButton";
 import { FollowModal } from "@components/user/FollowModal";
+import type { UserInfo } from "src/types/user";
 import style from "./MyPageTop.module.scss";
 
 const cx = classNames.bind(style);
@@ -12,17 +13,18 @@ interface Props {
   isEdited?: boolean;
   isFollowing?: boolean;
   pageType: "user" | "mypage";
+  userInfo: UserInfo;
 }
-const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType }: Props) => {
-  const organizations = ["테스트", "테스트2"];
-
+const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType, userInfo }: Props) => {
   const [isFollowerModalOpen, setIsFollowerModalOpen] = useState(false);
   const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
 
   const openFollowModal = (type: "follower" | "following") => {
     if (type === "follower") {
+      if (userInfo.follower_cnt === 0) return;
       setIsFollowerModalOpen(true);
     } else {
+      if (userInfo.following_cnt === 0) return;
       setIsFollowingModalOpen(true);
     }
   };
@@ -58,6 +60,16 @@ const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType }: Props) 
     }
   };
 
+  const getElapsedTimeByCreatedDate = () => {
+    const today = new Date();
+    const startDate = new Date(userInfo.created_time);
+
+    const timeDiff = today.getTime() - startDate.getTime();
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    return diffDays;
+  };
+
   return (
     <>
       <div className={cx("my-page-top-wrap")}>
@@ -65,10 +77,10 @@ const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType }: Props) 
           <div className={cx("user-wrap")}>
             <ProfileBadge size={168} />
             <div className={cx("info-wrap")}>
-              <span className={cx("nickname")}>{"nickname"}</span>
-              <span className={cx("introduce")}>{"intro"}</span>
+              <span className={cx("nickname")}>{userInfo.nickname}</span>
+              <span className={cx("introduce")}>{userInfo.intro}</span>
               <ul className={cx("organization-list")}>
-                {organizations.map((organization) => (
+                {userInfo.organizations.map((organization) => (
                   <li className={cx("organization-item")} key={organization}>
                     @{organization}
                   </li>
@@ -77,30 +89,36 @@ const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType }: Props) 
               <dl className={cx("figure-info-wrap")}>
                 <div>
                   <dt>가입일로부터</dt>
-                  <dd>{0} 일</dd>
+                  <dd>{getElapsedTimeByCreatedDate()} 일</dd>
                 </div>
                 <div>
                   <dt>질문수</dt>
-                  <dd>{0} 개</dd>
+                  <dd>{userInfo.question_cnt} 개</dd>
                 </div>
                 <div>
                   <dt>답변수</dt>
-                  <dd>{0} 개</dd>
+                  <dd>{userInfo.answer_cnt} 개</dd>
                 </div>
                 <div>
                   <dt>조회수</dt>
-                  <dd>{0} 개</dd>
+                  <dd>{userInfo.view_cnt} 개</dd>
                 </div>
               </dl>
               {/* TODO: 클릭 시 팝업 */}
               <div className={cx("social-wrap")}>
-                <div className={cx("social-item")} onClick={() => openFollowModal("follower")}>
+                <div
+                  className={cx("social-item", { disabled: userInfo.follower_cnt === 0 })}
+                  onClick={() => openFollowModal("follower")}
+                >
                   <span className={cx("social-item-title")}>팔로워</span>
-                  <span className={cx("social-item-count")}>{0}</span>
+                  <span className={cx("social-item-count")}>{userInfo.follower_cnt}</span>
                 </div>
-                <div className={cx("social-item")} onClick={() => openFollowModal("following")}>
+                <div
+                  className={cx("social-item", { disabled: userInfo.following_cnt === 0 })}
+                  onClick={() => openFollowModal("following")}
+                >
                   <span className={cx("social-item-title")}>팔로잉</span>
-                  <span className={cx("social-item-count")}>{0}</span>
+                  <span className={cx("social-item-count")}>{userInfo.following_cnt}</span>
                 </div>
               </div>
             </div>
@@ -112,11 +130,13 @@ const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType }: Props) 
         isOpen={isFollowerModalOpen}
         closeModal={() => closeFollowModal("follower")}
         type="follower"
+        userId={userInfo.id}
       />
       <FollowModal
         isOpen={isFollowingModalOpen}
         closeModal={() => closeFollowModal("following")}
         type="following"
+        userId={userInfo.id}
       />
     </>
   );

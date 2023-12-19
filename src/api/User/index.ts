@@ -1,5 +1,5 @@
 import { createHttpCilent } from "src/lib/http-client";
-import type { UserInfo, UserLoginRes, UserSignUpReq } from "src/types/user";
+import type { UserInfo, UserLoginRes, UserSignUpReq, UserFollow } from "src/types/user";
 import {
   API_UPDATE_USER,
   API_UPDATE_PASSWORD,
@@ -15,6 +15,8 @@ import {
   API_SEND_PASSWORD_EMAIL,
   API_CHECK_PASSWORD_CERTIFICATION_NUM,
   API_RESET_PASSWORD,
+  API_USER_FOLLOWER,
+  API_USER_FOLLOWING,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -88,4 +90,12 @@ export const requestUpdatePassword = (requestBody: {
   newPassword: string;
 }): Promise<any> => {
   return instance.put(API_UPDATE_PASSWORD, requestBody);
+};
+
+export const fetchUserFollower = (id: string): Promise<UserFollow[]> => {
+  return instance.get(API_USER_FOLLOWER(id));
+};
+
+export const fetchUserFollowing = (id: string): Promise<UserFollow[]> => {
+  return instance.get(API_USER_FOLLOWING(id));
 };

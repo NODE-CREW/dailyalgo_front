@@ -9,14 +9,29 @@ type InitialState = {
 type AuthState = {
   isLogIn: boolean;
   token: string | null;
-  userInfo: UserInfo | null;
+  userInfo: UserInfo;
+};
+
+const initialUserInfo = {
+  id: "",
+  name: "",
+  nickname: "",
+  intro: "",
+  email: "",
+  created_time: new Date(),
+  organizations: [],
+  question_cnt: 0,
+  answer_cnt: 0,
+  view_cnt: 0,
+  follower_cnt: 0,
+  following_cnt: 0,
 };
 
 const initialState = {
   value: {
     isLogIn: false,
     token: null,
-    userInfo: null,
+    userInfo: initialUserInfo,
   } as AuthState,
 } as InitialState;
 
@@ -38,7 +53,7 @@ export const auth = createSlice({
         value: {
           isLogIn: false,
           token: null,
-          userInfo: null,
+          userInfo: initialUserInfo,
         },
       };
     },

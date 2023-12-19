@@ -28,4 +28,11 @@ interface UserSignUpReq {
   organization_code?: string;
 }
 
-export type { UserLoginRes, UserInfo, UserSignUpReq };
+interface UserFollow {
+  id: string;
+  nickname: string;
+  intro?: string;
+  is_following: boolean;
+}
+
+export type { UserLoginRes, UserInfo, UserSignUpReq, UserFollow };

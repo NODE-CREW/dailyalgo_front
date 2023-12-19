@@ -1,10 +1,7 @@
-"use client";
-
-import { SideTab } from "@components/mypage/SideTab";
-import { MyPageQuestionList } from "@components/mypage/MyPageContentForm/MyPageQuestionList";
-import { MyPageTop } from "@components/mypage/MyPageTop";
-import { useState } from "react";
-import type { QuestionItem } from "@components/mypage/MyPageContentForm/MyPageQuestionList/MyPageQuestionList";
+import type { QuestionItem } from "./MyPageQuestionList/MyPageQuestionList";
+import { SideTab } from "../SideTab";
+import { MyPageQuestionList } from "./MyPageQuestionList";
+import { NotificationList } from "./NotificationList";
 
 const Dummy: QuestionItem[] = [
   {
@@ -65,25 +62,17 @@ const Dummy: QuestionItem[] = [
   },
 ];
 
-const UserPage = () => {
-  const userPageTabList = ["답변", "질문"];
-  const userPageTabContent = [
+const MyPageContentForm = () => {
+  const mypageTabList = ["답변", "질문", "다시보기", "알람"];
+
+  const mypageTabContents = [
     <MyPageQuestionList tab="답변" questionsData={Dummy} />,
     <MyPageQuestionList tab="질문" questionsData={Dummy} />,
+    <MyPageQuestionList tab="다시보기" questionsData={Dummy} />,
+    <NotificationList />,
   ];
 
-  const [isFollowing, setIsFollowing] = useState(false);
-
-  const clickFollowBtn = () => {
-    setIsFollowing(!isFollowing);
-  };
-
-  return (
-    <>
-      <MyPageTop clickBtnHandler={clickFollowBtn} isFollowing={isFollowing} pageType="user" />
-      <SideTab tabList={userPageTabList} tabContents={userPageTabContent} />
-    </>
-  );
+  return <SideTab tabList={mypageTabList} tabContents={mypageTabContents} />;
 };
 
-export default UserPage;
+export { MyPageContentForm };
