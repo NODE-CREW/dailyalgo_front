@@ -13,9 +13,10 @@ interface Props {
   closeModal: () => void;
   type: "follower" | "following";
   userId: string;
+  getUserInfo: () => void;
 }
 
-const FollowModal = ({ isOpen, closeModal, type, userId }: Props) => {
+const FollowModal = ({ isOpen, closeModal, type, userId, getUserInfo }: Props) => {
   const [followList, setFollowList] = useState<UserFollow[]>([]);
 
   const fetchFollowerList = async () => {
@@ -53,7 +54,7 @@ const FollowModal = ({ isOpen, closeModal, type, userId }: Props) => {
         </strong>
         <ul className={cx("follow-list")}>
           {followList.map((followItem) => (
-            <FollowItem key={followItem.id} followItem={followItem} />
+            <FollowItem key={followItem.id} followItem={followItem} getUserInfo={getUserInfo} />
           ))}
         </ul>
       </div>

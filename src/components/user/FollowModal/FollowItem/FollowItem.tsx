@@ -12,9 +12,10 @@ const cx = classNames.bind(style);
 
 interface Props {
   followItem: UserFollow;
+  getUserInfo: () => void;
 }
 
-const FollowItem = ({ followItem }: Props) => {
+const FollowItem = ({ followItem, getUserInfo }: Props) => {
   const [isFollowed, setIsFollowed] = useState(false);
   const { isLogIn } = reduxAppSelector((state) => state.authReducer.value);
   const router = useRouter();
@@ -32,6 +33,7 @@ const FollowItem = ({ followItem }: Props) => {
     try {
       await requestUserFollow(followItem.id);
       setIsFollowed(!isFollowed);
+      getUserInfo();
     } catch (e) {
       console.log(e);
     }

@@ -14,8 +14,16 @@ interface Props {
   isFollowing?: boolean;
   pageType: "user" | "mypage";
   userInfo: UserInfo;
+  getUserInfo: () => void;
 }
-const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType, userInfo }: Props) => {
+const MyPageTop = ({
+  clickBtnHandler,
+  isEdited,
+  isFollowing,
+  pageType,
+  userInfo,
+  getUserInfo,
+}: Props) => {
   const [isFollowerModalOpen, setIsFollowerModalOpen] = useState(false);
   const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
 
@@ -131,12 +139,14 @@ const MyPageTop = ({ clickBtnHandler, isEdited, isFollowing, pageType, userInfo 
         closeModal={() => closeFollowModal("follower")}
         type="follower"
         userId={userInfo.id}
+        getUserInfo={getUserInfo}
       />
       <FollowModal
         isOpen={isFollowingModalOpen}
         closeModal={() => closeFollowModal("following")}
         type="following"
         userId={userInfo.id}
+        getUserInfo={getUserInfo}
       />
     </>
   );
