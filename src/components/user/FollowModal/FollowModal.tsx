@@ -19,32 +19,32 @@ interface Props {
 const FollowModal = ({ isOpen, closeModal, type, userId, getUserInfo }: Props) => {
   const [followList, setFollowList] = useState<UserFollow[]>([]);
 
-  const fetchFollowerList = async () => {
-    try {
-      const res = await fetchUserFollower(userId);
-      setFollowList(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const fetchFollowingList = async () => {
-    try {
-      const res = await fetchUserFollowing(userId);
-      setFollowList(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
+    const setFollowerList = async () => {
+      try {
+        const res = await fetchUserFollower(userId);
+        setFollowList(res);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const setFollowingList = async () => {
+      try {
+        const res = await fetchUserFollowing(userId);
+        setFollowList(res);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     if (!userId) return;
     if (type === "follower") {
-      fetchFollowerList();
+      setFollowerList();
     } else {
-      fetchFollowingList();
+      setFollowingList();
     }
-  }, [userId]);
+  }, [userId, isOpen, type, setFollowList]);
 
   return (
     <BasicModal isOpen={isOpen} closeModal={closeModal}>

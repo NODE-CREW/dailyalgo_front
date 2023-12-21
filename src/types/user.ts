@@ -10,7 +10,10 @@ interface UserInfo {
   intro: string;
   email: string;
   created_time: Date;
-  organizations: string[];
+  organizations: {
+    name: string;
+    code: string;
+  }[];
   question_cnt: number;
   answer_cnt: number;
   view_cnt: number;
@@ -32,7 +35,7 @@ interface UserFollow {
   id: string;
   nickname: string;
   intro?: string;
-  is_following: boolean;
+  is_following: "true" | "false";
 }
 
 export type { UserLoginRes, UserInfo, UserSignUpReq, UserFollow };
