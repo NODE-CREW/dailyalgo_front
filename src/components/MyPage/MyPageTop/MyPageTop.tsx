@@ -89,8 +89,8 @@ const MyPageTop = ({
               <span className={cx("introduce")}>{userInfo.intro}</span>
               <ul className={cx("organization-list")}>
                 {userInfo.organizations.map((organization) => (
-                  <li className={cx("organization-item")} key={organization}>
-                    @{organization}
+                  <li className={cx("organization-item")} key={organization.name}>
+                    @{organization.name}
                   </li>
                 ))}
               </ul>

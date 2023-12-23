@@ -2,12 +2,17 @@
 
 import classNames from "classnames/bind";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
+import { reduxAppSelector, AppDispatch } from "src/redux/store";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "src/redux/slices/auth-slice";
+import { MouseEventHandler, useState } from "react";
 import {
   fetchOrganizationSearch,
   requestJoinOrganization,
   requestWithdrawOrganization,
 } from "src/api/Organization";
+import { Tag } from "@components/icon/Tag";
+import { SvgIcon } from "@components/icon/SvgIcon";
 import style from "./ChangeOrganizationForm.module.scss";
 
 const cx = classNames.bind(style);
@@ -28,7 +33,11 @@ const ChangeOrganizationForm = () => {
 
   // NCN.ji
 
+  const { userInfo } = reduxAppSelector((state) => state.authReducer.value);
+  const dispatch = useDispatch<AppDispatch>();
+
   const [isJoinComplete, setIsJoinComplete] = useState(false);
+  const [isWithdrawComplete, setIsWithdrawComplete] = useState(false);
   const [searchedOragnizationName, setSearchedOragnizationName] = useState<string>("");
   const [searchedOrganizationCode, setSearchedOrganizationCode] = useState<string>("");
 
@@ -53,6 +62,14 @@ const ChangeOrganizationForm = () => {
       setTimeout(() => {
         setIsJoinComplete(false);
       }, 1500);
+
+      const organizationItem = {
+        name: searchedOragnizationName,
+        code: searchedOrganizationCode,
+      };
+
+      const newOrganization = [...userInfo.organizations, organizationItem];
+      dispatch(setUserInfo({ organizations: newOrganization }));
     } catch (e) {
       setError("organizationName", {
         type: "wrongOrganizationName",
@@ -61,10 +78,25 @@ const ChangeOrganizationForm = () => {
     }
   };
 
+  const withdrawOrganization: MouseEventHandler = async (e) => {
+    const { code, idx } = e.currentTarget.dataset;
+
+    try {
+      await requestWithdrawOrganization(code);
+      const newOrganization = userInfo.organizations.filter((_, i) => i !== idx);
+      dispatch(setUserInfo({ organizations: newOrganization }));
+      setIsWithdrawComplete(true);
+      setTimeout(() => {
+        setIsWithdrawComplete(false);
+      }, 1500);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className={cx("form-wrap")}>
       <h1>소속 변경</h1>
-
       <form onSubmit={handleSubmit(onValid)} className={cx("organigation-search-wrap")}>
         <div className={cx("organigation-code-wrap")}>
           <label htmlFor="organizationCode">
@@ -101,12 +133,40 @@ const ChangeOrganizationForm = () => {
           </label>
         </div>
       </form>
-
+      <div className={cx("organization-list-wrap")}>
+        <h2>가입 중인 소속</h2>
+        <div className={cx("organization-list")}>
+          {userInfo.organizations.length > 0 &&
+            userInfo.organizations.map((organization, idx) => (
+              <div className={cx("tag-wrap")}>
+                <Tag label={organization.name} key={`tag-${organization.name}`} />
+                <button
+                  type="button"
+                  className={cx("tag-delete-btn")}
+                  onClick={(e) => withdrawOrganization(e)}
+                  data-code={organization.code}
+                  data-idx={idx}
+                >
+                  <SvgIcon iconName="close" size={14} />
+                </button>
+              </div>
+            ))}
+        </div>
+      </div>
       {isJoinComplete && (
         <button type="button" className={cx("background")} onClick={() => setIsJoinComplete(false)}>
           <div className={cx("success-alarm")}>
             {searchedOragnizationName}에 가입이 완료되었습니다.
           </div>
+        </button>
+      )}
+      {isWithdrawComplete && (
+        <button
+          type="button"
+          className={cx("background")}
+          onClick={() => setIsWithdrawComplete(false)}
+        >
+          <div className={cx("success-alarm")}>소속에서 탈퇴되었습니다.</div>
         </button>
       )}
     </div>
