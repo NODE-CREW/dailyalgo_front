@@ -21,7 +21,7 @@ const FollowItem = ({ followItem, getUserInfo }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    setIsFollowed(followItem.is_following);
+    setIsFollowed(followItem.is_following === "true");
   }, []);
 
   const handleClick = async () => {

@@ -36,4 +36,13 @@ export const API_USER_FOLLOW = (id: string) => {
 };
 
 // === Organization ===
+export const API_ORGANIGATION = "/organization/";
 export const API_SEARCH_ORGANIZATION = "/organization/code";
+
+export const API_JOIN_ORGANIZATION = (code: string) => {
+  return `/organization/${code}/join/`;
+};
+
+export const API_WITHDRAW_ORGANIZATION = (code: string) => {
+  return `/organization/${code}/withdraw/`;
+};
