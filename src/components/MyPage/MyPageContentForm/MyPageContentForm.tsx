@@ -1,78 +1,64 @@
-import type { QuestionItem } from "./MyPageQuestionList/MyPageQuestionList";
+import { reduxAppSelector } from "src/redux/store";
+import { requestPostQuestion } from "src/api/Question";
 import { SideTab } from "../SideTab";
 import { MyPageQuestionList } from "./MyPageQuestionList";
 import { NotificationList } from "./NotificationList";
 
-const Dummy: QuestionItem[] = [
-  {
-    id: 1,
-    title: "How to use React?",
-    questionContents:
-      "I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that?",
-    problemTag: "시간초과",
-    platform: "BOJ",
-    algorithmTagArray: ["DP", "DFS", "BFS"],
-    likeCount: 10,
-    viewCount: 20,
-    commentCount: 30,
-    author: "근육맨",
-    createdAt: "2021-08-01T00:00:00.000Z",
-  },
-  {
-    id: 2,
-    title: "How to use React?",
-    questionContents:
-      "I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that?",
-    problemTag: "시간초과",
-    platform: "BOJ",
-    algorithmTagArray: ["DP", "DFS", "BFS"],
-    likeCount: 10,
-    viewCount: 20,
-    commentCount: 30,
-    author: "근육맨",
-    createdAt: "2021-08-01T00:00:00.000Z",
-  },
-  {
-    id: 3,
-    title: "How to use React?",
-    questionContents:
-      "I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that?",
-    problemTag: "시간초과",
-    platform: "BOJ",
-    algorithmTagArray: ["DP", "DFS", "BFS"],
-    likeCount: 10,
-    viewCount: 20,
-    commentCount: 30,
-    author: "근육맨",
-    createdAt: "2021-08-01T00:00:00.000Z",
-  },
-  {
-    id: 4,
-    title: "How to use React?",
-    questionContents:
-      "I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that?",
-    problemTag: "시간초과",
-    platform: "BOJ",
-    algorithmTagArray: ["DP", "DFS", "BFS"],
-    likeCount: 10,
-    viewCount: 20,
-    commentCount: 30,
-    author: "근육맨",
-    createdAt: "2021-08-01T00:00:00.000Z",
-  },
-];
-
 const MyPageContentForm = () => {
-  const mypageTabList = ["답변", "질문", "다시보기", "알람"];
-
-  const mypageTabContents = [
-    <MyPageQuestionList tab="답변" questionsData={Dummy} />,
-    <MyPageQuestionList tab="질문" questionsData={Dummy} />,
-    <MyPageQuestionList tab="다시보기" questionsData={Dummy} />,
-    <NotificationList />,
+  const mypageTabList = [
+    {
+      label: "답변",
+      id: "answer",
+    },
+    {
+      label: "질문",
+      id: "question",
+    },
+    {
+      label: "다시보기",
+      id: "scrap",
+    },
+    {
+      label: "알람",
+      id: "notification",
+    },
   ];
 
-  return <SideTab tabList={mypageTabList} tabContents={mypageTabContents} />;
+  const dummy = {
+    title: "Test Title2",
+    source: "BOJ",
+    link: "https://www.acmicpc.net/problem/1000",
+    type: "시간초과",
+    content: "Test Content",
+    language: "python",
+    code: "print('Hello World')",
+    tags: ["tag1", "tag2"],
+  };
+
+  const testPost = () => {
+    console.log("test");
+    try {
+      requestPostQuestion(dummy);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const { userInfo } = reduxAppSelector((state) => state.authReducer.value);
+
+  const mypageTabContents = mypageTabList.map((tab) => {
+    if (tab.id === "notification") {
+      return <NotificationList key={tab.id} />;
+    }
+    return <MyPageQuestionList key={tab.id} tab={tab} userId={userInfo.id} />;
+  });
+
+  return (
+    <>
+      <div onClick={testPost}>Test</div>
+      <SideTab tabList={mypageTabList.map((tab) => tab.label)} tabContents={mypageTabContents} />
+    </>
+  );
 };
 
 export { MyPageContentForm };

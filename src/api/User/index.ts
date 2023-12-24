@@ -1,5 +1,11 @@
 import { createHttpCilent } from "src/lib/http-client";
-import type { UserInfo, UserLoginRes, UserSignUpReq, UserFollow } from "src/types/user";
+import type {
+  UserInfo,
+  UserLoginRes,
+  UserSignUpReq,
+  UserFollow,
+  UserQuestionsByContent,
+} from "src/types/user";
 import {
   API_UPDATE_USER,
   API_UPDATE_PASSWORD,
@@ -18,6 +24,7 @@ import {
   API_USER_FOLLOWER,
   API_USER_FOLLOWING,
   API_USER_FOLLOW,
+  API_USER_QUESTIONS_BY_CONTENT,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -103,4 +110,12 @@ export const fetchUserFollowing = (id: string): Promise<UserFollow[]> => {
 
 export const requestUserFollow = (id: string): Promise<any> => {
   return instance.put(API_USER_FOLLOW(id));
+};
+
+export const fetchUserQuestionsByContent = (
+  id: string,
+  content: string,
+  offset: number
+): Promise<UserQuestionsByContent> => {
+  return instance.get(API_USER_QUESTIONS_BY_CONTENT(id, content), { params: { offset } });
 };

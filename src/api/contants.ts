@@ -35,6 +35,10 @@ export const API_USER_FOLLOW = (id: string) => {
   return `/user/${id}/follow/`;
 };
 
+export const API_USER_QUESTIONS_BY_CONTENT = (id: string, content: string) => {
+  return `/user/${id}/${content}/`;
+};
+
 // === Organization ===
 export const API_ORGANIGATION = "/organization/";
 export const API_SEARCH_ORGANIZATION = "/organization/code";
@@ -46,3 +50,6 @@ export const API_JOIN_ORGANIZATION = (code: string) => {
 export const API_WITHDRAW_ORGANIZATION = (code: string) => {
   return `/organization/${code}/withdraw/`;
 };
+
+// === Question ===
+export const API_QUESTION = "/question/";
