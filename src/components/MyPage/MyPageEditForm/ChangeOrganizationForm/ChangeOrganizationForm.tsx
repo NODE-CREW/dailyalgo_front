@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { reduxAppSelector, AppDispatch } from "src/redux/store";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "src/redux/slices/auth-slice";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import {
   fetchOrganizationSearch,
   requestJoinOrganization,
@@ -78,9 +78,7 @@ const ChangeOrganizationForm = () => {
     }
   };
 
-  const withdrawOrganization: MouseEventHandler = async (e) => {
-    const { code, idx } = e.currentTarget.dataset;
-
+  const withdrawOrganization = async (code: string, idx: number) => {
     try {
       await requestWithdrawOrganization(code);
       const newOrganization = userInfo.organizations.filter((_, i) => i !== idx);
@@ -143,9 +141,7 @@ const ChangeOrganizationForm = () => {
                 <button
                   type="button"
                   className={cx("tag-delete-btn")}
-                  onClick={(e) => withdrawOrganization(e)}
-                  data-code={organization.code}
-                  data-idx={idx}
+                  onClick={() => withdrawOrganization(organization.code, idx)}
                 >
                   <SvgIcon iconName="close" size={14} />
                 </button>

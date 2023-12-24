@@ -38,4 +38,29 @@ interface UserFollow {
   is_following: "true" | "false";
 }
 
-export type { UserLoginRes, UserInfo, UserSignUpReq, UserFollow };
+interface QuestionItem {
+  id: number;
+  title: string;
+  source: string;
+  type: string;
+  tags: string[];
+  user_id: string;
+  answer_created_time: Date;
+  is_scraped: boolean;
+  is_like: boolean;
+}
+
+interface UserQuestionsByContent {
+  total_cnt: number;
+  nextIndex: number;
+  qustion_list: QuestionItem[];
+}
+
+export type {
+  UserLoginRes,
+  UserInfo,
+  UserSignUpReq,
+  UserFollow,
+  UserQuestionsByContent,
+  QuestionItem,
+};
