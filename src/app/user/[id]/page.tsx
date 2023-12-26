@@ -4,14 +4,15 @@ import { SideTab } from "@components/mypage/SideTab";
 import { reduxAppSelector } from "src/redux/store";
 import { MyPageQuestionList } from "@components/mypage/MyPageContentForm/MyPageQuestionList";
 import { MyPageTop } from "@components/mypage/MyPageTop";
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect, use } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { fetchUserInfo, requestUserFollow } from "src/api/User";
 import type { UserInfo } from "src/types/user";
 
 const UserPage = () => {
   const { id: userId } = useParams();
-  const { isLogIn } = reduxAppSelector((state) => state.authReducer.value);
+  const { isLogIn, userInfo: myUserInfo } = reduxAppSelector((state) => state.authReducer.value);
+  const router = useRouter();
 
   const userPageTabList = [
     {
@@ -77,6 +78,12 @@ const UserPage = () => {
   useEffect(() => {
     getUserInfo();
   }, []);
+
+  useEffect(() => {
+    if (isLogIn && myUserInfo.id === userId) {
+      router.push("/mypage");
+    }
+  }, [myUserInfo, isLogIn, router, userId]);
 
   return (
     <>

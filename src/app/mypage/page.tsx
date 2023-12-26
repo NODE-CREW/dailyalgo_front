@@ -2,7 +2,7 @@
 
 import { reduxAppSelector, AppDispatch } from "src/redux/store";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchUserInfo } from "src/api/User";
 import { setUserInfo } from "src/redux/slices/auth-slice";
 import { MyPageEditForm } from "@components/mypage/MyPageEditForm";
@@ -28,6 +28,10 @@ const Page = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   return (
     <>
