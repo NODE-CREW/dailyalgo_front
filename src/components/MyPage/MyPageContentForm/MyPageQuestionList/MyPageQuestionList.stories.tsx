@@ -1,6 +1,6 @@
 // import type { Meta, StoryObj } from "@storybook/react";
 // import { MyPageQuestionList } from "./MyPageQuestionList";
-// import type { QuestionItem } from "src/types/user";
+// import type { QuestionItem } from "src/types/question";
 
 // const meta: Meta<typeof MyPageQuestionList> = {
 //   component: MyPageQuestionList,

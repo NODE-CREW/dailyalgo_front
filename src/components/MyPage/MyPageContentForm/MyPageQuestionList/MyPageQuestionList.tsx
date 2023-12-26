@@ -1,8 +1,10 @@
 import classNames from "classnames/bind";
 import { useState, useEffect } from "react";
 import { Pagination } from "@components/common/Pagination/Pagination";
-import { MyPageQuestionItem } from "../MyPageQuestionItem";
 import { fetchUserQuestionsByContent } from "src/api/User";
+import type { QuestionItem } from "src/types/question";
+import Link from "next/link";
+import { MyPageQuestionItem } from "../MyPageQuestionItem";
 import style from "./MyPageQuestionList.module.scss";
 
 const cx = classNames.bind(style);
@@ -13,20 +15,44 @@ interface Props {
     id: string;
   };
   userId: string;
+  pageType: "mypage" | "user";
 }
 
-const MyPageQuestionList = ({ tab, userId }: Props) => {
-  const headerText = (tabType: string) => {
-    if (tabType === "답변") return "작성한 답변";
-    if (tabType === "질문") return "작성한 질문";
-    if (tabType === "다시보기") return "다시보기";
+const MyPageQuestionList = ({ tab, userId, pageType }: Props) => {
+  const headerText = () => {
+    if (tab.id === "answer") return "작성한 답변";
+    if (tab.id === "question") return "작성한 질문";
+    if (tab.id === "scrap") return "다시보기";
+    return undefined;
+  };
+
+  const noneQuestionText = () => {
+    if (tab.id === "answer") return <span>작성한 답변이 없습니다.</span>;
+    if (tab.id === "question") return <span>작성한 질문이 없습니다.</span>;
+    return undefined;
+  };
+
+  const noneQuestionSubTextInMyPage = () => {
+    if (tab.id === "answer")
+      return <span>질문에 답변하고 데일리알고 동료들과 정보를 나눠보세요!</span>;
+    if (tab.id === "question")
+      return <span>질문을 작성하고 데일리알고 동료들과 정보를 나눠보세요!</span>;
+    if (tab.id === "scrap") return <span>다시보기를 통해 질문을 저장해보세요!</span>;
     return undefined;
   };
 
   const [totalCnt, setTotalCnt] = useState(0);
-  const [questionList, setQuestionList] = useState([]);
-  const [totalPage, setTotalPage] = useState(0);
+  const [questionList, setQuestionList] = useState<QuestionItem[]>([]);
   const [page, setPage] = useState(1);
+
+  const scrapItem = (idx: number) => {
+    console.log(111);
+    const updateQuestionList = [...questionList];
+
+    updateQuestionList[idx].is_scrap = !updateQuestionList[idx].is_scrap;
+    setQuestionList(updateQuestionList);
+    console.log(updateQuestionList);
+  };
 
   useEffect(() => {
     setPage(1);
@@ -35,10 +61,13 @@ const MyPageQuestionList = ({ tab, userId }: Props) => {
   useEffect(() => {
     const getQuestionList = async () => {
       try {
-        const res = fetchUserQuestionsByContent(userId, tab.id, page);
-        console.log(res);
+        const offset = (page - 1) * 10;
+        const res = await fetchUserQuestionsByContent(userId, tab.id, offset);
+        setQuestionList(res.question_list);
+        setTotalCnt(res.total_cnt);
       } catch (e) {
-        console.log(e);
+        setQuestionList([]);
+        setTotalCnt(0);
       }
     };
 
@@ -49,16 +78,38 @@ const MyPageQuestionList = ({ tab, userId }: Props) => {
     <div className={cx("mypage-questions-wrap")}>
       <div className={cx("mypage-questions-header")}>
         <span className={cx("mypage-questions-header-text")}>
-          <span className={cx("mypage-questions-header-highlight")}>150개</span>의{" "}
-          {headerText(tab.label)}
+          <span className={cx("mypage-questions-header-highlight")}>{totalCnt}개</span>의{" "}
+          {headerText()}
         </span>
       </div>
-      <div className={cx("mypage-question-list")}>
-        {questionList.map((question) => (
-          <MyPageQuestionItem question={question} key={`${tab}-${question.id}`} />
-        ))}
-      </div>
-      <Pagination totalPage={totalPage} page={page} setPage={setPage} />
+
+      {questionList.length > 0 ? (
+        <>
+          <div className={cx("mypage-question-list")}>
+            {questionList.map((question, idx) => (
+              <MyPageQuestionItem
+                question={question}
+                key={`${tab}-${question.id}`}
+                onClickScrap={scrapItem}
+                idx={idx}
+              />
+            ))}
+          </div>
+          <Pagination totalCnt={totalCnt} page={page} setPage={setPage} />
+        </>
+      ) : (
+        <div className={cx("mypage-none-result-wrap")}>
+          <div className={cx("text-wrap")}>
+            {noneQuestionText()}
+            {pageType === "mypage" && noneQuestionSubTextInMyPage()}
+          </div>
+          {pageType === "mypage" && (
+            <Link href="/" className={cx("go-to-home-btn")}>
+              질문목록 보러가기
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 };

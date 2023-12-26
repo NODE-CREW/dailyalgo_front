@@ -19,7 +19,7 @@ interface Props {
 const MyPageTop = ({
   clickBtnHandler,
   isEdited,
-  isFollowing,
+  isFollowing = false,
   pageType,
   userInfo,
   getUserInfo,
@@ -49,11 +49,11 @@ const MyPageTop = ({
     switch (pageType) {
       case "user":
         return isFollowing ? (
-          <BasicButton size="sm" buttonType="primary" onClick={clickBtnHandler}>
-            팔로잉
+          <BasicButton size="sm" buttonType="secondary" onClick={clickBtnHandler}>
+            취소
           </BasicButton>
         ) : (
-          <BasicButton size="sm" buttonType="secondary" onClick={clickBtnHandler}>
+          <BasicButton size="sm" buttonType="primary" onClick={clickBtnHandler}>
             팔로우
           </BasicButton>
         );
@@ -94,7 +94,7 @@ const MyPageTop = ({
                   </li>
                 ))}
               </ul>
-              <dl className={cx("figure-info-wrap")}>
+              <div className={cx("figure-info-wrap")}>
                 <div>
                   <dt>가입일로부터</dt>
                   <dd>{getElapsedTimeByCreatedDate()} 일</dd>
@@ -111,7 +111,7 @@ const MyPageTop = ({
                   <dt>조회수</dt>
                   <dd>{userInfo.view_cnt} 개</dd>
                 </div>
-              </dl>
+              </div>
               {/* TODO: 클릭 시 팝업 */}
               <div className={cx("social-wrap")}>
                 <div

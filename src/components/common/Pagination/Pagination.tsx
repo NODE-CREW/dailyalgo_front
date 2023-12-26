@@ -5,13 +5,15 @@ import style from "./Pagination.module.scss";
 const cx = classNames.bind(style);
 
 type Props = {
-  totalPage: number;
+  totalCnt: number;
   page: number;
   setPage: (page: number) => void;
 };
 
-const Pagination = ({ totalPage, page, setPage }: Props) => {
+const Pagination = ({ totalCnt, page, setPage }: Props) => {
   const startPage = Math.floor((page - 1) / 10) * 10 + 1;
+
+  const totalPage = Math.ceil(totalCnt / 10);
 
   const pageBtns = [];
   for (let i = 0; i < 10; i++) {

@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import type { WritableDraft } from "immer/dist/internal";
 import type { UserInfo } from "src/types/user";
+import { fetchUserInfo } from "src/api/User";
 
 type InitialState = {
   value: AuthState;
