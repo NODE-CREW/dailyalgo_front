@@ -16,4 +16,30 @@
       }
     }
   }
+
+  .mypage-none-result-wrap {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-top: 160px;
+
+    .text-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    span {
+      color: $gray40;
+    }
+
+    .go-to-home-btn {
+      margin-top: 20px;
+      color: $primary-1;
+      text-decoration: underline;
+    }
+  }
 }

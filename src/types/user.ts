@@ -1,3 +1,5 @@
+import type { QuestionItem } from "./question";
+
 interface UserLoginRes {
   message: string;
   token: string;
@@ -19,6 +21,7 @@ interface UserInfo {
   view_cnt: number;
   follower_cnt: number;
   following_cnt: number;
+  is_following?: boolean;
 }
 
 interface UserSignUpReq {
@@ -38,29 +41,10 @@ interface UserFollow {
   is_following: "true" | "false";
 }
 
-interface QuestionItem {
-  id: number;
-  title: string;
-  source: string;
-  type: string;
-  tags: string[];
-  user_id: string;
-  answer_created_time: Date;
-  is_scraped: boolean;
-  is_like: boolean;
-}
-
 interface UserQuestionsByContent {
   total_cnt: number;
   nextIndex: number;
-  qustion_list: QuestionItem[];
+  question_list: QuestionItem[];
 }
 
-export type {
-  UserLoginRes,
-  UserInfo,
-  UserSignUpReq,
-  UserFollow,
-  UserQuestionsByContent,
-  QuestionItem,
-};
+export type { UserLoginRes, UserInfo, UserSignUpReq, UserFollow, UserQuestionsByContent };

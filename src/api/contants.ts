@@ -53,3 +53,11 @@ export const API_WITHDRAW_ORGANIZATION = (code: string) => {
 
 // === Question ===
 export const API_QUESTION = "/question/";
+
+export const API_QUESTION_SCRAP = (id: number) => {
+  return `/question/${id}/scrap/`;
+};
+
+export const API_QUESTION_LIKE = (id: number) => {
+  return `/question/${id}/like/`;
+};
