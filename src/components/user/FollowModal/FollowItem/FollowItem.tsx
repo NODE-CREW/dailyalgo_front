@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { reduxAppSelector } from "src/redux/store";
 import classNames from "classnames/bind";
 import { ProfileBadge } from "@components/user/ProfileBadge";
@@ -16,47 +16,56 @@ interface Props {
 }
 
 const FollowItem = ({ followItem, getUserInfo }: Props) => {
-  const [isFollowed, setIsFollowed] = useState(false);
-  const { isLogIn } = reduxAppSelector((state) => state.authReducer.value);
   const router = useRouter();
 
-  useEffect(() => {
-    setIsFollowed(followItem.is_following === "true");
-  }, []);
+  const [isFollowed, setIsFollowed] = useState(followItem.is_following);
+  const { isLogIn, userInfo } = reduxAppSelector((state) => state.authReducer.value);
 
-  const handleClick = async () => {
+  const handleFollowItemClick = () => {
+    router.push(`/user/${followItem.id}`);
+  };
+
+  const handleFollowBtnClick = async () => {
     if (!isLogIn) {
-      router.push("/login");
+      alert("로그인이 필요한 서비스입니다.");
       return;
     }
 
     try {
       await requestUserFollow(followItem.id);
-      setIsFollowed(!isFollowed);
+      setIsFollowed(Math.abs(isFollowed - 1));
       getUserInfo();
     } catch (e) {
       console.log(e);
     }
   };
 
+  const followBtn = () => {
+    if (isLogIn && followItem.id === userInfo.id) return null;
+    if (isFollowed) {
+      return (
+        <BasicButton size="sm" buttonType="secondary" onClick={handleFollowBtnClick}>
+          취소
+        </BasicButton>
+      );
+    }
+    return (
+      <BasicButton size="sm" onClick={handleFollowBtnClick}>
+        팔로우
+      </BasicButton>
+    );
+  };
+
   return (
     <li className={cx("follow-item-wrap")}>
-      <div className={cx("left")}>
+      <div className={cx("left")} onClick={handleFollowItemClick}>
         <ProfileBadge size={48} />
         <div className={cx("user-info")}>
           <span className={cx("name")}>{followItem.nickname}</span>
-          <span className={cx("introduce")}>{followItem.intro}</span>
+          {followItem.intro && <span className={cx("introduce")}>{followItem.intro}</span>}
         </div>
       </div>
-      {isFollowed ? (
-        <BasicButton size="sm" buttonType="secondary" onClick={handleClick}>
-          취소
-        </BasicButton>
-      ) : (
-        <BasicButton size="sm" onClick={handleClick}>
-          팔로우
-        </BasicButton>
-      )}
+      {followBtn()}
     </li>
   );
 };

@@ -1,4 +1,4 @@
-import type { QuestionItem } from "./question";
+import { QuestionItem } from "./question";
 
 interface UserLoginRes {
   message: string;
@@ -38,7 +38,7 @@ interface UserFollow {
   id: string;
   nickname: string;
   intro?: string;
-  is_following: "true" | "false";
+  is_following: number;
 }
 
 interface UserQuestionsByContent {

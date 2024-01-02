@@ -47,7 +47,7 @@ const UserPage = () => {
 
   const clickFollowBtn = async () => {
     if (!isLogIn) {
-      alert("로그인 후 이용해주세요.");
+      alert("로그인이 필요한 서비스입니다.");
       return;
     }
     try {

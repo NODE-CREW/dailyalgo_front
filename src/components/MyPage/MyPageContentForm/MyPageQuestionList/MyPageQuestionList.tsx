@@ -46,12 +46,10 @@ const MyPageQuestionList = ({ tab, userId, pageType }: Props) => {
   const [page, setPage] = useState(1);
 
   const scrapItem = (idx: number) => {
-    console.log(111);
     const updateQuestionList = [...questionList];
 
-    updateQuestionList[idx].is_scrap = !updateQuestionList[idx].is_scrap;
+    updateQuestionList[idx].is_scrap = Math.abs(updateQuestionList[idx].is_scrap - 1);
     setQuestionList(updateQuestionList);
-    console.log(updateQuestionList);
   };
 
   useEffect(() => {

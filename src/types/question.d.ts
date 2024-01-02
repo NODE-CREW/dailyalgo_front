@@ -6,8 +6,8 @@ interface QuestionItem {
   tags: { name: string }[];
   user_id: string;
   question_created_time: Date;
-  is_scrap: boolean;
-  is_like: boolean;
+  is_scrap: number;
+  is_like: number;
 }
 
 export type { QuestionItem };
