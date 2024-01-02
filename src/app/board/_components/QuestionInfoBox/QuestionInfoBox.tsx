@@ -4,6 +4,7 @@ import {
   // SetStateAction,
   ComponentProps,
   KeyboardEvent,
+  useEffect,
 } from "react";
 import classNames from "classnames/bind";
 import { Controller } from "react-hook-form";
@@ -11,6 +12,7 @@ import { BasicInput } from "@components/input/BasicInput";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { Tag } from "@components/icon/Tag";
 import { SvgIcon } from "@components/icon/SvgIcon";
+import { QuestionTagModal } from "./QustionTagModal";
 import { InputBlock } from "./InputBlock";
 import style from "./QuestionInfoBox.module.scss";
 
@@ -79,25 +81,19 @@ const typeOptionList: OptionType["options"] = [
   },
 ];
 
-const QuestionInfoBox = ({
-  register,
-  control,
-  setValue,
-}: {
+interface Props {
   register: any;
   control: any;
-  setValue: any;
-}) => {
-  const [tagList, setTagList] = useState<string[]>([]);
+  tagList: string[];
+  handleTagAdd: (tag: string) => void;
+  setTagList: any;
+}
 
-  const handleTagEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (tagList.length >= 5) return;
-    if (e.currentTarget.value === "") return;
-    if (tagList.includes(e.currentTarget.value)) return;
+const QuestionInfoBox = ({ register, control, tagList, handleTagAdd, setTagList }: Props) => {
+  const [isTagModalOpen, setIsTagModalOpen] = useState(false);
 
-    setTagList([...tagList, e.currentTarget.value]);
-    setValue("tags", [...tagList, e.currentTarget.value]);
-    e.currentTarget.value = "";
+  const handleTagModalOpen = () => {
+    setIsTagModalOpen(!isTagModalOpen);
   };
 
   return (
@@ -134,9 +130,13 @@ const QuestionInfoBox = ({
           )}
         />
       </InputBlock>
-      <InputBlock label="태그" subLabel="관련 태그를 추가해 주세요 (최대 5개)">
-        <BasicInput id="source" placeholder="예 : DFS" onEnter={handleTagEnter} size="sm" />
-      </InputBlock>
+      <div className={cx("add-tag-wrap")}>
+        <h1>태그</h1>
+        <span>관련 태그를 추가해주세요 (최대 5개)</span>
+        <button className={cx("add-tag-button")} type="button" onClick={handleTagModalOpen}>
+          태그 추가
+        </button>
+      </div>
       {tagList.length > 0 && (
         <div className={cx("tag-list")}>
           {tagList.map((tag) => (
@@ -148,10 +148,6 @@ const QuestionInfoBox = ({
                 className={cx("tag-delete-btn")}
                 onClick={() => {
                   setTagList(tagList.filter((item) => item !== tag));
-                  setValue(
-                    "tags",
-                    tagList.filter((item) => item !== tag)
-                  );
                 }}
               >
                 <SvgIcon iconName="close" size={14} />
@@ -160,6 +156,12 @@ const QuestionInfoBox = ({
           ))}
         </div>
       )}
+      <QuestionTagModal
+        isOpen={isTagModalOpen}
+        closeModal={handleTagModalOpen}
+        handleTagAdd={handleTagAdd}
+        tagList={tagList}
+      />
     </div>
   );
 };

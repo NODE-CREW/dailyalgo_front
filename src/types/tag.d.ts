@@ -8,4 +8,11 @@ type ProblemType =
   | "왜틀맞"
   | "기타";
 
+type TagItem = {
+  id: string;
+  label: string;
+};
+
 type PlatformType = "BOJ" | "SWEA" | "Programmers";
+
+export type { TagItem };
