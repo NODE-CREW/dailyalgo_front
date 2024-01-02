@@ -86,7 +86,7 @@ const MyPageTop = ({
             <ProfileBadge size={168} />
             <div className={cx("info-wrap")}>
               <span className={cx("nickname")}>{userInfo.nickname}</span>
-              <span className={cx("introduce")}>{userInfo.intro}</span>
+              {userInfo.intro && <span className={cx("introduce")}>{userInfo.intro}</span>}
               <ul className={cx("organization-list")}>
                 {userInfo.organizations.map((organization) => (
                   <li className={cx("organization-item")} key={organization.name}>
