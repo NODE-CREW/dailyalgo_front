@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import classNames from "classnames/bind";
 import { Controller, FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 
@@ -8,6 +8,7 @@ import { BasicInput } from "@components/input/BasicInput";
 import { CodeEditor } from "@components/article/CodeEditor";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { BasicButton } from "@components/button/BasicButton";
+import { requestPostQuestion } from "src/api/Question";
 import { QuestionInfoBox } from "../QuestionInfoBox";
 import { NotedBox } from "../NotedBox";
 
@@ -15,22 +16,20 @@ import style from "./ArticleForm.module.scss";
 
 const cx = classNames.bind(style);
 
-// interface Props {}xw
-
 const ArticleForm = () => {
   const [language, setLanguage] = useState("python");
+  const [tagList, setTagList] = useState<string[]>([]);
 
   type FormValues = {
     title: string;
     code: string;
-    questionContents: string;
+    content: string;
     source: string;
     link: string;
     type: string;
-    tags: string[];
   };
 
-  const { register, handleSubmit, control, setValue } = useForm<FormValues>();
+  const { register, handleSubmit, control } = useForm<FormValues>();
 
   const languageList = [
     { id: "python", label: "Python" },
@@ -40,8 +39,17 @@ const ArticleForm = () => {
     { id: "javascript", label: "JavaScript" },
     { id: "csharp", label: "C#" },
   ];
+
   const onValid: SubmitHandler<FormValues> = async (data) => {
-    console.log(data);
+    if (!data.title || !data.content || !data.source || !data.type) return;
+
+    const requestBody = { ...data, tags: tagList, language };
+
+    try {
+      await requestPostQuestion(requestBody);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onInValid = async (err: FieldErrors) => {
@@ -52,10 +60,27 @@ const ArticleForm = () => {
     setLanguage(value);
   };
 
+  const handleTagAdd = (tag: string) => {
+    if (tagList.includes(tag)) {
+      const newTagList = tagList.filter((item) => item !== tag);
+      setTagList(newTagList);
+    } else {
+      if (tagList.length >= 5) return;
+
+      setTagList([...tagList, tag]);
+    }
+  };
+
   return (
     <div className={cx("article-form-wrap")}>
       <div className={cx("left")}>
-        <QuestionInfoBox register={register} control={control} setValue={setValue} />
+        <QuestionInfoBox
+          register={register}
+          control={control}
+          tagList={tagList}
+          handleTagAdd={handleTagAdd}
+          setTagList={setTagList}
+        />
         <NotedBox />
       </div>
       <div className={cx("right")}>
@@ -99,7 +124,7 @@ const ArticleForm = () => {
               id="qc"
               cols={30}
               rows={10}
-              {...register("questionContents")}
+              {...register("content")}
             />
           </div>
         </div>

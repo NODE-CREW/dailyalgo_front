@@ -5,10 +5,10 @@ import classNames from "classnames/bind";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { SvgIcon } from "@components/icon/SvgIcon";
 import { Footer } from "@components/organisms/Footer";
+import { Pagination } from "@components/common/Pagination/Pagination";
 import { FilterModal } from "../FilterModal";
 import { HeroBanner } from "../HeroBanner";
 import { QuestionListItem } from "../QuestionListItem";
-import { Pagination } from "@components/common/Pagination/Pagination";
 import style from "./HomeLayout.module.scss";
 
 const cx = classNames.bind(style);
@@ -104,10 +104,7 @@ const HomeLayout = ({ data }: Props) => {
   const [questionStatus, setQuestionStatus] = useState(questionStatusOptions[0].id);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [filterKeyword, setFilterKeyword] = useState<{ id: string; label: string }>({
-    id: "",
-    label: "",
-  });
+  const [filterKeyword, setFilterKeyword] = useState<string>("");
 
   return (
     <div className={cx("home-layout-wrap")}>
@@ -139,13 +136,13 @@ const HomeLayout = ({ data }: Props) => {
                 changeHandler={setQuestionStatus}
               />
               <div className={cx("filter-btn")} onClick={() => setIsFilterModalOpen(true)}>
-                {filterKeyword.id === "" ? (
+                {filterKeyword === "" ? (
                   <div className={cx("filter-btn-inner")}>
                     <SvgIcon size={18} iconName="filter" />
                     필터
                   </div>
                 ) : (
-                  <span>{filterKeyword.label}</span>
+                  <span>{filterKeyword}</span>
                 )}
               </div>
             </div>
@@ -164,7 +161,7 @@ const HomeLayout = ({ data }: Props) => {
       <FilterModal
         isOpen={isFilterModalOpen}
         closeModal={() => setIsFilterModalOpen(false)}
-        filterKeyword={filterKeyword.id}
+        filterKeyword={filterKeyword}
         setFilterKeyword={setFilterKeyword}
       />
       <Footer />

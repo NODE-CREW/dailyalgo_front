@@ -3,19 +3,18 @@ import { debounce } from "lodash";
 import { BasicModal } from "@components/modal/BasicModal";
 import { BasicInput } from "@components/input/BasicInput";
 import classNames from "classnames/bind";
-import style from "./FilterModal.module.scss";
+import style from "./QustionTagModal.module.scss";
 
 const cx = classNames.bind(style);
 
 type Props = {
   isOpen: boolean;
   closeModal: () => void;
-  filterKeyword: string;
-  setFilterKeyword: (item: string) => void;
+  handleTagAdd: (tag: string) => void;
+  tagList: string[];
 };
 
-const filerItemList: string[] = [
-  "전체",
+const tagItemList: string[] = [
   "완전탐색",
   "자료구조",
   "해쉬",
@@ -48,7 +47,7 @@ const filerItemList: string[] = [
   "기타",
 ];
 
-const FilterItem = ({
+const TagItemComponent = ({
   item,
   isSelected,
   onClick,
@@ -67,16 +66,16 @@ const FilterItem = ({
   );
 };
 
-const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Props) => {
-  const [visibleFilterItem, setVisibleFilterItem] = useState<string[]>(filerItemList);
+const QuestionTagModal = ({ isOpen, closeModal, handleTagAdd, tagList }: Props) => {
+  const [visibleFilterItem, setVisibleFilterItem] = useState<string[]>(tagItemList);
 
   const searchKeywordHanlder = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = event.target.value;
     if (!keyword) {
-      setVisibleFilterItem(filerItemList);
+      setVisibleFilterItem(tagItemList);
       return;
     }
-    const filteredItem = filerItemList.filter((item) => item.includes(keyword));
+    const filteredItem = tagItemList.filter((item) => item.includes(keyword));
     setVisibleFilterItem(filteredItem);
   }, 300);
 
@@ -96,11 +95,13 @@ const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Pr
           ) : (
             <>
               {visibleFilterItem.map((item) => (
-                <FilterItem
+                <TagItemComponent
                   key={item}
                   item={item}
-                  isSelected={filterKeyword === item}
-                  onClick={setFilterKeyword}
+                  isSelected={tagList.includes(item)}
+                  onClick={() => {
+                    handleTagAdd(item);
+                  }}
                 />
               ))}
             </>
@@ -111,4 +112,4 @@ const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Pr
   );
 };
 
-export { FilterModal };
+export { QuestionTagModal };
