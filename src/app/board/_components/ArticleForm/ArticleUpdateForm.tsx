@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import { Controller, FieldErrors, SubmitHandler, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { BasicInput } from "@components/input/BasicInput";
 import { CodeEditor } from "@components/article/CodeEditor";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { BasicButton } from "@components/button/BasicButton";
-import { requestPostQuestion } from "src/api/Question";
-import { toast } from "react-toastify";
+import { fetchQuestionDetail, requestUpdateQuestion } from "src/api/Question";
 import { QuestionInfoBox } from "../QuestionInfoBox";
 import { NotedBox } from "../NotedBox";
 
@@ -17,8 +16,9 @@ import style from "./ArticleForm.module.scss";
 
 const cx = classNames.bind(style);
 
-const ArticleForm = () => {
+const ArticleUpdateForm = () => {
   const router = useRouter();
+  const { id } = useParams();
 
   const [language, setLanguage] = useState("python");
   const [tagList, setTagList] = useState<string[]>([]);
@@ -52,10 +52,9 @@ const ArticleForm = () => {
     const requestBody = { ...data, tags: tagList, language };
 
     try {
-      const id = await requestPostQuestion(requestBody);
-      router.push(`/board/${id}`);
+      await requestUpdateQuestion(Number(id), requestBody);
     } catch (e) {
-      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+      console.log(e);
     }
   };
 
@@ -144,4 +143,4 @@ const ArticleForm = () => {
   );
 };
 
-export { ArticleForm };
+export { ArticleUpdateForm };

@@ -54,6 +54,10 @@ export const API_WITHDRAW_ORGANIZATION = (code: string) => {
 // === Question ===
 export const API_QUESTION = "/question/";
 
+export const API_QUESTION_ITEM = (id: number) => {
+  return `/question/${id}/`;
+};
+
 export const API_QUESTION_SCRAP = (id: number) => {
   return `/question/${id}/scrap/`;
 };
