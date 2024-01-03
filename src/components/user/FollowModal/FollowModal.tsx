@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { BasicModal } from "@components/modal/BasicModal";
 import { fetchUserFollower, fetchUserFollowing } from "src/api/User";
 import type { UserFollow } from "src/types/user";
+import { toast } from "react-toastify";
 import { FollowItem } from "./FollowItem";
 import style from "./FollowModal.module.scss";
 
@@ -25,7 +26,7 @@ const FollowModal = ({ isOpen, closeModal, type, userId, getUserInfo }: Props) =
         const res = await fetchUserFollower(userId);
         setFollowList(res);
       } catch (e) {
-        console.log(e);
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
       }
     };
 
@@ -34,7 +35,7 @@ const FollowModal = ({ isOpen, closeModal, type, userId, getUserInfo }: Props) =
         const res = await fetchUserFollowing(userId);
         setFollowList(res);
       } catch (e) {
-        console.log(e);
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
       }
     };
 

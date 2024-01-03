@@ -5,6 +5,7 @@ import classNames from "classnames/bind";
 import { BasicButton } from "@components/button/BasicButton";
 import { useState } from "react";
 import { useForm, FieldErrors, SubmitHandler } from "react-hook-form";
+import { toast } from "react-toastify";
 import { fetchCheckNickname, requestUpdateUser } from "src/api/User";
 import { DeleteUserModal } from "../DeleteUserModal";
 import style from "./ChangeProfileForm.module.scss";
@@ -40,8 +41,9 @@ const ChangeProfileForm = () => {
       try {
         await requestUpdateUser(data);
         dispatch(setUserInfo(data));
+        toast.success("프로필이 수정되었습니다.");
       } catch (e) {
-        console.log(e);
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
       }
     }
   };

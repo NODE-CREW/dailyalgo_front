@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import classNames from "classnames/bind";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { SvgIcon } from "@components/icon/SvgIcon";

@@ -4,9 +4,10 @@ import { SideTab } from "@components/mypage/SideTab";
 import { reduxAppSelector } from "src/redux/store";
 import { MyPageQuestionList } from "@components/mypage/MyPageContentForm/MyPageQuestionList";
 import { MyPageTop } from "@components/mypage/MyPageTop";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchUserInfo, requestUserFollow } from "src/api/User";
+import { toast } from "react-toastify";
 import type { UserInfo } from "src/types/user";
 
 const UserPage = () => {
@@ -47,7 +48,7 @@ const UserPage = () => {
 
   const clickFollowBtn = async () => {
     if (!isLogIn) {
-      alert("로그인이 필요한 서비스입니다.");
+      toast.warning("로그인이 필요한 서비스입니다.");
       return;
     }
     try {
@@ -62,7 +63,7 @@ const UserPage = () => {
         follower_cnt: newFollowerCnt,
       });
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 
@@ -71,7 +72,7 @@ const UserPage = () => {
       const res: UserInfo = await fetchUserInfo(userId);
       setUserInfo(res);
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 

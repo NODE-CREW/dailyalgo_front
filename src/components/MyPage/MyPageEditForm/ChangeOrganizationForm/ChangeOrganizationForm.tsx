@@ -13,6 +13,7 @@ import {
 } from "src/api/Organization";
 import { Tag } from "@components/icon/Tag";
 import { SvgIcon } from "@components/icon/SvgIcon";
+import { toast } from "react-toastify";
 import style from "./ChangeOrganizationForm.module.scss";
 
 const cx = classNames.bind(style);
@@ -88,7 +89,7 @@ const ChangeOrganizationForm = () => {
         setIsWithdrawComplete(false);
       }, 1500);
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 

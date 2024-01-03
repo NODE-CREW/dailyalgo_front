@@ -7,6 +7,7 @@ import { TimeAgo } from "@components/user/TimeAgo";
 import { useRouter } from "next/navigation";
 import type { QuestionItem } from "src/types/question";
 import { requestScrapQuestion } from "src/api/Question";
+import { toast } from "react-toastify";
 import style from "./MyPageQuestionItem.module.scss";
 
 const cx = classNames.bind(style);
@@ -23,7 +24,7 @@ const MyPageQuestionItem = ({ question, onClickScrap, idx }: Props) => {
 
   const clickScrapHandler = async () => {
     if (!isLogIn) {
-      alert("로그인이 필요한 서비스입니다.");
+      toast.warning("로그인이 필요한 서비스입니다.");
       return;
     }
 
@@ -31,7 +32,7 @@ const MyPageQuestionItem = ({ question, onClickScrap, idx }: Props) => {
       await requestScrapQuestion(question.id);
       onClickScrap(idx);
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 
