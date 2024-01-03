@@ -6,6 +6,7 @@ import { BasicButton } from "@components/button/BasicButton";
 import { useRouter } from "next/navigation";
 import type { UserFollow } from "src/types/user";
 import { requestUserFollow } from "src/api/User";
+import { toast } from "react-toastify";
 import style from "./FollowItem.module.scss";
 
 const cx = classNames.bind(style);
@@ -27,7 +28,7 @@ const FollowItem = ({ followItem, getUserInfo }: Props) => {
 
   const handleFollowBtnClick = async () => {
     if (!isLogIn) {
-      alert("로그인이 필요한 서비스입니다.");
+      toast.warning("로그인이 필요한 서비스입니다.");
       return;
     }
 
@@ -36,7 +37,7 @@ const FollowItem = ({ followItem, getUserInfo }: Props) => {
       setIsFollowed(Math.abs(isFollowed - 1));
       getUserInfo();
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 

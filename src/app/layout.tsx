@@ -4,6 +4,8 @@ import { Header } from "@components/layout/Header";
 import "../styles/base/_reset.scss";
 import "../styles/base/_font.scss";
 import ReduxProvider from "src/redux/provider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
   children: ReactNode;
@@ -18,6 +20,7 @@ const RootLayout = ({ children }: Props) => (
         {children}
         <div id="modal-root" />
       </ReduxProvider>
+      <ToastContainer />
     </body>
   </html>
 );

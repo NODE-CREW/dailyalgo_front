@@ -3,7 +3,6 @@
 import { useState } from "react";
 import classNames from "classnames/bind";
 import { Controller, FieldErrors, SubmitHandler, useForm } from "react-hook-form";
-
 import { BasicInput } from "@components/input/BasicInput";
 import { CodeEditor } from "@components/article/CodeEditor";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
@@ -11,6 +10,7 @@ import { BasicButton } from "@components/button/BasicButton";
 import { requestPostQuestion } from "src/api/Question";
 import { QuestionInfoBox } from "../QuestionInfoBox";
 import { NotedBox } from "../NotedBox";
+import { toast } from "react-toastify";
 
 import style from "./ArticleForm.module.scss";
 
@@ -48,7 +48,7 @@ const ArticleForm = () => {
     try {
       await requestPostQuestion(requestBody);
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 

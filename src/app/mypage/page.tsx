@@ -8,6 +8,7 @@ import { setUserInfo } from "src/redux/slices/auth-slice";
 import { MyPageEditForm } from "@components/mypage/MyPageEditForm";
 import { MyPageContentForm } from "@components/mypage/MyPageContentForm";
 import { UserInfo } from "src/types/user";
+import { toast } from "react-toastify";
 import { MyPageTop } from "../../components/mypage/MyPageTop";
 
 const Page = () => {
@@ -25,7 +26,7 @@ const Page = () => {
       const res: UserInfo = await fetchUserInfo();
       dispatch(setUserInfo(res));
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 
