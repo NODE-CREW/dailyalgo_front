@@ -45,7 +45,7 @@ const ArticleForm = () => {
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
     if (!data.title || !data.content || !data.source || !data.type) {
-      alert("출처, 질문 유형, 제목, 내용은 필수 입력사항입니다.");
+      toast.warning("출처, 질문 유형, 제목, 내용은 필수 입력사항입니다.");
       return;
     }
 

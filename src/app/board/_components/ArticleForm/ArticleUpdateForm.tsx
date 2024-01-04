@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import classNames from "classnames/bind";
 import { Controller, FieldErrors, SubmitHandler, useForm } from "react-hook-form";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, redirect } from "next/navigation";
 import { BasicInput } from "@components/input/BasicInput";
 import { CodeEditor } from "@components/article/CodeEditor";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { BasicButton } from "@components/button/BasicButton";
-import { fetchQuestionDetail, requestUpdateQuestion } from "src/api/Question";
+import { toast } from "react-toastify";
+import { requestUpdateQuestion } from "src/api/Question";
+import { reduxAppSelector } from "src/redux/store";
+import type { QuestionDetail } from "src/types/question";
 import { QuestionInfoBox } from "../QuestionInfoBox";
 import { NotedBox } from "../NotedBox";
 
@@ -16,12 +19,21 @@ import style from "./ArticleForm.module.scss";
 
 const cx = classNames.bind(style);
 
-const ArticleUpdateForm = () => {
+interface RefMethods {
+  setInitialValue: (val: string) => void;
+}
+
+const ArticleUpdateForm = ({ data }: { data: QuestionDetail }) => {
   const router = useRouter();
   const { id } = useParams();
+  const { isLogIn, userInfo } = reduxAppSelector((state) => state.authReducer.value);
 
-  const [language, setLanguage] = useState("python");
+  const [language, setLanguage] = useState("");
   const [tagList, setTagList] = useState<string[]>([]);
+  const [defaultCode, setDefaultCode] = useState("");
+  const [defaultSource, setDefaultSource] = useState("");
+  const [defaultType, setDefaultType] = useState("");
+  const languageRef = useRef<RefMethods | null>(null);
 
   type FormValues = {
     title: string;
@@ -32,7 +44,7 @@ const ArticleUpdateForm = () => {
     type: string;
   };
 
-  const { register, handleSubmit, control } = useForm<FormValues>();
+  const { register, handleSubmit, control, setValue } = useForm<FormValues>();
 
   const languageList = [
     { id: "python", label: "Python" },
@@ -45,7 +57,7 @@ const ArticleUpdateForm = () => {
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
     if (!data.title || !data.content || !data.source || !data.type) {
-      alert("출처, 질문 유형, 제목, 내용은 필수 입력사항입니다.");
+      toast.error("출처, 질문 유형, 제목, 내용은 필수 입력사항입니다.");
       return;
     }
 
@@ -53,8 +65,9 @@ const ArticleUpdateForm = () => {
 
     try {
       await requestUpdateQuestion(Number(id), requestBody);
+      router.push(`/board/detail/${id}`);
     } catch (e) {
-      console.log(e);
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
   };
 
@@ -77,6 +90,36 @@ const ArticleUpdateForm = () => {
     }
   };
 
+  useEffect(() => {
+    const redirectToDetail = (authorId: string) => {
+      if (!isLogIn || userInfo.id !== authorId) {
+        redirect(`/board/detail/${id}`);
+      }
+    };
+
+    const setDefaultValue = (res: QuestionDetail) => {
+      setValue("title", res.title);
+      setValue("content", res.content);
+      setValue("source", res.source);
+      setDefaultSource(res.source);
+      setValue("link", res.link);
+      setValue("type", res.type);
+      setDefaultType(res.type);
+      setValue("code", res.code);
+      setTagList(res.tags.map((tag) => tag.name));
+      setDefaultCode(res.code);
+      languageRef.current?.setInitialValue(res.language);
+      setLanguage(res.language);
+    };
+
+    const fetchDetail = async (res: QuestionDetail) => {
+      redirectToDetail(res.user_id);
+      setDefaultValue(res);
+    };
+
+    fetchDetail(data);
+  }, []);
+
   return (
     <div className={cx("article-form-wrap")}>
       <div className={cx("left")}>
@@ -86,6 +129,8 @@ const ArticleUpdateForm = () => {
           tagList={tagList}
           handleTagAdd={handleTagAdd}
           setTagList={setTagList}
+          defaultSource={defaultSource}
+          defaultType={defaultType}
         />
         <NotedBox />
       </div>
@@ -104,8 +149,8 @@ const ArticleUpdateForm = () => {
           <div className={cx("title-wrap")}>
             <h3 className={cx("sub-title")}>코드</h3>
             <CommonDropdown
+              ref={languageRef}
               options={languageList}
-              initialValue={language}
               changeHandler={changeLanguage}
               size="sm"
             />
@@ -115,7 +160,11 @@ const ArticleUpdateForm = () => {
               name="code"
               control={control}
               render={({ field }) => (
-                <CodeEditor language={language} handleChange={field.onChange} />
+                <CodeEditor
+                  language={language}
+                  handleChange={field.onChange}
+                  defaultValue={defaultCode}
+                />
               )}
             />
           </div>
