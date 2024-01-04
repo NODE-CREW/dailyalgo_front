@@ -5,6 +5,7 @@ import {
   ComponentProps,
   KeyboardEvent,
   useEffect,
+  useRef,
 } from "react";
 import classNames from "classnames/bind";
 import { Controller } from "react-hook-form";
@@ -87,14 +88,39 @@ interface Props {
   tagList: string[];
   handleTagAdd: (tag: string) => void;
   setTagList: any;
+  defaultSource?: string;
+  defaultType?: string;
 }
 
-const QuestionInfoBox = ({ register, control, tagList, handleTagAdd, setTagList }: Props) => {
+interface RefMethods {
+  setInitialValue: (val: string) => void;
+}
+
+const QuestionInfoBox = ({
+  register,
+  control,
+  tagList,
+  handleTagAdd,
+  setTagList,
+  defaultSource,
+  defaultType,
+}: Props) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const sourceRef = useRef<RefMethods | null>(null);
+  const typeRef = useRef<RefMethods | null>(null);
 
   const handleTagModalOpen = () => {
     setIsTagModalOpen(!isTagModalOpen);
   };
+
+  useEffect(() => {
+    if (defaultSource) {
+      sourceRef.current?.setInitialValue(defaultSource);
+    }
+    if (defaultType) {
+      typeRef.current?.setInitialValue(defaultType);
+    }
+  }, [defaultSource, defaultType]);
 
   return (
     <div className={cx("question-info-box-wrap")}>
@@ -105,6 +131,7 @@ const QuestionInfoBox = ({ register, control, tagList, handleTagAdd, setTagList 
           control={control}
           render={({ field }) => (
             <CommonDropdown
+              ref={sourceRef}
               options={sourceOptionList}
               placeholder="문제 출처"
               size="full"
@@ -122,6 +149,7 @@ const QuestionInfoBox = ({ register, control, tagList, handleTagAdd, setTagList 
           control={control}
           render={({ field }) => (
             <CommonDropdown
+              ref={typeRef}
               options={typeOptionList}
               placeholder="질문 타입을 선택해주세요."
               size="full"

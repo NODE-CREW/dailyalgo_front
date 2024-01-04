@@ -36,6 +36,10 @@ type FormValues = {
   agreementId: boolean;
 };
 
+interface RefMethods {
+  resetTimer: () => void;
+}
+
 const SignUpForm = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -61,7 +65,7 @@ const SignUpForm = () => {
   const [isIdModalOpen, setIsIdModalOpen] = useState<boolean>(false);
   const [isOrganizationNameSearched, setIsOrganizationNameSearched] = useState<boolean>(false);
   const [organizationName, setOrganizationName] = useState<string>("");
-  const timerRef = useRef<any>();
+  const timerRef = useRef<RefMethods | null>(null);
 
   const getUserInfo = async () => {
     try {
@@ -235,7 +239,7 @@ const SignUpForm = () => {
       setShouldAuthorizeEmail(() => true);
       setAuthResultMsg("");
       setIsTimeOut(false);
-      timerRef.current.resetTimer();
+      timerRef.current?.resetTimer();
       initializeEmailAuthorization();
     } catch (e) {
       /** 이메일 중복 확인 로직 */
@@ -299,7 +303,7 @@ const SignUpForm = () => {
     try {
       const res = await fetchOrganizationSearch(organizationCode);
       if (res) {
-        setOrganizationName(res.name);
+        setOrganizationName(res);
         setIsOrganizationNameSearched(true);
       }
     } catch (e) {
