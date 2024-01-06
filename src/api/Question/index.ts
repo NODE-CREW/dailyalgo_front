@@ -7,11 +7,17 @@ import {
   API_QUESTION_SCRAP,
 } from "../contants";
 
+interface QeustionPostRes {
+  question_id: number;
+}
+
 const instance = createHttpCilent()
   .setBaseUrl(process.env.NEXT_PUBLIC_API_URL ?? "")
   .build();
 
-export const requestPostQuestion = (requestBody: QuestionCreateRequestBody): Promise<any> => {
+export const requestPostQuestion = (
+  requestBody: QuestionCreateRequestBody
+): Promise<QeustionPostRes> => {
   return instance.post(API_QUESTION, requestBody);
 };
 
