@@ -43,7 +43,7 @@ const Header = () => {
    * 비로그인유저 접근 불가: 마이페이지, 게시글 작성
    * */
   const redirectPathnameArrayToLoginUser = ["/sign-in", "/sign-up", "/find-user"];
-  const redirectPathnameArrayToNotLoginUser = ["/mypage", "/board/write"];
+  const redirectPathnameArrayToNotLoginUser = ["/mypage", "/board/write", "/board/update"];
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -56,7 +56,9 @@ const Header = () => {
         /** 토큰이 있고, 이미 로그인 상태라면 pathname에 따른 변동 */
         redirect("/");
       }
-    } else if (redirectPathnameArrayToNotLoginUser.includes(pathname)) {
+    } else if (
+      redirectPathnameArrayToNotLoginUser.some((pattern) => pathname.startsWith(pattern))
+    ) {
       /** 토큰이 없고, pathname에 따른 변동 */
       redirect("/");
     }

@@ -3,14 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import classNames from "classnames/bind";
 import { Controller, FieldErrors, SubmitHandler, useForm } from "react-hook-form";
-import { useRouter, useParams, redirect } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { BasicInput } from "@components/input/BasicInput";
 import { CodeEditor } from "@components/article/CodeEditor";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { BasicButton } from "@components/button/BasicButton";
 import { toast } from "react-toastify";
-import { requestUpdateQuestion } from "src/api/Question";
-import { reduxAppSelector } from "src/redux/store";
+import { fetchQuestionDetail, requestUpdateQuestion } from "src/api/Question";
 import type { QuestionDetail } from "src/types/question";
 import { QuestionInfoBox } from "../QuestionInfoBox";
 import { NotedBox } from "../NotedBox";
@@ -23,10 +22,9 @@ interface RefMethods {
   setInitialValue: (val: string) => void;
 }
 
-const ArticleUpdateForm = ({ data }: { data: QuestionDetail }) => {
+const ArticleUpdateForm = () => {
   const router = useRouter();
   const { id } = useParams();
-  const { isLogIn, userInfo } = reduxAppSelector((state) => state.authReducer.value);
 
   const [language, setLanguage] = useState("");
   const [tagList, setTagList] = useState<string[]>([]);
@@ -90,34 +88,32 @@ const ArticleUpdateForm = ({ data }: { data: QuestionDetail }) => {
     }
   };
 
+  const setDefaultValue = (res: QuestionDetail) => {
+    setValue("title", res.title);
+    setValue("content", res.content);
+    setValue("source", res.source);
+    setDefaultSource(res.source);
+    setValue("link", res.link);
+    setValue("type", res.type);
+    setDefaultType(res.type);
+    setValue("code", res.code);
+    setTagList(res.tags.map((tag) => tag.name));
+    setDefaultCode(res.code);
+    languageRef.current?.setInitialValue(res.language);
+    setLanguage(res.language);
+  };
+
   useEffect(() => {
-    const redirectToDetail = (authorId: string) => {
-      if (!isLogIn || userInfo.id !== authorId) {
-        redirect(`/board/detail/${id}`);
+    const fetchDetail = async () => {
+      try {
+        const res = await fetchQuestionDetail(Number(id));
+        setDefaultValue(res);
+      } catch (e) {
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
       }
     };
 
-    const setDefaultValue = (res: QuestionDetail) => {
-      setValue("title", res.title);
-      setValue("content", res.content);
-      setValue("source", res.source);
-      setDefaultSource(res.source);
-      setValue("link", res.link);
-      setValue("type", res.type);
-      setDefaultType(res.type);
-      setValue("code", res.code);
-      setTagList(res.tags.map((tag) => tag.name));
-      setDefaultCode(res.code);
-      languageRef.current?.setInitialValue(res.language);
-      setLanguage(res.language);
-    };
-
-    const fetchDetail = async (res: QuestionDetail) => {
-      redirectToDetail(res.user_id);
-      setDefaultValue(res);
-    };
-
-    fetchDetail(data);
+    fetchDetail();
   }, []);
 
   return (
@@ -185,7 +181,7 @@ const ArticleUpdateForm = ({ data }: { data: QuestionDetail }) => {
         </div>
         {/* TODO: submit 로직 */}
         <BasicButton size="lg" onClick={handleSubmit(onValid, onInValid)}>
-          질문하기
+          수정하기
         </BasicButton>
       </div>
     </div>

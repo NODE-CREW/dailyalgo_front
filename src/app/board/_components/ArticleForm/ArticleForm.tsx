@@ -52,8 +52,8 @@ const ArticleForm = () => {
     const requestBody = { ...data, tags: tagList, language };
 
     try {
-      const id = await requestPostQuestion(requestBody);
-      router.push(`/board/${id}`);
+      const res = await requestPostQuestion(requestBody);
+      router.push(`/board/detail/${res.question_id}`);
     } catch (e) {
       toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
     }
