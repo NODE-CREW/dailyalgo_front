@@ -1,5 +1,10 @@
 import { createHttpCilent } from "src/lib/http-client";
-import type { QuestionDetail, QuestionCreateRequestBody } from "src/types/question";
+import type {
+  QuestionDetail,
+  QuestionCreateRequestBody,
+  HomeQuestionListRes,
+  HomeQuestionListReq,
+} from "src/types/question";
 import {
   API_QUESTION,
   API_QUESTION_ITEM,
@@ -19,6 +24,12 @@ export const requestPostQuestion = (
   requestBody: QuestionCreateRequestBody
 ): Promise<QeustionPostRes> => {
   return instance.post(API_QUESTION, requestBody);
+};
+
+export const fetchQuestionList = (
+  requestBody: HomeQuestionListReq
+): Promise<HomeQuestionListRes> => {
+  return instance.get(API_QUESTION, { params: requestBody });
 };
 
 export const requestUpdateQuestion = (
