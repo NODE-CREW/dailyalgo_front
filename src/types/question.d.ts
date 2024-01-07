@@ -43,4 +43,25 @@ interface QuestionCreateRequestBody {
   tags: string[];
 }
 
-export type { QuestionItem, QuestionDetail, QuestionCreateRequestBody };
+interface HomeQuestionListReq {
+  offset: number;
+  keyword: string | null;
+  source: string;
+  type: string;
+  status: string;
+  order: string;
+}
+
+interface HomeQuestionListRes {
+  total_cnt: number;
+  nextIndex: number;
+  question_list: QuestionDetail[];
+}
+
+export type {
+  QuestionItem,
+  QuestionDetail,
+  QuestionCreateRequestBody,
+  HomeQuestionListRes,
+  HomeQuestionListReq,
+};

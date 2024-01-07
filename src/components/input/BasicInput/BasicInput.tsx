@@ -15,6 +15,7 @@ type Props = {
   size?: InputSize;
   className?: string;
   disabled?: boolean;
+  defaultValue?: string;
   onEnter?: (event: KeyboardEvent<HTMLInputElement>) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 } & Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "size">;
@@ -31,6 +32,7 @@ const BasicInput = forwardRef<HTMLInputElement, Props>(
       placeholder,
       onEnter,
       disabled = false,
+      defaultValue = "",
       ...props
     },
     ref
@@ -53,6 +55,7 @@ const BasicInput = forwardRef<HTMLInputElement, Props>(
         aria-required={props.required ? "true" : "false"}
         onKeyDown={handleEnter}
         disabled={disabled}
+        defaultValue={defaultValue}
         {...props}
       />
     );
