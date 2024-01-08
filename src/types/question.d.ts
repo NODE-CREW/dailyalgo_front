@@ -50,6 +50,7 @@ interface HomeQuestionListReq {
   type: string;
   status: string;
   order: string;
+  tag: string;
 }
 
 interface HomeQuestionListRes {

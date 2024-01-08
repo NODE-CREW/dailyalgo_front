@@ -10,7 +10,7 @@ import { fetchQuestionList, requestScrapQuestion } from "src/api/Question";
 import { reduxAppSelector } from "src/redux/store";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import type { QuestionDetail, HomeQuestionListRes } from "src/types/question";
+import type { QuestionDetail } from "src/types/question";
 import { FilterModal } from "../FilterModal";
 import { HeroBanner } from "../HeroBanner";
 import { QuestionListItem } from "../QuestionListItem";
@@ -84,7 +84,7 @@ const HomeLayout = () => {
   const [questionStatus, setQuestionStatus] = useState(questionStatusOptions[0].id);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [filterKeyword, setFilterKeyword] = useState<string>("");
+  const [filterTag, setFilterTag] = useState<string>("");
 
   const [questionList, setQuestionList] = useState<QuestionDetail[]>([]);
   const [totalPage, setTotalPage] = useState(0);
@@ -107,8 +107,15 @@ const HomeLayout = () => {
 
   useEffect(() => {
     const keyword = searchParams.get("keyword");
-    setPage(1);
+
     const offset = (page - 1) * 10;
+
+    let tagKeyword = "";
+    if (filterTag === "전체") {
+      tagKeyword = "";
+    } else {
+      tagKeyword = filterTag;
+    }
 
     const requestBody = {
       offset,
@@ -117,6 +124,7 @@ const HomeLayout = () => {
       type: questionType,
       status: questionStatus,
       order: sort,
+      tag: tagKeyword,
     };
 
     const getQuestionList = async () => {
@@ -130,7 +138,11 @@ const HomeLayout = () => {
     };
 
     getQuestionList();
-  }, [searchParams, sort, source, questionType, questionStatus, page]);
+  }, [searchParams, sort, source, questionType, questionStatus, page, filterTag]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchParams, sort, source, questionType, questionStatus]);
 
   return (
     <div className={cx("home-layout-wrap")}>
@@ -162,13 +174,13 @@ const HomeLayout = () => {
                 changeHandler={setQuestionStatus}
               />
               <div className={cx("filter-btn")} onClick={() => setIsFilterModalOpen(true)}>
-                {filterKeyword === "" ? (
+                {filterTag === "" ? (
                   <div className={cx("filter-btn-inner")}>
                     <SvgIcon size={18} iconName="filter" />
                     필터
                   </div>
                 ) : (
-                  <span>{filterKeyword}</span>
+                  <span>{filterTag}</span>
                 )}
               </div>
             </div>
@@ -176,7 +188,7 @@ const HomeLayout = () => {
           <ul className={cx("question-list")}>
             {questionList.map((item, idx) => (
               <QuestionListItem
-                key={item.id}
+                key={`question-${item.id}`}
                 question={item}
                 idx={idx}
                 onClickScrap={clickScrapHandler}
@@ -192,8 +204,8 @@ const HomeLayout = () => {
       <FilterModal
         isOpen={isFilterModalOpen}
         closeModal={() => setIsFilterModalOpen(false)}
-        filterKeyword={filterKeyword}
-        setFilterKeyword={setFilterKeyword}
+        filterTag={filterTag}
+        setFilterTag={setFilterTag}
       />
       <Footer />
     </div>
