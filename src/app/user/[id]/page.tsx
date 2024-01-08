@@ -82,7 +82,7 @@ const UserPage = () => {
 
   useEffect(() => {
     if (isLogIn && myUserInfo.id === userId) {
-      router.push("/mypage");
+      router.replace("/mypage");
     }
   }, [myUserInfo, isLogIn, router, userId]);
 

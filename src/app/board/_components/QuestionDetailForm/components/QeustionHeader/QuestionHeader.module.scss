@@ -1,4 +1,8 @@
 .question-header {
+  width: 100%;
+  border-bottom: 1px solid $gray20;
+  padding-bottom: 34px;
+
   .title-wrap {
     display: flex;
     align-items: center;
@@ -8,6 +12,11 @@
       @include head-3;
 
       color: $black;
+    }
+
+    .action-icon-wrap {
+      display: flex;
+      gap: 8px;
     }
   }
 
@@ -23,7 +32,7 @@
       .count-item-wrap {
         display: flex;
         align-items: center;
-        gap: 8px;;
+        gap: 8px;
       }
     }
   }

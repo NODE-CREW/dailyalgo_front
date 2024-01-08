@@ -2,6 +2,8 @@
   padding: 28px 20px;
   border: 1px solid $gray20;
   border-radius: 16px;
+  width: 380px;
+  height: fit-content;
 
   .problem-name {
     @include head-4;

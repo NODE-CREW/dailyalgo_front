@@ -4,46 +4,61 @@ import classNames from "classnames/bind";
 import { IconButton } from "@components/button/IconButton";
 import { SvgIcon } from "@components/icon/SvgIcon";
 import { UserProfileThumbnail } from "@components/user/UserProfileThumbnail";
+import type { QuestionDetail } from "src/types/question";
+import Link from "next/link";
 
 import style from "./QuestionHeader.module.scss";
 
 const cx = classNames.bind(style);
 
-// interface Props {
-// title: string;
-// }
+interface Props {
+  question: QuestionDetail;
+  onClickScrap: () => void;
+  onClickLike: () => void;
+}
 
-const QuestionHeader = () => {
-  const title = "저 이런게 다 궁금하네용";
+const QuestionHeader = ({ question, onClickScrap, onClickLike }: Props) => {
   const countInfoArray = [
     {
       iconName: "eye",
-      count: 123,
+      count: question.view_cnt,
     },
     {
       iconName: "like-off",
-      count: 3,
+      count: question.like_cnt,
     },
     {
       iconName: "chat",
-      count: 123,
+      count: question.comment_cnt,
     },
   ];
   return (
     <div className={cx("question-header")}>
       <div className={cx("title-wrap")}>
-        <h2 className={cx("question-title")}>{title}</h2>
+        <h2 className={cx("question-title")}>{question.title}</h2>
         {/* TODO: 별 아이콘 맞는지 확인, 클릭 시 on/off toggle 기능 추가 */}
         <div className={cx("action-icon-wrap")}>
-          <IconButton icon={<SvgIcon iconName="star" size={24} />} title="즐겨찾기" />
+          <IconButton
+            icon={<SvgIcon iconName={question.is_like ? "like-on" : "like-off"} size={24} />}
+            title="좋아요"
+            size={24}
+            onClick={onClickLike}
+          />
+          <IconButton
+            icon={
+              <SvgIcon iconName={question.is_scrap ? "solid-tag-on" : "solid-tag-off"} size={24} />
+            }
+            title="북마크"
+            onClick={onClickScrap}
+          />
         </div>
       </div>
       <div className={cx("header-info-wrap")}>
-        <div className={cx("author")}>
+        <Link href={`/user/${question.user_id}`} className={cx("author")}>
           {/* TODO: 프로필 썸네일 크기 props? */}
-          <UserProfileThumbnail userName="질문자 닉넴" userId="몰?루" />
+          <UserProfileThumbnail userName={question.user_nickname} />
           {/* TODO: n 분전 등 시간 지남 기능 */}
-        </div>
+        </Link>
         {/* TODO: 공통 컴포넌트로 교체 */}
         <div className={cx("count-info-wrap")}>
           {countInfoArray.map((countInfo) => (
