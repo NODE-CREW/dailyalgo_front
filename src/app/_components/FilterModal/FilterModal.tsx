@@ -10,8 +10,8 @@ const cx = classNames.bind(style);
 type Props = {
   isOpen: boolean;
   closeModal: () => void;
-  filterKeyword: string;
-  setFilterKeyword: (item: string) => void;
+  filterTag: string;
+  setFilterTag: (item: string) => void;
 };
 
 const filerItemList: string[] = [
@@ -67,7 +67,7 @@ const FilterItem = ({
   );
 };
 
-const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Props) => {
+const FilterModal = ({ isOpen, closeModal, filterTag, setFilterTag }: Props) => {
   const [visibleFilterItem, setVisibleFilterItem] = useState<string[]>(filerItemList);
 
   const searchKeywordHanlder = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,8 +99,8 @@ const FilterModal = ({ isOpen, closeModal, filterKeyword, setFilterKeyword }: Pr
                 <FilterItem
                   key={item}
                   item={item}
-                  isSelected={filterKeyword === item}
-                  onClick={setFilterKeyword}
+                  isSelected={filterTag === item}
+                  onClick={setFilterTag}
                 />
               ))}
             </>
