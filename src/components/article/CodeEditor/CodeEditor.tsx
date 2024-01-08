@@ -9,7 +9,7 @@ interface Props {
   defaultValue?: string;
   language: string;
   customOption?: { [key: string]: any };
-  handleChange: (value: string) => void;
+  handleChange?: (value: string) => void;
 }
 
 const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Props) => {

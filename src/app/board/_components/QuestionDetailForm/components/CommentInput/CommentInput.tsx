@@ -6,6 +6,10 @@ import style from "./CommentInput.module.scss";
 
 const cx = classNames.bind(style);
 
+interface Props {
+  commentCnt: number;
+}
+
 const CommentInput = () => {
   const [comment, setComment] = useState<string>("");
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
