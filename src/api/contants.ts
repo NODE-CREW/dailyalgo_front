@@ -65,3 +65,15 @@ export const API_QUESTION_SCRAP = (id: number) => {
 export const API_QUESTION_LIKE = (id: number) => {
   return `/question/${id}/like/`;
 };
+
+export const API_QUESTION_COMMENT = (id: number) => {
+  return `/question/${id}/comment/`;
+};
+
+export const API_QUESTION_COMMENT_ITEM = (commentId: number) => {
+  return `/question/comment/${commentId}/`;
+};
+
+export const API_QUESTION_COMMENT_ITEM_LIKE = (commentId: number) => {
+  return `/question/comment/${commentId}/like/`;
+};

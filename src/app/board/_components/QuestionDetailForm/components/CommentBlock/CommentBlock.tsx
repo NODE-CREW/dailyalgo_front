@@ -1,46 +1,127 @@
-// import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 
+import type { QuestionComment } from "src/types/question";
+import {
+  requestPostComment,
+  fetchCommentList,
+  requestLikeComment,
+  deleteComment,
+  requestUpdateComment,
+} from "src/api/Question";
+import { reduxAppSelector } from "src/redux/store";
 import { CommentInput } from "../CommentInput";
 import { CommentItem } from "../CommentItem";
 
 import style from "./CommentBlock.module.scss";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(style);
 
-// interface Props {}
+interface Props {
+  questionId: number;
+  isLogIn: boolean;
+}
 
-const CommentBlock = () => {
-  const commentCount = 2;
-  const commentList = [
-    {
-      text: "와 이거 나도 헷갈렸던건데! 누가 빨리 대답좀 해주세요!! ",
-      user: {
-        id: 1,
-        name: "나코딩잘해",
-      },
-    },
-    {
-      text: "ㅋㅋㅋㅋㅋ이걸모르넼ㅋㅋㅋㅋ",
-      user: {
-        id: 1,
-        name: "이걸모름?",
-      },
-    },
-  ];
+const CommentBlock = ({ questionId, isLogIn }: Props) => {
+  const [commentList, setCommentList] = useState<QuestionComment[]>([]);
+  const [commentCnt, setCommentCnt] = useState<number>(0);
+  const { userInfo } = reduxAppSelector((state) => state.authReducer.value);
+
+  const getCommentList = async () => {
+    try {
+      const res = await fetchCommentList(questionId);
+      setCommentList(res);
+      setCommentCnt(res.length);
+    } catch (e) {
+      setCommentList([]);
+      setCommentCnt(0);
+    }
+  };
+
+  const handleCommentSubmit = async (comment: string) => {
+    if (!isLogIn) {
+      toast.warning("로그인이 필요한 서비스입니다.");
+      return;
+    }
+
+    if (!comment) {
+      toast.warning("댓글을 입력해주세요.");
+      return;
+    }
+
+    try {
+      await requestPostComment(questionId, comment);
+      toast.success("댓글이 등록되었습니다.");
+      getCommentList();
+    } catch (e) {
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+    }
+  };
+
+  const handleCommentLike = async (commentId: number) => {
+    if (!isLogIn) {
+      toast.warning("로그인이 필요한 서비스입니다.");
+      return;
+    }
+
+    try {
+      await requestLikeComment(commentId);
+      getCommentList();
+    } catch (e) {
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+    }
+  };
+
+  const handleCommentDelete = async (commentId: number) => {
+    try {
+      await deleteComment(commentId);
+      getCommentList();
+    } catch (e) {
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+    }
+  };
+
+  const handleCommentUpdate = async (commentId: number, content: string) => {
+    try {
+      await requestUpdateComment(commentId, content);
+      getCommentList();
+    } catch (e) {
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+    }
+  };
+
+  useEffect(() => {
+    if (questionId) {
+      getCommentList();
+    }
+  }, [questionId]);
+
   return (
     <div className={cx("comment-block-wrap")}>
       <strong className={cx("comment-count-wrap")}>
-        <span className={cx("comment-count")}>{commentCount}개</span>의 댓글
+        <span className={cx("comment-count")}>{commentCnt}개</span>의 댓글
       </strong>
-      <CommentInput />
-      <ul className={cx("comment-list-wrap")}>
-        {commentList.map((comment) => (
-          <li key={comment.text}>
-            <CommentItem />
-          </li>
-        ))}
-      </ul>
+      <CommentInput handleCommentSubmit={handleCommentSubmit} />
+      {commentCnt ? (
+        <ul className={cx("comment-list-wrap")}>
+          {commentList.map((comment) => (
+            <li key={`comment-${comment.id}`}>
+              <CommentItem
+                comment={comment}
+                handleCommentLike={handleCommentLike}
+                handleCommentDelete={handleCommentDelete}
+                handleCommentUpdate={handleCommentUpdate}
+                isAuthor={userInfo.id === comment.user_id}
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className={cx("none-comment-wrap")}>
+          <span>아직 해당 질문에 대한 댓글이 없습니다.</span>
+        </div>
+      )}
     </div>
   );
 };

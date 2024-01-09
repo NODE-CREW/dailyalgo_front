@@ -59,10 +59,23 @@ interface HomeQuestionListRes {
   question_list: QuestionDetail[];
 }
 
+interface QuestionComment {
+  id: number;
+  question_id: number;
+  user_id: string;
+  user_nickname: string;
+  content: string;
+  like_cnt: number;
+  created_time: Date;
+  modified_time?: Date;
+  is_like: number;
+}
+
 export type {
   QuestionItem,
   QuestionDetail,
   QuestionCreateRequestBody,
   HomeQuestionListRes,
   HomeQuestionListReq,
+  QuestionComment,
 };
