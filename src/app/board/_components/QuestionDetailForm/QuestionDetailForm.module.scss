@@ -10,16 +10,5 @@
     display: flex;
     flex-direction: column;
     gap: 34px;
-
-    .comment-input-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-
-      h3 {
-        @include body-1;
-        font-weight: bold;
-      }
-    }
   }
 }

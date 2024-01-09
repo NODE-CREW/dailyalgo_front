@@ -23,6 +23,8 @@ const SYSTEM = [
   "filter",
   "logout",
   "login",
+  "heart-on",
+  "heart-off",
 ] as const;
 const GRAPHIC = [] as const;
 const ICON_NAMES = [...LOGO, ...ARROW, ...PLATFORMS, ...SYSTEM, ...GRAPHIC] as const;

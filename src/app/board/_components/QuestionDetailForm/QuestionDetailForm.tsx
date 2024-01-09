@@ -9,7 +9,6 @@ import type { QuestionDetail } from "src/types/question";
 import { QuestionHeader } from "./components/QeustionHeader";
 import { QuestionContents } from "./components/QuestionContents";
 import { QuestionCoreInfoBox } from "./components/QuestionCoreInfoBox";
-import { CommentInput } from "./components/CommentInput";
 import { CommentBlock } from "./components/CommentBlock";
 import style from "./QuestionDetailForm.module.scss";
 
@@ -98,10 +97,7 @@ const QuestionDetailForm = ({ id }: { id: number }) => {
           onClickLike={clickLikeHandler}
         />
         <QuestionContents question={question} />
-        <div className={cx("comment-input-wrap")}>
-          <h3>{question.comment_cnt}개의 댓글</h3>
-          <CommentInput />
-        </div>
+        <CommentBlock questionId={question.id} isLogIn={isLogIn} />
       </div>
       <QuestionCoreInfoBox question={question} />
     </div>
