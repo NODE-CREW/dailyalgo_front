@@ -1,4 +1,4 @@
-.article-form-wrap {
+.answer-form-wrap {
   display: flex;
   gap: 30px;
   width: 1200px;
@@ -17,7 +17,7 @@
     flex: 1;
 
     .title {
-      @include head-2;
+      @include head-3;
 
       & + .input-wrap {
         margin-top: 16px;

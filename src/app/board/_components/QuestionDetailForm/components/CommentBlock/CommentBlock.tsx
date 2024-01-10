@@ -10,11 +10,11 @@ import {
   requestUpdateComment,
 } from "src/api/Question";
 import { reduxAppSelector } from "src/redux/store";
+import { toast } from "react-toastify";
 import { CommentInput } from "../CommentInput";
 import { CommentItem } from "../CommentItem";
 
 import style from "./CommentBlock.module.scss";
-import { toast } from "react-toastify";
 
 const cx = classNames.bind(style);
 

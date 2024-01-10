@@ -77,3 +77,22 @@ export const API_QUESTION_COMMENT_ITEM = (commentId: number) => {
 export const API_QUESTION_COMMENT_ITEM_LIKE = (commentId: number) => {
   return `/question/comment/${commentId}/like/`;
 };
+
+// === Answer ===
+export const API_ANSWER = "/answer/";
+
+export const API_ANSWER_ITEM = (answerId: number) => {
+  return `/answer/${answerId}/`;
+};
+
+export const API_QUESTION_ANSWER = (questionId: number) => {
+  return `/answer/${questionId}/`;
+};
+
+export const API_ANSWER_LIKE = (answerId: number) => {
+  return `/answer/${answerId}/like/`;
+};
+
+export const API_ANSWER_COMMENT = (answerId: number) => {
+  return `/answer/${answerId}/comment/`;
+};
