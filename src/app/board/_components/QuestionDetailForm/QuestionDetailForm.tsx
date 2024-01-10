@@ -10,6 +10,7 @@ import { QuestionHeader } from "./components/QeustionHeader";
 import { QuestionContents } from "./components/QuestionContents";
 import { QuestionCoreInfoBox } from "./components/QuestionCoreInfoBox";
 import { CommentBlock } from "./components/CommentBlock";
+import { AnswerBlock } from "./components/AnswerBlock";
 import style from "./QuestionDetailForm.module.scss";
 
 const cx = classNames.bind(style);
@@ -98,6 +99,7 @@ const QuestionDetailForm = ({ id }: { id: number }) => {
         />
         <QuestionContents question={question} />
         <CommentBlock questionId={question.id} isLogIn={isLogIn} />
+        <AnswerBlock questionId={question.id} isLogIn={isLogIn} />
       </div>
       <QuestionCoreInfoBox question={question} />
     </div>

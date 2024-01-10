@@ -1,25 +1,54 @@
 "use client";
 
-import { useState } from "react";
 import classNames from "classnames/bind";
+
 import { Controller, FieldErrors, SubmitHandler, useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BasicInput } from "@components/input/BasicInput";
 import { CodeEditor } from "@components/article/CodeEditor";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { BasicButton } from "@components/button/BasicButton";
-import { requestPostQuestion } from "src/api/Question";
+import type { QuestionDetail } from "src/types/question";
 import { toast } from "react-toastify";
-import { QuestionInfoBox } from "../QuestionInfoBox";
-import { NotedBox } from "../NotedBox";
+import { fetchQuestionDetail } from "src/api/Question";
+import { requestCreateAnswer } from "src/api/Answer";
+import { QuestionCoreInfoBox } from "../QuestionDetailForm/components/QuestionCoreInfoBox";
 
-import style from "./ArticleForm.module.scss";
+import style from "./AnswerForm.module.scss";
 
 const cx = classNames.bind(style);
 
-const ArticleForm = () => {
+interface Props {
+  questionId: number;
+}
+
+const defaultQuestion: QuestionDetail = {
+  id: 0,
+  title: "",
+  user_id: "",
+  user_nickname: "",
+  source: "",
+  link: "",
+  type: "",
+  content: "",
+  language: "",
+  code: "",
+  created_time: new Date(),
+  modified_time: new Date(),
+  view_cnt: 0,
+  like_cnt: 0,
+  answer_cnt: 0,
+  comment_cnt: 0,
+  tags: [],
+  is_scrap: 0,
+  is_like: 0,
+};
+
+const AnswerForm = ({ questionId }: Props) => {
   const router = useRouter();
 
+  const [question, setQuestion] = useState<QuestionDetail>(defaultQuestion);
   const [language, setLanguage] = useState("python");
   const [tagList, setTagList] = useState<string[]>([]);
 
@@ -27,9 +56,6 @@ const ArticleForm = () => {
     title: string;
     code: string;
     content: string;
-    source: string;
-    link: string;
-    type: string;
   };
 
   const { register, handleSubmit, control } = useForm<FormValues>();
@@ -43,30 +69,6 @@ const ArticleForm = () => {
     { id: "csharp", label: "C#" },
   ];
 
-  const onValid: SubmitHandler<FormValues> = async (data) => {
-    if (!data.title || !data.content || !data.source || !data.type) {
-      toast.warning("출처, 질문 유형, 제목, 내용은 필수 입력사항입니다.");
-      return;
-    }
-
-    const requestBody = { ...data, tags: tagList, language };
-
-    try {
-      const res = await requestPostQuestion(requestBody);
-      router.push(`/board/detail/${res.question_id}`);
-    } catch (e) {
-      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
-    }
-  };
-
-  const onInValid = async (err: FieldErrors) => {
-    console.log(err);
-  };
-
-  const changeLanguage = (value: string) => {
-    setLanguage(value);
-  };
-
   const handleTagAdd = (tag: string) => {
     if (tagList.includes(tag)) {
       const newTagList = tagList.filter((item) => item !== tag);
@@ -78,22 +80,52 @@ const ArticleForm = () => {
     }
   };
 
+  const changeLanguage = (value: string) => {
+    setLanguage(value);
+  };
+
+  const onValid: SubmitHandler<FormValues> = async (data) => {
+    if (!data.title || !data.content) {
+      toast.warning("제목, 내용은 필수 입력사항입니다.");
+      return;
+    }
+
+    const requestBody = { ...data, tags: tagList, language, question_id: questionId };
+
+    try {
+      await requestCreateAnswer(requestBody);
+      router.push(`/board/detail/${questionId}`);
+    } catch (e) {
+      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+    }
+  };
+
+  const onInValid = async (err: FieldErrors) => {
+    console.log(err);
+  };
+
+  useEffect(() => {
+    const getQuestionDetail = async () => {
+      try {
+        const res = await fetchQuestionDetail(questionId);
+        setQuestion(res);
+      } catch (e) {
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+      }
+    };
+
+    getQuestionDetail();
+  }, [questionId]);
+
   return (
-    <div className={cx("article-form-wrap")}>
+    <div className={cx("answer-form-wrap")}>
       <div className={cx("left")}>
-        <QuestionInfoBox
-          register={register}
-          control={control}
-          tagList={tagList}
-          handleTagAdd={handleTagAdd}
-          setTagList={setTagList}
-        />
-        <NotedBox />
+        <QuestionCoreInfoBox question={question} />
       </div>
       <div className={cx("right")}>
-        <h2 className={cx("title")}>질문하기</h2>
+        <h2 className={cx("title")}>답변하기</h2>
         <div className={cx("input-wrap")}>
-          <h3 className={cx("title-name")}>질문 제목</h3>
+          <h3 className={cx("title-name")}>답변 제목</h3>
           <BasicInput
             id="title"
             size="md"
@@ -103,7 +135,7 @@ const ArticleForm = () => {
         </div>
         <div className={cx("input-wrap")}>
           <div className={cx("title-wrap")}>
-            <h3 className={cx("sub-title")}>코드</h3>
+            <h3 className={cx("sub-title")}>답변 내용</h3>
             <CommonDropdown
               options={languageList}
               initialValue={language}
@@ -122,7 +154,6 @@ const ArticleForm = () => {
           </div>
         </div>
         <div className={cx("input-wrap")}>
-          <h3 className={cx("sub-title")}>질문 내용</h3>
           <div className={cx("markdown-wrap")}>
             {/* TODO: 마크다운 에디터 삽입 */}
             {/* <MarkDownEditor /> */}
@@ -137,11 +168,11 @@ const ArticleForm = () => {
         </div>
         {/* TODO: submit 로직 */}
         <BasicButton size="lg" onClick={handleSubmit(onValid, onInValid)}>
-          질문하기
+          답변하기
         </BasicButton>
       </div>
     </div>
   );
 };
 
-export { ArticleForm };
+export { AnswerForm };
