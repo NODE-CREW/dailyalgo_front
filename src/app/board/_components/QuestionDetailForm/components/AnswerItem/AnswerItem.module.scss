@@ -1,0 +1,14 @@
+.answer-item-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  > .content-wrap {
+    padding-left: 55px;
+    margin-bottom: 20px;
+  }
+
+  > .comment-wrap {
+    padding-left: 55px;
+  }
+}

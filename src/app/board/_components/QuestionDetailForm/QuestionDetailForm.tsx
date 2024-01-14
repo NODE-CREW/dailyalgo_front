@@ -97,8 +97,12 @@ const QuestionDetailForm = ({ id }: { id: number }) => {
           onClickScrap={clickScrapHandler}
           onClickLike={clickLikeHandler}
         />
-        <QuestionContents question={question} />
-        <CommentBlock questionId={question.id} isLogIn={isLogIn} />
+        <QuestionContents
+          language={question.language}
+          code={question.code}
+          content={question.content}
+        />
+        <CommentBlock id={question.id} isLogIn={isLogIn} />
         <AnswerBlock questionId={question.id} isLogIn={isLogIn} />
       </div>
       <QuestionCoreInfoBox question={question} />

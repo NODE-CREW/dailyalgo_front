@@ -76,6 +76,7 @@ const AnswerBlock = ({ questionId, isLogIn }: Props) => {
                   isAuthor={userInfo.id === answer.user_id}
                   onDeleteAnswer={onDeleteAnswer}
                   onLikeAnswer={onLikeAnswer}
+                  isLogIn={isLogIn}
                 />
               </li>
             ))}

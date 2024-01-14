@@ -19,18 +19,18 @@ import style from "./CommentBlock.module.scss";
 const cx = classNames.bind(style);
 
 interface Props {
-  questionId: number;
+  id: number;
   isLogIn: boolean;
 }
 
-const CommentBlock = ({ questionId, isLogIn }: Props) => {
+const CommentBlock = ({ id, isLogIn }: Props) => {
   const [commentList, setCommentList] = useState<QuestionComment[]>([]);
   const [commentCnt, setCommentCnt] = useState<number>(0);
   const { userInfo } = reduxAppSelector((state) => state.authReducer.value);
 
   const getCommentList = async () => {
     try {
-      const res = await fetchCommentList(questionId);
+      const res = await fetchCommentList(id);
       setCommentList(res);
       setCommentCnt(res.length);
     } catch (e) {
@@ -51,7 +51,7 @@ const CommentBlock = ({ questionId, isLogIn }: Props) => {
     }
 
     try {
-      await requestPostComment(questionId, comment);
+      await requestPostComment(id, comment);
       toast.success("댓글이 등록되었습니다.");
       getCommentList();
     } catch (e) {
@@ -92,10 +92,10 @@ const CommentBlock = ({ questionId, isLogIn }: Props) => {
   };
 
   useEffect(() => {
-    if (questionId) {
+    if (id) {
       getCommentList();
     }
-  }, [questionId]);
+  }, [id]);
 
   return (
     <div className={cx("comment-block-wrap")}>
