@@ -1,7 +1,12 @@
 .answer-header-wrap {
   display: flex;
   align-items: center;
-  gap: 30px;
+
+  .icon {
+    width: 55px;
+    display: flex;
+    align-items: center;
+  }
 
   .answer-content-wrap {
     display: flex;

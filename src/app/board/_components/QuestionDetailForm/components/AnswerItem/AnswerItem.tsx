@@ -1,6 +1,8 @@
 import classNames from "classnames/bind";
 import type { AnswerDetail } from "src/types/answer";
 import { AnswerHeader } from "../AnswerHeader";
+import { QuestionContents } from "../QuestionContents";
+import { CommentBlock } from "../CommentBlock";
 import style from "./AnswerItem.module.scss";
 
 const cx = classNames.bind(style);
@@ -10,9 +12,10 @@ interface Props {
   isAuthor: boolean;
   onDeleteAnswer: (answerId: number) => void;
   onLikeAnswer: (answerId: number) => void;
+  isLogIn: boolean;
 }
 
-const AnswerItem = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer }: Props) => {
+const AnswerItem = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer, isLogIn }: Props) => {
   return (
     <div className={cx("answer-item-wrap")}>
       <AnswerHeader
@@ -21,6 +24,12 @@ const AnswerItem = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer }: Props) =
         onDeleteAnswer={onDeleteAnswer}
         onLikeAnswer={onLikeAnswer}
       />
+      <div className={cx("content-wrap")}>
+        <QuestionContents language={answer.language} code={answer.code} content={answer.content} />
+      </div>
+      <div className={cx("comment-wrap")}>
+        <CommentBlock id={answer.id} isLogIn={isLogIn} />
+      </div>
     </div>
   );
 };

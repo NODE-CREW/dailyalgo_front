@@ -20,6 +20,7 @@ interface Props {
 }
 
 const AnswerHeader = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer }: Props) => {
+  console.log(answer);
   return (
     <div className={cx("answer-header-wrap")}>
       <div className={cx("icon")}>
@@ -29,7 +30,7 @@ const AnswerHeader = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer }: Props)
         <div className={cx("left")}>
           <div className={cx("user-info")}>
             <Link href={`/user/${answer.user_id}`}>
-              <span className={cx("user-name")}>{answer.user_nickname}</span>
+              <span className={cx("user-name")}>{answer.user_nickname}dsad</span>
             </Link>
 
             <div className={cx("answer-info")}>
@@ -38,7 +39,7 @@ const AnswerHeader = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer }: Props)
               </span>
               {isAuthor && (
                 <div className={cx("edit-wrap")}>
-                  <Link href={`/board/answer/update/${answer.id}`}>
+                  <Link href={`/board/answer/update/${answer.question_id}/${answer.id}`}>
                     <div>수정</div>
                   </Link>
                   <div onClick={() => onDeleteAnswer(answer.id)}>삭제</div>

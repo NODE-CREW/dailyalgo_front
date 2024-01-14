@@ -10,6 +10,7 @@ import { CodeEditor } from "@components/article/CodeEditor";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { BasicButton } from "@components/button/BasicButton";
 import type { QuestionDetail } from "src/types/question";
+import type { AnswerDetail } from "src/types/answer";
 import { toast } from "react-toastify";
 import { fetchQuestionDetail } from "src/api/Question";
 import { requestCreateAnswer } from "src/api/Answer";
@@ -22,6 +23,7 @@ import style from "./AnswerForm.module.scss";
 const cx = classNames.bind(style);
 
 interface Props {
+  answerId: number;
   questionId: number;
 }
 
@@ -47,10 +49,11 @@ const defaultQuestion: QuestionDetail = {
   is_like: 0,
 };
 
-const AnswerForm = ({ questionId }: Props) => {
+const AnswerUpdateForm = ({ questionId }: Props) => {
   const router = useRouter();
 
   const [question, setQuestion] = useState<QuestionDetail>(defaultQuestion);
+  const [answer, setAnswer] = useState<AnswerDetail>();
   const [language, setLanguage] = useState("python");
   const [tagList, setTagList] = useState<string[]>([]);
 
@@ -116,6 +119,8 @@ const AnswerForm = ({ questionId }: Props) => {
       }
     };
 
+    const getAnswerDetail = async () => {};
+
     getQuestionDetail();
   }, [questionId]);
 
@@ -127,56 +132,61 @@ const AnswerForm = ({ questionId }: Props) => {
       <div className={cx("right")}>
         <AnswerQuestionContent question={question} />
         <h2 className={cx("title")}>답변하기</h2>
-        <div className={cx("input-wrap")}>
-          <h3 className={cx("title-name")}>답변 제목</h3>
-          <BasicInput
-            id="title"
-            size="md"
-            placeholder="질문 제목을 입력해 주세요"
-            {...register("title")}
-          />
-        </div>
-        <AnswerTagInputForm handleTagAdd={handleTagAdd} tagList={tagList} />
-        <div className={cx("input-wrap")}>
-          <div className={cx("title-wrap")}>
-            <h3 className={cx("sub-title")}>답변 내용</h3>
-            <CommonDropdown
-              options={languageList}
-              initialValue={language}
-              changeHandler={changeLanguage}
-              size="sm"
-            />
-          </div>
-          <div className={cx("code-editor-wrap")}>
-            <Controller
-              name="code"
-              control={control}
-              render={({ field }) => (
-                <CodeEditor language={language} handleChange={field.onChange} />
-              )}
-            />
-          </div>
-        </div>
-        <div className={cx("input-wrap")}>
-          <div className={cx("markdown-wrap")}>
-            {/* TODO: 마크다운 에디터 삽입 */}
-            {/* <MarkDownEditor /> */}
-            <textarea
-              className={cx("question-contents")}
-              id="qc"
-              cols={30}
-              rows={10}
-              {...register("content")}
-            />
-          </div>
-        </div>
+        {answer && (
+          <>
+            <div className={cx("input-wrap")}>
+              <h3 className={cx("title-name")}>답변 제목</h3>
+              <BasicInput
+                id="title"
+                size="md"
+                placeholder="질문 제목을 입력해 주세요"
+                {...register("title")}
+              />
+            </div>
+            <AnswerTagInputForm handleTagAdd={handleTagAdd} tagList={tagList} />
+            <div className={cx("input-wrap")}>
+              <div className={cx("title-wrap")}>
+                <h3 className={cx("sub-title")}>답변 내용</h3>
+                <CommonDropdown
+                  options={languageList}
+                  initialValue={language}
+                  changeHandler={changeLanguage}
+                  size="sm"
+                />
+              </div>
+              <div className={cx("code-editor-wrap")}>
+                <Controller
+                  name="code"
+                  control={control}
+                  render={({ field }) => (
+                    <CodeEditor language={language} handleChange={field.onChange} />
+                  )}
+                />
+              </div>
+            </div>
+            <div className={cx("input-wrap")}>
+              <div className={cx("markdown-wrap")}>
+                {/* TODO: 마크다운 에디터 삽입 */}
+                {/* <MarkDownEditor /> */}
+                <textarea
+                  className={cx("question-contents")}
+                  id="qc"
+                  cols={30}
+                  rows={10}
+                  {...register("content")}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
         {/* TODO: submit 로직 */}
         <BasicButton size="lg" onClick={handleSubmit(onValid, onInValid)}>
-          답변하기
+          수정하기
         </BasicButton>
       </div>
     </div>
   );
 };
 
-export { AnswerForm };
+export { AnswerUpdateForm };

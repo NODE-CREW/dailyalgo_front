@@ -1,6 +1,6 @@
 interface AnswerDetail {
   id: number;
-  questionId: number;
+  question_id: number;
   title: string;
   user_id: string;
   user_nickname: string;
