@@ -1,12 +1,16 @@
 import { createHttpCilent } from "src/lib/http-client";
 
 import type { AnswerDetail, AnswerCreateReq } from "src/types/answer";
+import type { QuestionComment } from "src/types/question";
+
 import {
   API_ANSWER,
   API_QUESTION_ANSWER,
   API_ANSWER_ITEM,
   API_ANSWER_LIKE,
   API_ANSWER_COMMENT,
+  API_ANSWER_COMMENT_ITEM,
+  API_ANSWER_COMMENT_ITEM_LIKE,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -27,4 +31,24 @@ export const deleteAnswer = (answerId: number): Promise<any> => {
 
 export const requestAnswerLike = (answerId: number): Promise<any> => {
   return instance.put(API_ANSWER_LIKE(answerId));
+};
+
+export const fetchAnswerCommentList = (answerId: number): Promise<QuestionComment[]> => {
+  return instance.get(API_ANSWER_COMMENT(answerId));
+};
+
+export const requestPostAnswerComment = (answerId: number, content: string): Promise<any> => {
+  return instance.post(API_ANSWER_COMMENT(answerId), { content });
+};
+
+export const deleteAnswerComment = (commentId: number): Promise<any> => {
+  return instance.delete(API_ANSWER_COMMENT_ITEM(commentId));
+};
+
+export const requestUpdateAnswerComment = (commentId: number, content: string): Promise<any> => {
+  return instance.put(API_ANSWER_COMMENT_ITEM(commentId), { content });
+};
+
+export const requestLikeAnswerComment = (commentId: number): Promise<any> => {
+  return instance.put(API_ANSWER_COMMENT_ITEM_LIKE(commentId));
 };

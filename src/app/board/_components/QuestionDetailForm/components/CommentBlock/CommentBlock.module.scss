@@ -26,6 +26,16 @@
     }
   }
 
+  .all-comment-show-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-top: 2px solid $gray20;
+    padding: 11px 0;
+    color: $gray50;
+    cursor: pointer;
+  }
+
   .none-comment-wrap {
     color: #898989;
     display: flex;

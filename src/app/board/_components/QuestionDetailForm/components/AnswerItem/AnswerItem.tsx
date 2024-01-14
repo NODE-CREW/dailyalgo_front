@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import type { AnswerDetail } from "src/types/answer";
 import { AnswerHeader } from "../AnswerHeader";
 import { QuestionContents } from "../QuestionContents";
-import { CommentBlock } from "../CommentBlock";
+import { AnswerCommentBlock } from "../CommentBlock";
 import style from "./AnswerItem.module.scss";
 
 const cx = classNames.bind(style);
@@ -28,7 +28,7 @@ const AnswerItem = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer, isLogIn }:
         <QuestionContents language={answer.language} code={answer.code} content={answer.content} />
       </div>
       <div className={cx("comment-wrap")}>
-        <CommentBlock id={answer.id} isLogIn={isLogIn} />
+        <AnswerCommentBlock id={answer.id} isLogIn={isLogIn} />
       </div>
     </div>
   );
