@@ -20,7 +20,6 @@ interface Props {
 }
 
 const AnswerHeader = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer }: Props) => {
-  console.log(answer);
   return (
     <div className={cx("answer-header-wrap")}>
       <div className={cx("icon")}>

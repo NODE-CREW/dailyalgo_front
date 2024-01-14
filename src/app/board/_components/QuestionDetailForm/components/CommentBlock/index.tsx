@@ -1,3 +1,4 @@
 import { CommentBlock } from "./CommentBlock";
+import { AnswerCommentBlock } from "./AnswerCommentBlock";
 
-export { CommentBlock };
+export { CommentBlock, AnswerCommentBlock };

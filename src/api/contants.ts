@@ -96,3 +96,11 @@ export const API_ANSWER_LIKE = (answerId: number) => {
 export const API_ANSWER_COMMENT = (answerId: number) => {
   return `/answer/${answerId}/comment/`;
 };
+
+export const API_ANSWER_COMMENT_ITEM = (commentId: number) => {
+  return `/answer/comment/${commentId}/`;
+};
+
+export const API_ANSWER_COMMENT_ITEM_LIKE = (commentId: number) => {
+  return `/answer/comment/${commentId}/like/`;
+};
