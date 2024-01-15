@@ -4,7 +4,7 @@
   padding: 12px 0;
   border-bottom: solid 1px $gray20;
   gap: 4px;
-  
+
   &-top {
     display: flex;
     justify-content: space-between;
@@ -13,10 +13,10 @@
     .notification-top-content {
       @include body-2;
       font-weight: 600;
-
-      .notification-highlight {
+      span {
         color: $primary-1;
         font-weight: 600;
+        margin-right: 3px;
       }
     }
 
