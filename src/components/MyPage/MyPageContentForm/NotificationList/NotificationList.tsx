@@ -19,7 +19,7 @@ const NotificationList = () => {
       const offset = (page - 1) * 10;
 
       const requestBody = {
-        unreadOnly: false,
+        unreadOnly: true,
         offset,
       };
 
