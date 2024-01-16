@@ -6,12 +6,14 @@
   padding-bottom: 48px;
   padding-top: 24px;
 
-  > .content-wrap {
+  > .answer-content-wrap {
     padding-left: 55px;
-    margin-bottom: 20px;
-  }
 
-  > .comment-wrap {
-    padding-left: 55px;
+    .content-wrap {
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
   }
 }

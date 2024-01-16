@@ -25,6 +25,30 @@
     justify-content: space-between;
     margin-top: 24px;
 
+    .user-info-wrap {
+      @include body-2;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      .edit-wrap {
+        @include body-2;
+        display: flex;
+        gap: 5px;
+        margin-left: 8px;
+
+        .edit-btn {
+          color: $gray40;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+
+          &:hover {
+            color: $primary-1;
+          }
+        }
+      }
+    }
+
     .count-info-wrap {
       display: flex;
       gap: 28px;

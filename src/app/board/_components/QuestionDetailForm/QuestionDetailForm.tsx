@@ -83,6 +83,7 @@ const QuestionDetailForm = ({ id }: { id: number }) => {
       setQuestion({
         ...question,
         is_like: Math.abs(question.is_like - 1),
+        like_cnt: question.is_like ? question.like_cnt - 1 : question.like_cnt + 1,
       });
     } catch (e) {
       toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");

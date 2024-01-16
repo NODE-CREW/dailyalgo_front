@@ -25,4 +25,12 @@ interface AnswerCreateReq {
   tags: string[];
 }
 
-export type { AnswerDetail, AnswerCreateReq };
+interface AnswerUpdateReq {
+  title: string;
+  language: string;
+  code: string;
+  content: string;
+  tags: string[];
+}
+
+export type { AnswerDetail, AnswerCreateReq, AnswerUpdateReq };
