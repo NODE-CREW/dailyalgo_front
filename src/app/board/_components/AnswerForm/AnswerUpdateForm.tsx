@@ -13,7 +13,7 @@ import type { QuestionDetail } from "src/types/question";
 import type { AnswerDetail } from "src/types/answer";
 import { toast } from "react-toastify";
 import { fetchQuestionDetail } from "src/api/Question";
-import { requestCreateAnswer } from "src/api/Answer";
+import { updateAnswer, fetchAnswerDetail } from "src/api/Answer";
 import { QuestionCoreInfoBox } from "../QuestionDetailForm/components/QuestionCoreInfoBox";
 import { AnswerQuestionContent } from "./AnswerQuestionContent";
 import { AnswerTagInputForm } from "./AnswerTagInputForm";
@@ -49,7 +49,7 @@ const defaultQuestion: QuestionDetail = {
   is_like: 0,
 };
 
-const AnswerUpdateForm = ({ questionId }: Props) => {
+const AnswerUpdateForm = ({ questionId, answerId }: Props) => {
   const router = useRouter();
 
   const [question, setQuestion] = useState<QuestionDetail>(defaultQuestion);
@@ -63,7 +63,7 @@ const AnswerUpdateForm = ({ questionId }: Props) => {
     content: string;
   };
 
-  const { register, handleSubmit, control } = useForm<FormValues>();
+  const { register, handleSubmit, control, setValue } = useForm<FormValues>();
 
   const languageList = [
     { id: "python", label: "Python" },
@@ -95,10 +95,10 @@ const AnswerUpdateForm = ({ questionId }: Props) => {
       return;
     }
 
-    const requestBody = { ...data, tags: tagList, language, question_id: questionId };
+    const requestBody = { ...data, tags: tagList, language };
 
     try {
-      await requestCreateAnswer(requestBody);
+      await updateAnswer(answerId, requestBody);
       router.push(`/board/detail/${questionId}`);
     } catch (e) {
       toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
@@ -119,10 +119,23 @@ const AnswerUpdateForm = ({ questionId }: Props) => {
       }
     };
 
-    const getAnswerDetail = async () => {};
+    const getAnswerDetail = async () => {
+      try {
+        const res = await fetchAnswerDetail(answerId);
+        setAnswer(res);
+        setLanguage(res.language);
+        setTagList(res.tags.map((tag) => tag.name));
+        setValue("title", res.title);
+        setValue("content", res.content);
+        setValue("code", res.code);
+      } catch (e) {
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+      }
+    };
 
     getQuestionDetail();
-  }, [questionId]);
+    getAnswerDetail();
+  }, [questionId, answerId]);
 
   return (
     <div className={cx("answer-form-wrap")}>
@@ -159,7 +172,11 @@ const AnswerUpdateForm = ({ questionId }: Props) => {
                   name="code"
                   control={control}
                   render={({ field }) => (
-                    <CodeEditor language={language} handleChange={field.onChange} />
+                    <CodeEditor
+                      language={language}
+                      handleChange={field.onChange}
+                      defaultValue={answer.code}
+                    />
                   )}
                 />
               </div>

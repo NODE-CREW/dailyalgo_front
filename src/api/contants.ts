@@ -105,6 +105,10 @@ export const API_ANSWER_COMMENT_ITEM_LIKE = (commentId: number) => {
   return `/answer/comment/${commentId}/like/`;
 };
 
+export const API_ANSWER_DETAIL = (answerId: number) => {
+  return `/answer/detail/${answerId}/`;
+};
+
 // === Notification ===
 export const API_NOTIFICATION = "/notification/";
 

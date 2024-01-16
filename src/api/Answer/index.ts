@@ -1,6 +1,6 @@
 import { createHttpCilent } from "src/lib/http-client";
 
-import type { AnswerDetail, AnswerCreateReq } from "src/types/answer";
+import type { AnswerDetail, AnswerCreateReq, AnswerUpdateReq } from "src/types/answer";
 import type { QuestionComment } from "src/types/question";
 
 import {
@@ -11,6 +11,7 @@ import {
   API_ANSWER_COMMENT,
   API_ANSWER_COMMENT_ITEM,
   API_ANSWER_COMMENT_ITEM_LIKE,
+  API_ANSWER_DETAIL,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -27,6 +28,10 @@ export const requestCreateAnswer = (requestBody: AnswerCreateReq): Promise<any> 
 
 export const deleteAnswer = (answerId: number): Promise<any> => {
   return instance.delete(API_ANSWER_ITEM(answerId));
+};
+
+export const updateAnswer = (answerId: number, requestBody: AnswerUpdateReq): Promise<any> => {
+  return instance.put(API_ANSWER_ITEM(answerId), requestBody);
 };
 
 export const requestAnswerLike = (answerId: number): Promise<any> => {
@@ -51,4 +56,8 @@ export const requestUpdateAnswerComment = (commentId: number, content: string): 
 
 export const requestLikeAnswerComment = (commentId: number): Promise<any> => {
   return instance.put(API_ANSWER_COMMENT_ITEM_LIKE(commentId));
+};
+
+export const fetchAnswerDetail = (answerId: number): Promise<AnswerDetail> => {
+  return instance.get(API_ANSWER_DETAIL(answerId));
 };

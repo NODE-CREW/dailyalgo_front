@@ -69,10 +69,10 @@ const QuestionListItem = ({ question, idx, onClickScrap }: Props) => {
               </div>
             ))}
           </div>
-          <div className={cx("user-info-wrap")}>
-            <UserProfileThumbnail userName={question.user_nickname} userId={question.user_id} />
+          <Link href={`/user/${question.user_id}`} className={cx("user-info-wrap")}>
+            <UserProfileThumbnail userName={question.user_nickname} />
             <TimeAgo time={question.created_time} />
-          </div>
+          </Link>
         </div>
       </div>
     </li>

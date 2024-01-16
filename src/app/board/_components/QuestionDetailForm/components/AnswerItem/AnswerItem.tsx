@@ -24,11 +24,17 @@ const AnswerItem = ({ answer, isAuthor, onDeleteAnswer, onLikeAnswer, isLogIn }:
         onDeleteAnswer={onDeleteAnswer}
         onLikeAnswer={onLikeAnswer}
       />
-      <div className={cx("content-wrap")}>
-        <QuestionContents language={answer.language} code={answer.code} content={answer.content} />
-      </div>
-      <div className={cx("comment-wrap")}>
-        <AnswerCommentBlock id={answer.id} isLogIn={isLogIn} />
+      <div className={cx("answer-content-wrap")}>
+        <div className={cx("content-wrap")}>
+          <QuestionContents
+            language={answer.language}
+            code={answer.code}
+            content={answer.content}
+          />
+        </div>
+        <div className={cx("comment-wrap")}>
+          <AnswerCommentBlock id={answer.id} isLogIn={isLogIn} />
+        </div>
       </div>
     </div>
   );

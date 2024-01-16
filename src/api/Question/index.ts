@@ -47,6 +47,10 @@ export const fetchQuestionDetail = (questionId: number): Promise<QuestionDetail>
   return instance.get(API_QUESTION_ITEM(questionId));
 };
 
+export const deleteQuestion = (questionId: number): Promise<any> => {
+  return instance.delete(API_QUESTION_ITEM(questionId));
+};
+
 export const requestScrapQuestion = (questionId: number): Promise<any> => {
   return instance.put(API_QUESTION_SCRAP(questionId));
 };
