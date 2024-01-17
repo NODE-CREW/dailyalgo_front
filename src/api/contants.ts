@@ -115,3 +115,7 @@ export const API_NOTIFICATION = "/notification/";
 export const API_NOTIFICATION_ITEM = (id: number) => {
   return `/notification/${id}/`;
 };
+
+export const API_NOTIFICATION_COUNT = "/notification/count/";
+
+export const API_NOTIFICATION_READ_ALL = "/notification/readAll/";

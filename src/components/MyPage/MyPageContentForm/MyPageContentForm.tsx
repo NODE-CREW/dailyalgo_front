@@ -3,7 +3,11 @@ import { SideTab } from "../SideTab";
 import { MyPageQuestionList } from "./MyPageQuestionList";
 import { NotificationList } from "./NotificationList";
 
-const MyPageContentForm = () => {
+interface Props {
+  showNotification: boolean;
+}
+
+const MyPageContentForm = ({ showNotification }: Props) => {
   const mypageTabList = [
     {
       label: "답변",
@@ -33,7 +37,11 @@ const MyPageContentForm = () => {
   });
 
   return (
-    <SideTab tabList={mypageTabList.map((tab) => tab.label)} tabContents={mypageTabContents} />
+    <SideTab
+      tabList={mypageTabList.map((tab) => tab.label)}
+      tabContents={mypageTabContents}
+      defaultActiveTabIdx={showNotification ? 3 : 0}
+    />
   );
 };
 

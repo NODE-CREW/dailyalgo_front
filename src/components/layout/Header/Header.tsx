@@ -11,6 +11,7 @@ import { SvgIcon } from "@components/icon/SvgIcon";
 import { reduxAppSelector, AppDispatch } from "src/redux/store";
 import { setLogIn, setUserInfo, setLogOut } from "src/redux/slices/auth-slice";
 import { useDispatch } from "react-redux";
+import { NotificationButton } from "../NotificationButton";
 import style from "./Header.module.scss";
 import { fetchUserInfo } from "../../../api/User";
 
@@ -82,7 +83,7 @@ const Header = () => {
           {isLogIn ? (
             <>
               {/* TODO: 알림 및 프로필 버튼 */}
-              <IconButton icon={<SvgIcon iconName="alert" size={36} />} title="alert" />
+              <NotificationButton />
               <Link href="/mypage">
                 <IconButton icon={<SvgIcon iconName="profile" size={36} />} title="mypage" />
               </Link>
