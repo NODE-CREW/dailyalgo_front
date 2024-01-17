@@ -9,10 +9,11 @@ const cx = classNames.bind(style);
 interface Props {
   tabList: string[];
   tabContents: React.ReactNode[];
+  defaultActiveTabIdx?: number;
 }
 
-const SideTab = ({ tabList, tabContents }: Props) => {
-  const [activeTab, setActiveTab] = useState(0);
+const SideTab = ({ tabList, tabContents, defaultActiveTabIdx = 0 }: Props) => {
+  const [activeTab, setActiveTab] = useState(defaultActiveTabIdx);
 
   return (
     <div className={cx("side-tab-wrap")}>

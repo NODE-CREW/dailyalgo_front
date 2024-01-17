@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import type { Notification } from "src/types/notification";
-import { TimeAgo } from "@components/user/TimeAgo";
 import { fetchNotificationItem } from "src/api/Notification";
+import { TimeAgo } from "@components/user/TimeAgo";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import style from "./NotificationListItem.module.scss";
@@ -10,9 +10,10 @@ const cx = classNames.bind(style);
 
 interface Props {
   notification: Notification;
+  closeNotification: () => void;
 }
 
-const NotificationListItem = ({ notification }: Props) => {
+const NotificationListItem = ({ notification, closeNotification }: Props) => {
   const router = useRouter();
 
   const getObjectNameString = (text: string) => {
@@ -129,29 +130,27 @@ const NotificationListItem = ({ notification }: Props) => {
     }
   };
 
-  const clickNotificationHandler = async () => {
+  const handleNotificationClick = async () => {
     try {
       const res = await fetchNotificationItem(notification.id);
       if (typeof res.id === "number") router.push(`/board/detail/${res.id}`);
       else router.push(`/user/${res.id}`);
+
+      closeNotification();
     } catch (e) {
-      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+      toast.error("예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
   };
 
   return (
-    <div className={cx("notification-item", !notification.is_read && "not-read-item")}>
-      <div className={cx("notification-item-top")}>
-        <div className={cx("notification-top-content")} onClick={clickNotificationHandler}>
-          {getNotificationContent()}
-        </div>
-        <span className={cx("notification-time")}>
-          <TimeAgo time={notification.created_time} />
-        </span>
+    <div className={cx("notification-item-wrap", !notification.is_read && "not-read-item")}>
+      <div className={cx("notification-msg")} onClick={handleNotificationClick}>
+        {getNotificationContent()}
       </div>
-      <div className={cx("notification-item-bottom")}>
-        {notification.content && <span>{notification.content}</span>}
-      </div>
+      {notification.content && (
+        <div className={cx("notification-content")}>{notification.content}</div>
+      )}
+      <TimeAgo time={notification.created_time} />
     </div>
   );
 };

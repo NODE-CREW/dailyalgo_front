@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import { fetchUserInfo } from "src/api/User";
 import { setUserInfo } from "src/redux/slices/auth-slice";
 import { MyPageEditForm } from "@components/mypage/MyPageEditForm";
+import { useSearchParams } from "next/navigation";
 import { MyPageContentForm } from "@components/mypage/MyPageContentForm";
 import { UserInfo } from "src/types/user";
 import { toast } from "react-toastify";
 import { MyPageTop } from "../../components/mypage/MyPageTop";
 
 const Page = () => {
+  const searchParams = useSearchParams();
+  const showNotification = searchParams.get("show-notification") === "true";
+
   const { userInfo } = reduxAppSelector((state) => state.authReducer.value);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -43,7 +47,7 @@ const Page = () => {
         userInfo={userInfo}
         getUserInfo={getUserInfo}
       />
-      {isEdited ? <MyPageEditForm /> : <MyPageContentForm />}
+      {isEdited ? <MyPageEditForm /> : <MyPageContentForm showNotification={showNotification} />}
     </>
   );
 };
