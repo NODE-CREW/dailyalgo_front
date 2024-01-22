@@ -52,7 +52,6 @@ const CommentBlock = ({ id, isLogIn }: Props) => {
 
     try {
       await requestPostComment(id, comment);
-      toast.success("댓글이 등록되었습니다.");
       getCommentList();
     } catch (e) {
       toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");

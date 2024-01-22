@@ -31,7 +31,7 @@ const SignIn = () => {
             <img src="./images/arrow-tr.svg" alt="" />
           </Link>
         </div>
-        <div className={cx("social-login")}>
+        {/* <div className={cx("social-login")}>
           <button type="button" className={cx("kakao-btn")}>
             <img src="./images/kakao-logo.svg" alt="" />
             <span>카카오톡으로 로그인</span>
@@ -44,7 +44,7 @@ const SignIn = () => {
             <img src="./images/github-logo.svg" alt="" />
             <span>깃허브로 로그인</span>
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

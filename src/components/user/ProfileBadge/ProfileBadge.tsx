@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ProfileBadge = ({ profileImage, size }: Props) => {
-  const imgUrl = profileImage || "/assets/image/logo_colored.png";
+  const imgUrl = profileImage ?? "/assets/image/logo_colored.png";
   return (
     <span
       className={cx("profile-image-wrap")}
@@ -21,7 +21,7 @@ const ProfileBadge = ({ profileImage, size }: Props) => {
         } as CSSProperties
       }
     >
-      <Image src={imgUrl} fill alt="profile image" />
+      <Image src={imgUrl} fill sizes="100%" alt="profile image" priority="high" />
     </span>
   );
 };

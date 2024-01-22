@@ -34,6 +34,10 @@
       display: flex;
       gap: 4px;
 
+      .source-dropdown {
+        min-width: 120px;
+      }
+
       .filter-btn {
         @include body-1;
 
@@ -76,6 +80,14 @@
           border-top: 1px solid $gray20;
         }
       }
+    }
+
+    .none-answer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 20vh;
+      color: $gray60;
     }
   }
 

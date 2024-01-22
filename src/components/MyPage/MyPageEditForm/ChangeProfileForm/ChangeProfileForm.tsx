@@ -48,10 +48,6 @@ const ChangeProfileForm = () => {
     }
   };
 
-  const onInvalid = (error: FieldErrors) => {
-    console.log("invalid", error);
-  };
-
   const handleCheckNickname = async () => {
     const isValid = await trigger("nickname");
     if (!isValid) return;
@@ -98,7 +94,7 @@ const ChangeProfileForm = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onValid, onInvalid)} className={cx("change-profile-form-wrap")}>
+      <form onSubmit={handleSubmit(onValid)} className={cx("change-profile-form-wrap")}>
         <div className={cx("form-header")}>
           <span>프로필 수정</span>
         </div>
@@ -181,11 +177,11 @@ const ChangeProfileForm = () => {
           </div>
         </div>
         <BasicButton type="submit">수정완료</BasicButton>
-        <div className={cx("delete-user-btn")} onClick={openDeleteUserModal}>
+        {/* <div className={cx("delete-user-btn")} onClick={openDeleteUserModal}>
           회원탈퇴하기
-        </div>
+        </div> */}
       </form>
-      <DeleteUserModal isOpen={isDeleteUserModalOpen} closeModal={closeDeleteUserModal} />
+      {/* <DeleteUserModal isOpen={isDeleteUserModalOpen} closeModal={closeDeleteUserModal} /> */}
     </>
   );
 };
