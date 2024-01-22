@@ -11,7 +11,7 @@ interface UserInfo {
   nickname: string;
   intro: string;
   email: string;
-  created_time: Date;
+  created_time: Date | string;
   organizations: {
     name: string;
     code: string;

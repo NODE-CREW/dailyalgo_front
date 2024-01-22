@@ -1,7 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { WritableDraft } from "immer/dist/internal";
 import type { UserInfo } from "src/types/user";
-import { fetchUserInfo } from "src/api/User";
 
 type InitialState = {
   value: AuthState;
@@ -19,7 +18,7 @@ const initialUserInfo = {
   nickname: "",
   intro: "",
   email: "",
-  created_time: new Date(),
+  created_time: new Date().toISOString(),
   organizations: [],
   question_cnt: 0,
   answer_cnt: 0,

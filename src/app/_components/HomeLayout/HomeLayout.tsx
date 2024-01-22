@@ -75,7 +75,7 @@ const HomeLayout = () => {
   const questionStatusOptions = [
     { id: "all", label: "전체" },
     { id: "answered", label: "답변완료" },
-    { id: "now_answered", label: "미완료" },
+    { id: "not_answered", label: "미완료" },
   ];
 
   const [sort, setSort] = useState(sortOptions[0].id);
@@ -162,6 +162,7 @@ const HomeLayout = () => {
                 options={sourceOptions}
                 placeholder="문제 출처"
                 changeHandler={setSource}
+                className={cx("source-dropdown")}
               />
               <CommonDropdown
                 options={questionTypeOptions}
@@ -195,7 +196,13 @@ const HomeLayout = () => {
               />
             ))}
           </ul>
-          <Pagination totalCnt={totalPage} page={page} setPage={setPage} />
+          {questionList.length > 0 ? (
+            <Pagination totalCnt={totalPage} page={page} setPage={setPage} />
+          ) : (
+            <div className={cx("none-answer")}>
+              <span>검색 결과가 없습니다.</span>
+            </div>
+          )}
         </div>
         <div className={cx("advertise-wrap")}>
           <div className={cx("temp-ad")}>광고 영역</div>
