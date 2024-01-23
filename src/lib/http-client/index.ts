@@ -38,16 +38,35 @@ const responseInterceptor: ResponseInterceptor = {
     if (!token) return Promise.reject(error);
 
     if (!isRefreshing) {
-      console.log("in");
       httpClient
         .put("user/token")
-        .then((res) => {
-          console.log(res);
+        .then((res: { token: string; message: string }) => {
+          const newToken = res.token;
+          localStorage.setItem("token", newToken);
+          refreshQueue.forEach((promise: any) => promise.resolve(newToken));
         })
         .catch(() => {
-          console.log("error");
+          refreshQueue.forEach((promise: any) => promise.reject(error));
+        })
+        .finally(() => {
+          refreshQueue = [];
+          isRefreshing = false;
         });
     }
+
+    if (originConfig.url === "/user/token") {
+      return Promise.reject(error);
+    }
+    return new Promise((resolve, reject) => {
+      refreshQueue.push({
+        resolve() {
+          resolve(axiosClient(originConfig));
+        },
+        reject(err: any) {
+          reject(err);
+        },
+      });
+    });
   },
 };
 
