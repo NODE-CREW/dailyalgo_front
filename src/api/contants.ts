@@ -39,6 +39,8 @@ export const API_USER_QUESTIONS_BY_CONTENT = (id: string, content: string) => {
   return `/user/${id}/${content}/`;
 };
 
+export const API_USER_TOKEN = "/user/token/";
+
 // === Organization ===
 export const API_ORGANIGATION = "/organization/";
 export const API_SEARCH_ORGANIZATION = "/organization/code";

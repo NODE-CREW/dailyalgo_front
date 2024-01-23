@@ -25,6 +25,7 @@ import {
   API_USER_FOLLOWING,
   API_USER_FOLLOW,
   API_USER_QUESTIONS_BY_CONTENT,
+  API_USER_TOKEN,
 } from "../contants";
 
 const instance = createHttpCilent()
@@ -118,4 +119,8 @@ export const fetchUserQuestionsByContent = (
   offset: number
 ): Promise<UserQuestionsByContent> => {
   return instance.get(API_USER_QUESTIONS_BY_CONTENT(id, content), { params: { offset } });
+};
+
+export const requestUserToken = (): Promise<any> => {
+  return instance.put(API_USER_TOKEN);
 };
