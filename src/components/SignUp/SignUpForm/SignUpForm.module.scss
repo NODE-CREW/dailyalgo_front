@@ -12,13 +12,11 @@
         padding: 16px 20px 16px 20px;
         box-sizing: border-box;
         font-size: 16px;
-        border: 1px solid #D2D2D2;
+        border: 1px solid #d2d2d2;
         border-radius: 4px;
-        // margin-bottom: 8px;
       }
       input:focus {
         border: 1px solid #1b5ced;
-        // box-shadow: rgba(27, 92, 237, 0.3) 0px 0px 4px 2px;
       }
       input::placeholder {
         font-size: 16px;
@@ -26,38 +24,35 @@
       }
     }
     button {
-      // width: 100px;
       max-width: 100px;
       max-height: 52px;
       padding: 16px 20px 16px 20px;
       margin-left: 12px;
       box-sizing: border-box;
-      border: 1px solid #1B5CED;
+      border: 1px solid #1b5ced;
       border-radius: 4px;
-      color: #1B5CED;
+      color: #1b5ced;
     }
     button:disabled {
-      border: 1px solid #D2D2D2;
+      border: 1px solid #d2d2d2;
       color: #898989;
       cursor: no-drop;
     }
   }
-  .input-with-button-wrap:nth-child(n+2) {
+  .input-with-button-wrap:nth-child(n + 2) {
     margin-top: 8px;
   }
   .input-without-button-wrap {
     margin-top: 8px;
   }
   label {
-    // width: 100%;
-    // position: relative;
     input {
       width: 100%;
       max-width: 400px;
       padding: 16px 20px 16px 20px;
       box-sizing: border-box;
       font-size: 16px;
-      border: 1px solid #D2D2D2;
+      border: 1px solid #d2d2d2;
       border-radius: 4px;
       // margin-bottom: 8px;
     }
@@ -72,6 +67,10 @@
     &.email-authorization {
       position: relative;
     }
+
+    .oranization-name-text {
+      color: $primary-1;
+    }
   }
   .agreement {
     width: 100%;
@@ -82,11 +81,12 @@
       margin-top: 16px;
     }
     input[type="checkbox"] {
-      display: none
+      display: none;
     }
 
-    input[type="checkbox"]+label {
-      background: no-repeat left/16px 16px url(../../../../public/assets/svg/svg-icon/tabler_checkbox.svg);
+    input[type="checkbox"] + label {
+      background: no-repeat left/16px 16px
+        url(../../../../public/assets/svg/svg-icon/tabler_checkbox.svg);
       background-position: 0 4px;
       height: 20px;
       span {
@@ -94,17 +94,17 @@
         margin-left: 24px;
         a {
           text-decoration: underline;
-          color: #0241CF;
+          color: #0241cf;
         }
       }
     }
-    
+
     input[type="checkbox"]:checked + label {
-      background: no-repeat left/16px 16px url(../../../../public/assets/svg/svg-icon/tabler_checkbox_checked.svg);
+      background: no-repeat left/16px 16px
+        url(../../../../public/assets/svg/svg-icon/tabler_checkbox_checked.svg);
       background-position: 0 4px;
       height: 20px;
     }
-
   }
   .register-btn {
     background-color: $color-blue;
@@ -117,7 +117,7 @@
     margin-top: 28px;
   }
   .register-btn:hover {
-    background-color: #0241CF;
+    background-color: #0241cf;
   }
   span {
     width: 100%;

@@ -1,72 +1,65 @@
-import { Dispatch, SetStateAction, useLayoutEffect } from "react";
 import classNames from "classnames/bind";
-import { IconButton } from "@components/button/IconButton";
-import { SvgIcon } from "@components/icon/SvgIcon";
+import { useState, useEffect } from "react";
+import { BasicModal } from "@components/modal/BasicModal";
+import { fetchUserFollower, fetchUserFollowing } from "src/api/User";
+import type { UserFollow } from "src/types/user";
+import { toast } from "react-toastify";
 import { FollowItem } from "./FollowItem";
 import style from "./FollowModal.module.scss";
 
 const cx = classNames.bind(style);
 
 interface Props {
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  isOpen: boolean;
+  closeModal: () => void;
+  type: "follower" | "following";
+  userId: string;
+  getUserInfo: () => void;
 }
 
-const FollowModal = ({ setIsOpen }: Props) => {
-  const a = 1;
-  console.log(a);
-  useLayoutEffect(() => {
-    // Get original body overflow
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    // Prevent scrolling on mount
-    document.body.style.overflow = "hidden";
+const FollowModal = ({ isOpen, closeModal, type, userId, getUserInfo }: Props) => {
+  const [followList, setFollowList] = useState<UserFollow[]>([]);
 
-    // Re-enable scrolling when component unmounts
-    return () => {
-      document.body.style.overflow = originalStyle;
+  useEffect(() => {
+    const setFollowerList = async () => {
+      try {
+        const res = await fetchUserFollower(userId);
+        setFollowList(res);
+      } catch (e) {
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+      }
     };
-  }, []);
+
+    const setFollowingList = async () => {
+      try {
+        const res = await fetchUserFollowing(userId);
+        setFollowList(res);
+      } catch (e) {
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+      }
+    };
+
+    if (!userId) return;
+    if (type === "follower") {
+      setFollowerList();
+    } else {
+      setFollowingList();
+    }
+  }, [userId, isOpen, type, setFollowList]);
+
   return (
-    <div className={cx("follow-modal-wrap")}>
-      <div className={cx("dim")} onClick={() => setIsOpen(false)} />
-      <div className={cx("follow-modal")}>
-        <div className={cx("follow-modal-header")}>
-          <strong>팔로워</strong>
-          <IconButton
-            icon={<SvgIcon iconName="close" size={32} />}
-            onClick={() => setIsOpen(false)}
-            title="닫기"
-          />
-        </div>
-        <div className={cx("follow-list-wrap")}>
-          <ul className={cx("follow-list")}>
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-            <FollowItem />
-          </ul>
-        </div>
+    <BasicModal isOpen={isOpen} closeModal={closeModal}>
+      <div className={cx("follow-list-wrap")}>
+        <strong className={cx("follow-list-title")}>
+          {type === "follower" ? "팔로워" : "팔로잉"}
+        </strong>
+        <ul className={cx("follow-list")}>
+          {followList.map((followItem) => (
+            <FollowItem key={followItem.id} followItem={followItem} getUserInfo={getUserInfo} />
+          ))}
+        </ul>
       </div>
-    </div>
+    </BasicModal>
   );
 };
 

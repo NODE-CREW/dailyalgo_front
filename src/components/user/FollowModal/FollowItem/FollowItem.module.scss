@@ -1,10 +1,13 @@
 .follow-item-wrap {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 
   .left {
     display: flex;
     gap: 12px;
+    cursor: pointer;
+    align-items: center;
 
     .user-info {
       display: flex;

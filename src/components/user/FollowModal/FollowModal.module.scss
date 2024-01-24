@@ -1,51 +1,20 @@
-.follow-modal-wrap {
-  .dim {
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgb(0 0 0 / 70%);
+.follow-list-wrap {
+  @include scroll-style;
+
+  max-height: 700px;
+  strong {
+    @include head-3;
+    margin-bottom: 12px;
   }
-  
-  .follow-modal {
-    position: fixed;
-    z-index: 2;
-    top: 50%;
-    left: 50%;
-    width: 600px;
-    padding: 40px 44px;
-    border-radius: 16px;
-    background-color: $white;
-    transform: translate(-50%, -50%);
 
-    .follow-modal-header{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
+  padding-right: 12px;
+  overflow: auto;
 
-      strong {
-        @include head-3;
-      }
-    }
+  .follow-list {
+    margin-top: 18px;
 
-    .follow-list-wrap {
-      @include scroll-style;
-
-      height: 708px;
-      padding: 12px 0;
-      padding-right: 12px;
-      margin-top: 12px;
-      margin-right: -24px;
-      overflow-y: auto;
-
-      .follow-list {
-        li + li {
-          margin-top: 12px;
-        }
-      }
+    li + li {
+      margin-top: 18px;
     }
   }
 }

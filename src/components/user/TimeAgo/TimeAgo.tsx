@@ -15,8 +15,10 @@ interface Props {
 
 function timeAgoParser(timeString: string | Date) {
   const parsedTime = dayjs(timeString);
+  const adjustedTime = parsedTime.subtract(9, "hour");
+
   const currentTime = dayjs();
-  return parsedTime.from(currentTime);
+  return adjustedTime.from(currentTime);
 }
 
 const TimeAgo = ({ time }: Props) => <span className={cx("time-ago")}>{timeAgoParser(time)}</span>;

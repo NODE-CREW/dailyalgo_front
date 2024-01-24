@@ -9,7 +9,7 @@ type Props = {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
   size?: "sm" | "md" | "lg";
-  buttonType?: "primary" | "secondary" | "third" | "tertiary" | "danger" | "link";
+  buttonType?: "primary" | "secondary" | "third" | "tertiary" | "danger" | "link" | "nomal";
 } & React.ButtonHTMLAttributes<HTMLButtonElement> &
   React.AnchorHTMLAttributes<HTMLAnchorElement>;
 

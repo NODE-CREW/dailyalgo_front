@@ -4,6 +4,8 @@ import {
   // SetStateAction,
   ComponentProps,
   KeyboardEvent,
+  useEffect,
+  useRef,
 } from "react";
 import classNames from "classnames/bind";
 import { Controller } from "react-hook-form";
@@ -11,6 +13,7 @@ import { BasicInput } from "@components/input/BasicInput";
 import { CommonDropdown } from "@components/dropdown/CommonDropdown";
 import { Tag } from "@components/icon/Tag";
 import { SvgIcon } from "@components/icon/SvgIcon";
+import { QuestionTagModal } from "./QustionTagModal";
 import { InputBlock } from "./InputBlock";
 import style from "./QuestionInfoBox.module.scss";
 
@@ -79,26 +82,45 @@ const typeOptionList: OptionType["options"] = [
   },
 ];
 
+interface Props {
+  register: any;
+  control: any;
+  tagList: string[];
+  handleTagAdd: (tag: string) => void;
+  setTagList: any;
+  defaultSource?: string;
+  defaultType?: string;
+}
+
+interface RefMethods {
+  setInitialValue: (val: string) => void;
+}
+
 const QuestionInfoBox = ({
   register,
   control,
-  setValue,
-}: {
-  register: any;
-  control: any;
-  setValue: any;
-}) => {
-  const [tagList, setTagList] = useState<string[]>([]);
+  tagList,
+  handleTagAdd,
+  setTagList,
+  defaultSource,
+  defaultType,
+}: Props) => {
+  const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const sourceRef = useRef<RefMethods | null>(null);
+  const typeRef = useRef<RefMethods | null>(null);
 
-  const handleTagEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (tagList.length >= 5) return;
-    if (e.currentTarget.value === "") return;
-    if (tagList.includes(e.currentTarget.value)) return;
-
-    setTagList([...tagList, e.currentTarget.value]);
-    setValue("tags", [...tagList, e.currentTarget.value]);
-    e.currentTarget.value = "";
+  const handleTagModalOpen = () => {
+    setIsTagModalOpen(!isTagModalOpen);
   };
+
+  useEffect(() => {
+    if (defaultSource) {
+      sourceRef.current?.setInitialValue(defaultSource);
+    }
+    if (defaultType) {
+      typeRef.current?.setInitialValue(defaultType);
+    }
+  }, [defaultSource, defaultType]);
 
   return (
     <div className={cx("question-info-box-wrap")}>
@@ -109,6 +131,7 @@ const QuestionInfoBox = ({
           control={control}
           render={({ field }) => (
             <CommonDropdown
+              ref={sourceRef}
               options={sourceOptionList}
               placeholder="문제 출처"
               size="full"
@@ -126,6 +149,7 @@ const QuestionInfoBox = ({
           control={control}
           render={({ field }) => (
             <CommonDropdown
+              ref={typeRef}
               options={typeOptionList}
               placeholder="질문 타입을 선택해주세요."
               size="full"
@@ -134,9 +158,13 @@ const QuestionInfoBox = ({
           )}
         />
       </InputBlock>
-      <InputBlock label="태그" subLabel="관련 태그를 추가해 주세요 (최대 5개)">
-        <BasicInput id="source" placeholder="예 : DFS" onEnter={handleTagEnter} size="sm" />
-      </InputBlock>
+      <div className={cx("add-tag-wrap")}>
+        <h1>태그</h1>
+        <span>관련 태그를 추가해주세요 (최대 5개)</span>
+        <button className={cx("add-tag-button")} type="button" onClick={handleTagModalOpen}>
+          태그 추가
+        </button>
+      </div>
       {tagList.length > 0 && (
         <div className={cx("tag-list")}>
           {tagList.map((tag) => (
@@ -148,10 +176,6 @@ const QuestionInfoBox = ({
                 className={cx("tag-delete-btn")}
                 onClick={() => {
                   setTagList(tagList.filter((item) => item !== tag));
-                  setValue(
-                    "tags",
-                    tagList.filter((item) => item !== tag)
-                  );
                 }}
               >
                 <SvgIcon iconName="close" size={14} />
@@ -160,6 +184,12 @@ const QuestionInfoBox = ({
           ))}
         </div>
       )}
+      <QuestionTagModal
+        isOpen={isTagModalOpen}
+        closeModal={handleTagModalOpen}
+        handleTagAdd={handleTagAdd}
+        tagList={tagList}
+      />
     </div>
   );
 };
