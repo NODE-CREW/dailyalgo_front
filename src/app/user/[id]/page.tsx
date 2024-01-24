@@ -72,7 +72,7 @@ const UserPage = () => {
       const res: UserInfo = await fetchUserInfo(userId);
       setUserInfo(res);
     } catch (e) {
-      toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+      router.replace("/404");
     }
   };
 

@@ -6,6 +6,7 @@ import { reduxAppSelector } from "src/redux/store";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import type { QuestionDetail } from "src/types/question";
+import { useRouter } from "next/navigation";
 import { QuestionHeader } from "./components/QeustionHeader";
 import { QuestionContents } from "./components/QuestionContents";
 import { QuestionCoreInfoBox } from "./components/QuestionCoreInfoBox";
@@ -38,6 +39,8 @@ const defaultQuestion: QuestionDetail = {
 };
 
 const QuestionDetailForm = ({ id }: { id: number }) => {
+  const router = useRouter();
+
   const { isLogIn } = reduxAppSelector((state) => state.authReducer.value);
 
   const [question, setQuestion] = useState<QuestionDetail>(defaultQuestion);
@@ -48,7 +51,7 @@ const QuestionDetailForm = ({ id }: { id: number }) => {
         const res = await fetchQuestionDetail(id);
         setQuestion(res);
       } catch (e) {
-        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요.");
+        router.replace("/404");
       }
     };
 

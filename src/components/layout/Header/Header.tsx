@@ -48,6 +48,7 @@ const Header = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       if (!isLogIn) {
         /** 토큰이 있는데, login상태가 아니라면 변경 */
