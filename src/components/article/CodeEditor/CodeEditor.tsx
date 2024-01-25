@@ -31,7 +31,7 @@ const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Prop
   const handleEditorChange = (value: any) => {
     setEditorContent(value);
     // register("codeEditor", { onChange: value });
-    handleChange(value);
+    if (handleChange) handleChange(value);
     // TODO: 해당 로직 수정 필요, 부적절하게 늘어남
     const lineHeight = 19; // 디폴트 테마 line-height
     const totalLines = value.split("\n").length;
@@ -56,7 +56,7 @@ const CodeEditor = ({ defaultValue, language, customOption, handleChange }: Prop
       enabled: false,
     },
     scrollbar: {
-      vertical: "hidden",
+      vertical: "hidden" as const,
     },
     overflow: "hidden",
     overviewRulerLanes: 0,

@@ -4,6 +4,7 @@ import { ProblemTag } from "@components/icon/ProblemTag";
 import { Tag } from "@components/icon/Tag";
 import { BasicButton } from "@components/button/BasicButton";
 import type { QuestionDetail } from "src/types/question";
+import { ProblemType } from "src/types/tag";
 import style from "./QuestionCoreInfoBox.module.scss";
 
 const cx = classNames.bind(style);
@@ -43,7 +44,7 @@ const QuestionCoreInfoBox = ({ question }: Props) => {
         <div>
           <dt>질문타입</dt>
           <dd>
-            <ProblemTag tagName={question.type} />
+            <ProblemTag tagName={question.type as ProblemType} />
           </dd>
         </div>
         <div>

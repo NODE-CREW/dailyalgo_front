@@ -11,6 +11,6 @@ type Story = StoryObj<typeof ProblemTag>;
 
 export const Default: Story = {
   args: {
-    tagName: "시간초과",
+    tagName: "timeOut",
   },
 };

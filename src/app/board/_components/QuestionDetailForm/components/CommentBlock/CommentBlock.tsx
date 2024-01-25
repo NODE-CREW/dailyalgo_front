@@ -92,7 +92,18 @@ const CommentBlock = ({ id, isLogIn }: Props) => {
 
   useEffect(() => {
     if (id) {
-      getCommentList();
+      const getCommentListFirstRender = async () => {
+        try {
+          const res = await fetchCommentList(id);
+          setCommentList(res);
+          setCommentCnt(res.length);
+        } catch (e) {
+          setCommentList([]);
+          setCommentCnt(0);
+        }
+      };
+
+      getCommentListFirstRender();
     }
   }, [id]);
 

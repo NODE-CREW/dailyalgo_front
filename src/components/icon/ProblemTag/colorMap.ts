@@ -1,3 +1,5 @@
+import type { ProblemType } from "src/types/tag";
+
 type ColorMap = {
   [key in ProblemType]: string;
 };

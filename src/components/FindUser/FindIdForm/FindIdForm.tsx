@@ -35,7 +35,7 @@ const FindIdForm = () => {
   const [userId, setUserId] = useState<string>("");
   const timerRef = useRef<any>(null);
 
-  const onVaild: SubmitHandler<FormValues> = async (data) => {
+  const onVaild: SubmitHandler<FormValues> = async () => {
     if (!isAuthorized) {
       setError("emailAuthorization", {
         type: "required",

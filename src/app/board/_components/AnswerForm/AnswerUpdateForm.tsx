@@ -135,7 +135,7 @@ const AnswerUpdateForm = ({ questionId, answerId }: Props) => {
 
     getQuestionDetail();
     getAnswerDetail();
-  }, [questionId, answerId]);
+  }, [questionId, answerId, setValue]);
 
   return (
     <div className={cx("answer-form-wrap")}>

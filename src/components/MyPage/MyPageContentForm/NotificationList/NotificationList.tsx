@@ -41,7 +41,24 @@ const NotificationList = () => {
   };
 
   useEffect(() => {
-    getNotificationList();
+    const getNotificationListFirstRender = async () => {
+      const offset = (page - 1) * 10;
+
+      const requestBody = {
+        unreadOnly: false,
+        offset,
+      };
+
+      try {
+        const res = await fetchNotificationList(requestBody);
+        setTotalCnt(res.total_cnt);
+        setNotificationList(res.notification_list);
+      } catch (e) {
+        toast.error("예기치 못한 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+      }
+    };
+
+    getNotificationListFirstRender();
   }, [page]);
 
   return (

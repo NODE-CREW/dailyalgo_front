@@ -1,11 +1,12 @@
 import classNames from "classnames/bind";
+import { ProblemType } from "src/types/tag";
 import colorMap from "./colorMap";
 import style from "./ProblemTag.module.scss";
 
 const cx = classNames.bind(style);
 
 interface Props {
-  tagName: string;
+  tagName: ProblemType;
   size?: "sm" | "md" | "lg";
 }
 

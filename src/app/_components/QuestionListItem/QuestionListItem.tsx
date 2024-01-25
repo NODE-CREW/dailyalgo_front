@@ -8,6 +8,7 @@ import { ProblemTag } from "@components/icon/ProblemTag";
 import { Tag } from "@components/icon/Tag";
 import { UserProfileThumbnail } from "@components/user/UserProfileThumbnail";
 import { TimeAgo } from "@components/user/TimeAgo";
+import { ProblemType } from "src/types/tag";
 import type { QuestionDetail } from "src/types/question";
 import style from "./QuestionListItem.module.scss";
 
@@ -46,7 +47,7 @@ const QuestionListItem = ({ question, idx, onClickScrap }: Props) => {
         <div className={cx("item-header")}>
           <div className={cx("header-left")}>
             <PlatformTag platform={question.source} />
-            <ProblemTag tagName={question.type} size="sm" />
+            <ProblemTag tagName={question.type as ProblemType} size="sm" />
           </div>
           <div className={cx("header-right")}>
             {question.tags.map((algorithmTag) => (

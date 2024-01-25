@@ -6,9 +6,7 @@ import style from "./WrongReasonTagList.module.scss";
 
 const cx = classNames.bind(style);
 
-interface Props {}
-
-const WrongReasonTagList = ({}: Props) => {
+const WrongReasonTagList = () => {
   const [wrongReasonTagList, setWrongReasonTagList] = useState<string[]>([
     "오타",
     "범위 확인",

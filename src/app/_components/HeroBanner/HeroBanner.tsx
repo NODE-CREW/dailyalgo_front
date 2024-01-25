@@ -4,8 +4,8 @@ import classNames from "classnames/bind";
 import Link from "next/link";
 import Image from "next/image";
 import { reduxAppSelector } from "src/redux/store";
-import { IconButton } from "@components/button/IconButton";
-import { SvgIcon } from "@components/icon/SvgIcon";
+// import { IconButton } from "@components/button/IconButton";
+// import { SvgIcon } from "@components/icon/SvgIcon";
 import style from "./HeroBanner.module.scss";
 
 const cx = classNames.bind(style);

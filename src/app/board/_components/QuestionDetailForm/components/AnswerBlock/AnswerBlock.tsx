@@ -55,7 +55,16 @@ const AnswerBlock = ({ questionId, isLogIn }: Props) => {
   };
 
   useEffect(() => {
-    getAnswerList();
+    const getAnswerListFirstRender = async () => {
+      try {
+        const res = await fetchAnswerList(questionId);
+        setAnswerList(res);
+      } catch (e) {
+        setAnswerList([]);
+      }
+    };
+
+    getAnswerListFirstRender();
   }, [questionId]);
 
   return (

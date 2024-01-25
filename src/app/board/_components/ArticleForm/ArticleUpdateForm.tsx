@@ -88,22 +88,22 @@ const ArticleUpdateForm = () => {
     }
   };
 
-  const setDefaultValue = (res: QuestionDetail) => {
-    setValue("title", res.title);
-    setValue("content", res.content);
-    setValue("source", res.source);
-    setDefaultSource(res.source);
-    setValue("link", res.link);
-    setValue("type", res.type);
-    setDefaultType(res.type);
-    setValue("code", res.code);
-    setTagList(res.tags.map((tag) => tag.name));
-    setDefaultCode(res.code);
-    languageRef.current?.setInitialValue(res.language);
-    setLanguage(res.language);
-  };
-
   useEffect(() => {
+    const setDefaultValue = (res: QuestionDetail) => {
+      setValue("title", res.title);
+      setValue("content", res.content);
+      setValue("source", res.source);
+      setDefaultSource(res.source);
+      setValue("link", res.link);
+      setValue("type", res.type);
+      setDefaultType(res.type);
+      setValue("code", res.code);
+      setTagList(res.tags.map((tag) => tag.name));
+      setDefaultCode(res.code);
+      languageRef.current?.setInitialValue(res.language);
+      setLanguage(res.language);
+    };
+
     const fetchDetail = async () => {
       try {
         const res = await fetchQuestionDetail(Number(id));
@@ -114,7 +114,7 @@ const ArticleUpdateForm = () => {
     };
 
     fetchDetail();
-  }, []);
+  }, [id, setValue]);
 
   return (
     <div className={cx("article-form-wrap")}>

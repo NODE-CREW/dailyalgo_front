@@ -1,9 +1,9 @@
 "use client";
 
-import { SideTab } from "@components/mypage/SideTab";
+import { SideTab } from "@components/MyPage/SideTab";
 import { reduxAppSelector } from "src/redux/store";
-import { MyPageQuestionList } from "@components/mypage/MyPageContentForm/MyPageQuestionList";
-import { MyPageTop } from "@components/mypage/MyPageTop";
+import { MyPageQuestionList } from "@components/MyPage/MyPageContentForm/MyPageQuestionList";
+import { MyPageTop } from "@components/MyPage/MyPageTop";
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchUserInfo, requestUserFollow } from "src/api/User";
@@ -77,8 +77,17 @@ const UserPage = () => {
   };
 
   useEffect(() => {
-    getUserInfo();
-  }, []);
+    const getUserInfoFirstRender = async () => {
+      try {
+        const res: UserInfo = await fetchUserInfo(userId);
+        setUserInfo(res);
+      } catch (e) {
+        router.replace("/404");
+      }
+    };
+
+    getUserInfoFirstRender();
+  }, [router, userId]);
 
   useEffect(() => {
     if (isLogIn && myUserInfo.id === userId) {

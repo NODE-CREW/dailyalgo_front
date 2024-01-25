@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { AnswerTagItem } from "./AnswerTagItem";
 import { AnswerTagItemWithInput } from "./AnswerTagItemWithInput";
 import style from "./AnswerTagInputForm.module.scss";
@@ -12,13 +12,13 @@ interface Props {
 }
 
 const AnswerTagInputForm = ({ tagList, handleTagAdd }: Props) => {
-  const reasonList = ["오타", "로직오류", "제한범위확인", "반례오류"];
+  const reasonList = useMemo(() => ["오타", "로직오류", "제한범위확인", "반례오류"], []);
   const [addedTag, setAddedTag] = useState<string[]>([]);
 
   useEffect(() => {
     const newAddedTag = tagList.filter((item) => !reasonList.includes(item));
     setAddedTag(newAddedTag);
-  }, [tagList]);
+  }, [tagList, reasonList]);
 
   return (
     <div className={cx("answer-tag-input-form")}>

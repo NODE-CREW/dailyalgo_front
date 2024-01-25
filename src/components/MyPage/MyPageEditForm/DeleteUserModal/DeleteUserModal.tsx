@@ -1,7 +1,6 @@
 import classNames from "classnames/bind";
 import { BasicModal } from "@components/modal/BasicModal";
 import { BasicButton } from "@components/button/BasicButton";
-import { BasicInput } from "@components/input/BasicInput";
 import { useState } from "react";
 import style from "./DeleteUserModal.module.scss";
 

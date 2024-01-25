@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import { IconButton } from "@components/button/IconButton";
 import { SvgIcon } from "@components/icon/SvgIcon";

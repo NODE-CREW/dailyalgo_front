@@ -9,6 +9,7 @@ import "../src/styles/base/_reset.scss";
 import "../src/styles/base/_font.scss";
 import React from "react";
 import { Preview } from "@storybook/react";
+import ReduxProvider from "src/redux/provider";
 
 const customViewports = {
   DesktopXXLarge: {
@@ -93,9 +94,11 @@ export const parameters = {
 const preview: Preview = {
   decorators: [
     (Story) => (
-      <div style={{ margin: "3em" }}>
-        <Story />
-      </div>
+      <ReduxProvider>
+        <div style={{ margin: "3em" }}>
+          <Story />
+        </div>
+      </ReduxProvider>
     ),
   ],
 };

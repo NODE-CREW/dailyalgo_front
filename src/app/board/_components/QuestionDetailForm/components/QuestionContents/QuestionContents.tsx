@@ -1,7 +1,6 @@
 // import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import { CodeEditor } from "@components/article/CodeEditor";
-import type { QuestionDetail } from "src/types/question";
 import style from "./QuestionContents.module.scss";
 
 const cx = classNames.bind(style);

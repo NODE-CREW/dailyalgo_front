@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import classNames from "classnames/bind";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/redux/store";

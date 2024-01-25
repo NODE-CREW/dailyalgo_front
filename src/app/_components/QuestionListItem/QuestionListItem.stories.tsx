@@ -11,16 +11,26 @@ type Story = StoryObj<typeof QuestionListItem>;
 
 export const Default: Story = {
   args: {
-    title: "How to use React?",
-    questionContents:
-      "I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that? I want to use React in my project. How can I do that?",
-    problemTag: "시간초과",
-    platform: "BOJ",
-    algorithmTagArray: ["DP", "DFS", "BFS"],
-    likeCount: 10,
-    viewCount: 20,
-    commentCount: 30,
-    author: "근육맨",
-    createdAt: "2021-08-01T00:00:00.000Z",
+    question: {
+      id: 1,
+      title: "제목",
+      user_id: "1",
+      user_nickname: "닉네임",
+      source: "boj",
+      link: "https://www.acmicpc.net/problem/1000",
+      type: "시간초과",
+      content: "내용",
+      language: "python",
+      code: "print('hello world')",
+      created_time: new Date(),
+      modified_time: new Date(),
+      view_cnt: 1,
+      like_cnt: 1,
+      answer_cnt: 1,
+      comment_cnt: 1,
+      tags: [{ name: "태그" }],
+      is_scrap: 1,
+      is_like: 1,
+    },
   },
 };

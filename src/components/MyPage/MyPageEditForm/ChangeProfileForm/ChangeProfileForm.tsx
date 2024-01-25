@@ -4,10 +4,10 @@ import { setUserInfo } from "src/redux/slices/auth-slice";
 import classNames from "classnames/bind";
 import { BasicButton } from "@components/button/BasicButton";
 import { useState } from "react";
-import { useForm, FieldErrors, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { fetchCheckNickname, requestUpdateUser } from "src/api/User";
-import { DeleteUserModal } from "../DeleteUserModal";
+// import { DeleteUserModal } from "../DeleteUserModal";
 import style from "./ChangeProfileForm.module.scss";
 
 const cx = classNames.bind(style);
@@ -32,7 +32,7 @@ const ChangeProfileForm = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [nicknameDuplicationCheck, setNicknameDuplicationCheck] = useState(true);
-  const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
+  // const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
 
   const onValid: SubmitHandler<FormValues> = async (data) => {
     if (!nicknameDuplicationCheck) {
@@ -84,13 +84,13 @@ const ChangeProfileForm = () => {
     return null;
   };
 
-  const openDeleteUserModal = () => {
-    setIsDeleteUserModalOpen(true);
-  };
+  // const openDeleteUserModal = () => {
+  //   setIsDeleteUserModalOpen(true);
+  // };
 
-  const closeDeleteUserModal = () => {
-    setIsDeleteUserModalOpen(false);
-  };
+  // const closeDeleteUserModal = () => {
+  //   setIsDeleteUserModalOpen(false);
+  // };
 
   return (
     <>

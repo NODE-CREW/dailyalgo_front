@@ -8,6 +8,7 @@ const config = {
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
     "@storybook/addon-mdx-gfm",
+    "storybook-addon-next-router",
   ],
   framework: {
     name: "@storybook/nextjs",

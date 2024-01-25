@@ -8,8 +8,9 @@ const requestInterceptor: RequestInterceptor = {
     const token = localStorage.getItem("token");
     if (!token) return config;
 
-    config.headers.Authorization = `Bearer ${token}`;
-    return config;
+    const newConfig = config;
+    newConfig.headers.Authorization = `Bearer ${token}`;
+    return newConfig;
   },
   onRejected(error) {
     return Promise.reject(error);

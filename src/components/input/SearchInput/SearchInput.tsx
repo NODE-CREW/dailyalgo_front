@@ -12,7 +12,7 @@ const SearchInput = () => {
   const searchParams = useSearchParams();
 
   const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
-    const searchValue = event.target.value;
+    const searchValue = event.currentTarget.value;
     if (searchValue) {
       router.push(`/?keyword=${searchValue}`);
     }

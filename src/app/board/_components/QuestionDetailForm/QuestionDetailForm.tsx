@@ -56,7 +56,7 @@ const QuestionDetailForm = ({ id }: { id: number }) => {
     };
 
     getQuestionDetail();
-  }, [id]);
+  }, [id, router]);
 
   const clickScrapHandler = async () => {
     if (!isLogIn) {

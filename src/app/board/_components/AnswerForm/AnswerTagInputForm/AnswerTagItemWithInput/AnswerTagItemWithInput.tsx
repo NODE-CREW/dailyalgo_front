@@ -43,7 +43,6 @@ const AnswerTagItemWithInput = ({ handleTagAdd }: Props) => {
             className={cx("tag-input")}
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            autoFocus
             onKeyDown={handleKeyDown}
           />
           <IconButton

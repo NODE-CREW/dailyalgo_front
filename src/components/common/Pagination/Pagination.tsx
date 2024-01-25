@@ -16,7 +16,7 @@ const Pagination = ({ totalCnt, page, setPage }: Props) => {
   const totalPage = Math.ceil(totalCnt / 10);
 
   const pageBtns = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 10; i += 1) {
     if (startPage + i > totalPage) {
       break;
     } else {

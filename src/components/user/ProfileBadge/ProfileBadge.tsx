@@ -21,7 +21,7 @@ const ProfileBadge = ({ profileImage, size }: Props) => {
         } as CSSProperties
       }
     >
-      <Image src={imgUrl} fill sizes="100%" alt="profile image" priority="high" />
+      <Image src={imgUrl} fill sizes="100%" alt="profile image" priority />
     </span>
   );
 };

@@ -15,4 +15,4 @@ type TagItem = {
 
 type PlatformType = "BOJ" | "SWEA" | "Programmers";
 
-export type { TagItem };
+export type { TagItem, ProblemType };
