@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "export": "next export",
     "storybook": "storybook dev -p 6006",
     "format": "prettier --write \"**/*.tsx\" \"**/*.ts\" ",
     "build-storybook": "storybook build"
